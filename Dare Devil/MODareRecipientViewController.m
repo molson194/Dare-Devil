@@ -92,34 +92,25 @@
 @synthesize delegate;
 -(void)viewWillDisappear:(BOOL)animated
 {
-    [delegate sendDataToPostViewfacebook:self.taggedFacebook world:[self.worldButton.backgroundColor isEqual:[UIColor lightGrayColor]]];
+    
+    //[delegate sendDataToPostViewfacebook:self.taggedFacebook world:[self.worldButton.backgroundColor isEqual:[UIColor lightGrayColor]]];
     
 }
 
-- (void) reopenWithFacebook:(NSMutableArray*)facebookTags world:(BOOL)world {
+- (void) reopenWithFacebook:(NSMutableArray*)facebookTags {
     self.taggedFacebook = facebookTags;
-    self.toWorld = world;
     [self.tableView reloadData];
     
 }
 
 - (void)worldButtonPressed{
-    if (self.worldButton.backgroundColor == [UIColor whiteColor]) {
-        [self.worldButton setBackgroundColor:[UIColor lightGrayColor]];
-    } else {
-        [self.worldButton setBackgroundColor:[UIColor whiteColor]];
-    }
+    [delegate sendWorld:YES];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
+
 - (void)friendsButtonPressed{
-    if (self.friendsButton.backgroundColor == [UIColor whiteColor]) {
-        [self.friendsButton setBackgroundColor:[UIColor lightGrayColor]];
-        [self.taggedFacebook addObjectsFromArray:self.allFacebook];
-    } else {
-        [self.friendsButton setBackgroundColor:[UIColor whiteColor]];
-        for (NSArray *fbInfo in self.allFacebook){
-            [self.taggedFacebook removeObjectAtIndex:[self.taggedFacebook indexOfObject:fbInfo]];
-        }
-    }
+    [delegate sendFacebook:self.allFacebook];
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)searchBarTextDidBeginEditing:(UISearchBar *)searchBar {
@@ -138,6 +129,7 @@
 }
 
 -(void) tagPeople {
+    [delegate sendIndividuals:self.taggedFacebook];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -145,10 +137,10 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.contentView.backgroundColor != [UIColor lightGrayColor]){
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
-        [self.taggedFacebook addObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
+        [self.taggedFacebook addObject:[NSArray arrayWithObjects:self.searchResults[indexPath.row][0], self.searchResults[indexPath.row][1], nil]];
     } else {
         [cell.contentView setBackgroundColor:[UIColor whiteColor]];
-        [self.taggedFacebook removeObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
+        [self.taggedFacebook removeObject:[NSArray arrayWithObjects:self.searchResults[indexPath.row][0], self.searchResults[indexPath.row][1], nil]];
     }
 }
 
@@ -158,12 +150,11 @@
     
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellIdentifier];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     cell.textLabel.text = self.searchResults[indexPath.row][0];
-    cell.detailTextLabel.text = self.searchResults[indexPath.row][1];
     
     if ([self.taggedFacebook containsObject:self.searchResults[indexPath.row]]) {
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];

@@ -172,10 +172,6 @@
     NSString *fbId = [[PFUser currentUser] objectForKey:@"fbId"];
     [facebookQuery whereKey:@"facebookIds" containsAllObjectsInArray:[NSArray arrayWithObject:fbId]];
     
-    PFQuery *phoneQuery = [PFQuery queryWithClassName:self.parseClassName];
-    NSString *phoneNumber = [[PFUser currentUser] objectForKey:@"phoneNumber"];
-    [phoneQuery whereKey:@"phonenumbers" containsString:phoneNumber];
-    
     PFQuery *userQuery = [PFQuery queryWithClassName:self.parseClassName];
     [userQuery whereKey:@"user" equalTo:[PFUser currentUser]];
     
@@ -183,11 +179,11 @@
     
     PFQuery *query;
     if (self.queryLocalFriends == 1 || self.queryLocalFriends ==0){
-        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery, phoneQuery,userQuery, nil]];
+        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery,userQuery, nil]];
     } else if (self.queryLocalFriends == 2) {
-        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects: phoneQuery,facebookQuery, userQuery, nil]];
+        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects: facebookQuery, userQuery, nil]];
     } else if (self.queryLocalFriends == 3) {
-        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery,phoneQuery,userQuery, nil]];
+        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery,userQuery, nil]];
         [query whereKey:@"location" nearGeoPoint:self.geoPoint withinMiles:10.0];
     }
     if (self.queryHotRecent==1 || self.queryHotRecent == 0) {
@@ -269,10 +265,7 @@
         submission[@"dare"] = self.uploadObject;
         submission[@"votingFavorites"] = [NSMutableArray array];
         submission[@"user"] = [PFUser currentUser];
-        NSMutableArray *array = [self.uploadObject objectForKey:@"submissions"];
-        [array addObject:submission];
-        self.uploadObject[@"hasSubmission"] = [NSNumber numberWithBool:YES];
-        [self.uploadObject saveInBackground];
+        [submission saveInBackground];
         // Create our push query
         NSMutableArray *fundersPush = [self.uploadObject objectForKey:@"funders"];
         PFQuery *pushQuery = [PFInstallation query];

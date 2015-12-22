@@ -10,7 +10,9 @@
 #import <ParseUI/ParseUI.h>
 
 @protocol senddataProtocol <NSObject>
--(void)sendDataToPostViewfacebook:(NSMutableArray *)facebookTags world:(BOOL)worldPost;
+-(void)sendWorld:(BOOL)worldPost;
+-(void)sendFacebook:(NSMutableArray *)facebookPost;
+-(void)sendIndividuals:(NSMutableArray *)individuals;
 @end
 
 @interface MODareRecipientViewController : UIViewController <UISearchResultsUpdating, UISearchBarDelegate,UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
@@ -24,6 +26,6 @@
 @property (nonatomic, strong) UIButton *worldButton;
 @property (nonatomic, strong) UIButton *friendsButton;
 @property (nonatomic) BOOL toWorld;
-- (void) reopenWithFacebook:(NSMutableArray*)facebookTags world:(BOOL)world;
+- (void) reopenWithFacebook:(NSMutableArray*)facebookTags;
 
 @end

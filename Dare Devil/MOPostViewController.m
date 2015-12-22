@@ -68,6 +68,7 @@
         }
     }];
     
+    self.world = NO;
     self.facebookIds = [NSMutableArray array];
 }
 - (void)postDare {
@@ -100,33 +101,40 @@
 - (void)toButtonPressed {
     MODareRecipientViewController *recipientView = [[MODareRecipientViewController alloc] init];
     recipientView.delegate = self;
-    [recipientView reopenWithFacebook:self.facebookTags world:self.world];
+    [recipientView reopenWithFacebook:self.facebookTags];
     UIViewController *recipientNav =  [[UINavigationController alloc] initWithRootViewController:recipientView];
     [self presentViewController:recipientNav animated:YES completion:nil];
 }
 
--(void)sendDataToPostViewfacebook:(NSMutableArray *)facebookTags contacts:(NSMutableArray *)contactTags world:(BOOL)worldPost {
-    NSMutableArray *allContacts = [NSMutableArray arrayWithArray:facebookTags];
-    [allContacts addObjectsFromArray:contactTags];
-    self.facebookTags = facebookTags;
+-(void)sendWorld:(BOOL)worldPost {
+    [self.toButton setTitle:@"To: World" forState: UIControlStateNormal];
     self.world = worldPost;
-    
-    for (NSArray *array in facebookTags) {
+    self.facebookTags = [NSMutableArray array];
+}
+
+-(void)sendFacebook:(NSMutableArray *)facebookPost {
+    [self.toButton setTitle:@"To: Current Facebook Friends" forState: UIControlStateNormal];
+    self.world = NO;
+    for (NSArray *array in facebookPost) {
         [self.facebookIds addObject:array[1]];
     }
-    
-    NSString *buttonString;
-    if (worldPost == YES){
-        buttonString = @"To: World";
-    } else {
-        if ([allContacts count]>1) {
-            buttonString = [NSString stringWithFormat:@"To: %@ and %li others", allContacts[0][0], [allContacts count]-1];
-        } else if ([allContacts count] == 1){
-            buttonString = [NSString stringWithFormat:@"To: %@", allContacts[0][0]];
-        } else {
-            buttonString = @"To:";
-        }
+}
+
+-(void)sendIndividuals:(NSMutableArray *)individuals {
+    self.facebookTags = individuals;
+    self.world = NO;
+    for (NSArray *array in individuals) {
+        [self.facebookIds addObject:array[1]];
     }
+    NSString *buttonString;
+    if ([individuals count]>1) {
+        buttonString = [NSString stringWithFormat:@"To: %@ and %li others", individuals[0][0], [individuals count]-1];
+    } else if ([individuals count] == 1){
+        buttonString = [NSString stringWithFormat:@"To: %@", individuals[0][0]];
+    } else {
+        buttonString = @"To:";
+    }
+
     [self.toButton setTitle:buttonString forState: UIControlStateNormal];
 }
 

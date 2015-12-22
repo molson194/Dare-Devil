@@ -45,13 +45,6 @@
     grandParentRevealController.bounceBackOnOverdraw = NO;
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [textField resignFirstResponder];
-    [PFUser currentUser][@"phoneNumber"] = textField.text;
-    [[PFUser currentUser] saveInBackground];
-    return YES;
-}
-
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
