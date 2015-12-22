@@ -59,10 +59,15 @@
         if (user) {
             PFInstallation *currentInstallation = [PFInstallation currentInstallation];
             [currentInstallation addUniqueObject:[PFUser currentUser].objectId forKey:@"userObject"];
+            [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"fbId"] forKey:@"facebook"];
             [currentInstallation saveInBackground];
             [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBar];
         } else if (error) {
-            // TODO(3): Show error popup
+            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Facebook Login Error" message:@"Try again" preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+            [alertController addAction:ok];
+            [self presentViewController:alertController animated:YES completion:nil];
+            return;
         }}];
 }
 

@@ -11,6 +11,7 @@
 #import "MOPostViewController.h"
 #import <Parse/Parse.h>
 #import "MOVotingViewController.h"
+#import "MOSingleDareController.h"
 
 @interface MOActivityViewController ()
 @property (nonatomic) CGFloat previousScrollViewYOffset;
@@ -69,8 +70,13 @@
 
 // ORGANIZE QUERY
 - (PFQuery *)queryForTable {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:@"followers" containsAllObjectsInArray:@[[PFUser currentUser].objectId]];
+    PFQuery *queryUsers = [PFQuery queryWithClassName:self.parseClassName];
+    [queryUsers whereKey:@"followers" containsAllObjectsInArray:@[[PFUser currentUser].objectId]];
+    
+    PFQuery *queryFacebook = [PFQuery queryWithClassName:self.parseClassName];
+    [queryFacebook whereKey:@"facebook" equalTo:[[PFUser currentUser] objectForKey:@"fbId"]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:queryUsers, queryFacebook, nil]];
     [query orderByDescending:@"createdAt"];
     return query;
 }
@@ -79,9 +85,20 @@
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
     if ([obj[@"type"] isEqualToString:@"New Submission"]) {
-        MOVotingViewController *votingView = [[MOVotingViewController alloc] initWithStyle:UITableViewStylePlain];
-        [votingView setObject:obj[@"dare"]];
-        [self.navigationController pushViewController:votingView animated:YES];
+        PFObject *dareObj = obj[@"dare"];
+        [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+            MOVotingViewController *votingView = [[MOVotingViewController alloc] initWithStyle:UITableViewStylePlain];
+            [votingView setObject:object];
+            [self.navigationController pushViewController:votingView animated:YES];
+        }];
+    } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
+        PFObject *dareObj = obj[@"dare"];
+        [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+            MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
+            [singleView setObject:object];
+            [self.navigationController pushViewController:singleView animated:YES];
+        }];
+
     }
 }
 

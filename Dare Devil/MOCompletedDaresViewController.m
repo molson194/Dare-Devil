@@ -65,14 +65,20 @@
     }
 
     PFObject *dareObject = [object objectForKey:@"dare"];
-    [dareObject fetchIfNeeded]; // TODO(0): Long running operation
-    cell.dareLabel.text = [dareObject objectForKey:@"text"];
-    [cell.contentView addSubview:cell.dareLabel];
-    cell.moneyRaised.text = [NSString stringWithFormat:@"$ %lu", (unsigned long) [[dareObject objectForKey:@"funders"] count]];
+    [dareObject fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        cell.dareLabel.text = [object objectForKey:@"text"];
+        [cell.contentView addSubview:cell.dareLabel];
+        cell.moneyRaised.text = [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+
     
     PFUser *userSubmitted = (PFUser *)[object objectForKey:@"user"];
-    [userSubmitted fetchIfNeededInBackground];
-    cell.personSubmitted.text = [userSubmitted objectForKey:@"name"];
+    [userSubmitted fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+            cell.personSubmitted.text = [object objectForKey:@"name"];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+
 
     if (object[@"video"]) {
         PFFile *video = [object objectForKey:@"video"];
@@ -99,7 +105,7 @@
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     [query orderByDescending:@"createdAt"];
-    // TODO(0): isWinner
+    [query whereKey:@"isWinner" equalTo:[NSNumber numberWithBool:YES]];
     return query;
 }
 
