@@ -44,6 +44,7 @@
 		F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */; };
 		F0CEC2C31BCB04DE009B0149 /* MODareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CEC2C21BCB04DE009B0149 /* MODareTableViewCell.m */; };
 		F0ECDB851BD3530B005297B0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */; };
+		F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */; };
 		F0FD84E71BB1EFB500A43F83 /* MOAddFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -119,6 +120,8 @@
 		F0CEC2C11BCB04DE009B0149 /* MODareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareTableViewCell.h; sourceTree = "<group>"; };
 		F0CEC2C21BCB04DE009B0149 /* MODareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareTableViewCell.m; sourceTree = "<group>"; };
 		F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		F0FA415C1C2A005700AA0FCD /* MOSingleDareController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSingleDareController.h; sourceTree = "<group>"; };
+		F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSingleDareController.m; sourceTree = "<group>"; };
 		F0FD84E51BB1EFB500A43F83 /* MOAddFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAddFundsViewController.h; sourceTree = "<group>"; };
 		F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAddFundsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -222,6 +225,8 @@
 				F065562C1C211FBD000DDB42 /* MOVotingViewController.m */,
 				F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */,
 				F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */,
+				F0FA415C1C2A005700AA0FCD /* MOSingleDareController.h */,
+				F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -453,6 +458,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0BBFBF71C05056400F7686D /* SideViewController.m in Sources */,
+				F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */,
 				F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */,
 				F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */,
 				F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */,

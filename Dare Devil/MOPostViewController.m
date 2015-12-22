@@ -141,13 +141,6 @@
 // USER PRESSED POST, FIND IF ABLE TO POST
 - (void)attemptToPost {
     
-    if (self.textView.text.length <=1 || self.textView.text.length>201) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Invalid number of characters" message:@"Edit post to have valid number of characters" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
-    }
     if ([[[PFUser currentUser] objectForKey:@"funds"] integerValue] >= 1){
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Are you okay with funding $1?" message:nil preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *yesSelect = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){[self postToCloud];}];
@@ -189,7 +182,18 @@
             [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
             [[PFUser currentUser] saveEventually];
             
-            // TODO(0) Push notifiaction to all people in self.facebookIds
+            PFQuery *pushQuery = [PFInstallation query];
+            [pushQuery whereKey:@"facebook" containedIn:self.facebookIds];
+            // Send push notification to query
+            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
+            
+            PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+            notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a dare", [[PFUser currentUser] objectForKey:@"name"]];
+            notification[@"dare"] = dare;
+            notification[@"type"] = @"New Dare";
+            notification[@"facebook"] = self.facebookIds;
+            [notification saveInBackground];
+
             // TODO(3): Reload the root view controller
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
