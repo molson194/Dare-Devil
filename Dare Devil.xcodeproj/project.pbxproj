@@ -7,14 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
+		F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */; };
+		F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */; };
+		F06556261C2110BF000DDB42 /* MOCurrentDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */; };
+		F065562D1C211FBD000DDB42 /* MOVotingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F065562C1C211FBD000DDB42 /* MOVotingViewController.m */; };
+		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
+		F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F07600411BAE6CEC0052BFBB /* MOPostViewController.m */; };
+		F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F084712D1C239A350068EEC5 /* MOActivityViewController.m */; };
+		F09F77791C290DFE003071CC /* MODareTargetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F09F77781C290DFE003071CC /* MODareTargetViewController.m */; };
 		F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACAD1BAD06F9000F4F5A /* main.m */; };
 		F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */; };
-		F0BAACB41BAD06F9000F4F5A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACB31BAD06F9000F4F5A /* ViewController.m */; };
-		F0BAACB71BAD06F9000F4F5A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACB51BAD06F9000F4F5A /* Main.storyboard */; };
 		F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */; };
-		F0BAACBC1BAD06F9000F4F5A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACBA1BAD06F9000F4F5A /* LaunchScreen.storyboard */; };
-		F0BAACC71BAD06F9000F4F5A /* Dare_DevilTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACC61BAD06F9000F4F5A /* Dare_DevilTests.m */; };
-		F0BAACD21BAD06F9000F4F5A /* Dare_DevilUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACD11BAD06F9000F4F5A /* Dare_DevilUITests.m */; };
+		F0BAACED1BAD0C20000F4F5A /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACE61BAD0C20000F4F5A /* Bolts.framework */; };
+		F0BAACEF1BAD0C20000F4F5A /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACE71BAD0C20000F4F5A /* Parse.framework */; };
+		F0BAACF01BAD0C20000F4F5A /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */; };
+		F0BAACF21BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */; };
+		F0BAACF31BAD0C20000F4F5A /* ParseTwitterUtils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */; };
+		F0BAACF41BAD0C20000F4F5A /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */; };
+		F0BAACF61BAD0C8A000F4F5A /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACF51BAD0C8A000F4F5A /* AudioToolbox.framework */; };
+		F0BAACF81BAD0C8F000F4F5A /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACF71BAD0C8F000F4F5A /* CFNetwork.framework */; };
+		F0BAACFA1BAD0C98000F4F5A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACF91BAD0C98000F4F5A /* CoreGraphics.framework */; };
+		F0BAACFC1BAD0C9E000F4F5A /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACFB1BAD0C9E000F4F5A /* CoreLocation.framework */; };
+		F0BAACFE1BAD0CA5000F4F5A /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACFD1BAD0CA5000F4F5A /* QuartzCore.framework */; };
+		F0BAAD001BAD0CAF000F4F5A /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAACFF1BAD0CAF000F4F5A /* Security.framework */; };
+		F0BAAD041BAD0CBE000F4F5A /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD031BAD0CBE000F4F5A /* SystemConfiguration.framework */; };
+		F0BAAD061BAD0D44000F4F5A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD051BAD0D44000F4F5A /* libz.dylib */; };
+		F0BAAD081BAD0D5B000F4F5A /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD071BAD0D5B000F4F5A /* libsqlite3.dylib */; };
+		F0BAAD0A1BAD0D64000F4F5A /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD091BAD0D64000F4F5A /* Accounts.framework */; };
+		F0BAAD0C1BAD0D69000F4F5A /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD0B1BAD0D69000F4F5A /* Social.framework */; };
+		F0BAAD0F1BAD16B6000F4F5A /* MOLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAAD0E1BAD16B6000F4F5A /* MOLoginViewController.m */; };
+		F0BAAD191BAD1E17000F4F5A /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */; };
+		F0BAAD1A1BAD1E17000F4F5A /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */; };
+		F0BAAD1B1BAD1E17000F4F5A /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */; };
+		F0BBFBF01C04E9B600F7686D /* SWRevealViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BBFBEF1C04E9B600F7686D /* SWRevealViewController.m */; };
+		F0BBFBF71C05056400F7686D /* SideViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BBFBF61C05056400F7686D /* SideViewController.m */; };
+		F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */; };
+		F0CEC2C31BCB04DE009B0149 /* MODareTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F0CEC2C21BCB04DE009B0149 /* MODareTableViewCell.m */; };
+		F0ECDB851BD3530B005297B0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */; };
+		F0FD84E71BB1EFB500A43F83 /* MOAddFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,22 +66,64 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		F0BAACA91BAD06F9000F4F5A /* Dare Devil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dare Devil.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F01470221BDEAFE000F4074D /* MOCompletedDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCompletedDaresViewController.h; sourceTree = "<group>"; };
+		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
+		F01470251BDEBEBF00F4074D /* MOSubmissionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSubmissionsCell.h; sourceTree = "<group>"; };
+		F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSubmissionsCell.m; sourceTree = "<group>"; };
+		F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareRecipientViewController.h; sourceTree = "<group>"; };
+		F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareRecipientViewController.m; sourceTree = "<group>"; };
+		F06556241C2110BF000DDB42 /* MOCurrentDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCurrentDaresViewController.h; sourceTree = "<group>"; };
+		F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCurrentDaresViewController.m; sourceTree = "<group>"; };
+		F065562B1C211FBD000DDB42 /* MOVotingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOVotingViewController.h; sourceTree = "<group>"; };
+		F065562C1C211FBD000DDB42 /* MOVotingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOVotingViewController.m; sourceTree = "<group>"; };
+		F076003B1BAE62E70052BFBB /* Dare DevilTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F076003C1BAE62E70052BFBB /* Dare DevilUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F076003D1BAE640A0052BFBB /* MOMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMainViewController.h; sourceTree = "<group>"; };
+		F076003E1BAE640A0052BFBB /* MOMainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMainViewController.m; sourceTree = "<group>"; };
+		F07600401BAE6CEC0052BFBB /* MOPostViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOPostViewController.h; sourceTree = "<group>"; };
+		F07600411BAE6CEC0052BFBB /* MOPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPostViewController.m; sourceTree = "<group>"; };
+		F084712C1C239A350068EEC5 /* MOActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOActivityViewController.h; sourceTree = "<group>"; };
+		F084712D1C239A350068EEC5 /* MOActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOActivityViewController.m; sourceTree = "<group>"; };
+		F09F77771C290DFE003071CC /* MODareTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareTargetViewController.h; sourceTree = "<group>"; };
+		F09F77781C290DFE003071CC /* MODareTargetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareTargetViewController.m; sourceTree = "<group>"; };
 		F0BAACAD1BAD06F9000F4F5A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F0BAACAF1BAD06F9000F4F5A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		F0BAACB21BAD06F9000F4F5A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		F0BAACB31BAD06F9000F4F5A /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		F0BAACB61BAD06F9000F4F5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F0BAACBB1BAD06F9000F4F5A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Dare Devil/Assets.xcassets"; sourceTree = "<group>"; };
 		F0BAACBD1BAD06F9000F4F5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0BAACC21BAD06F9000F4F5A /* Dare DevilTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0BAACC61BAD06F9000F4F5A /* Dare_DevilTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dare_DevilTests.m; sourceTree = "<group>"; };
-		F0BAACC81BAD06F9000F4F5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0BAACCD1BAD06F9000F4F5A /* Dare DevilUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		F0BAACD11BAD06F9000F4F5A /* Dare_DevilUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Dare_DevilUITests.m; sourceTree = "<group>"; };
-		F0BAACD31BAD06F9000F4F5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F0BAACE61BAD0C20000F4F5A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
+		F0BAACE71BAD0C20000F4F5A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
+		F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseCrashReporting.framework; sourceTree = "<group>"; };
+		F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseTwitterUtils.framework; sourceTree = "<group>"; };
+		F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
+		F0BAACEE1BAD0C20000F4F5A /* Dare Devil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dare Devil.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F0BAACF51BAD0C8A000F4F5A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		F0BAACF71BAD0C8F000F4F5A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		F0BAACF91BAD0C98000F4F5A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		F0BAACFB1BAD0C9E000F4F5A /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		F0BAACFD1BAD0CA5000F4F5A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		F0BAACFF1BAD0CAF000F4F5A /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		F0BAAD031BAD0CBE000F4F5A /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		F0BAAD051BAD0D44000F4F5A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = "../../../Library/Developer/Xcode/iOS DeviceSupport/7.1.2 (11D257)/Symbols/usr/lib/libz.dylib"; sourceTree = "<group>"; };
+		F0BAAD071BAD0D5B000F4F5A /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = "../../../Library/Developer/Xcode/iOS DeviceSupport/7.1.2 (11D257)/Symbols/usr/lib/libsqlite3.dylib"; sourceTree = "<group>"; };
+		F0BAAD091BAD0D64000F4F5A /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
+		F0BAAD0B1BAD0D69000F4F5A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
+		F0BAAD0D1BAD16B6000F4F5A /* MOLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOLoginViewController.h; sourceTree = "<group>"; };
+		F0BAAD0E1BAD16B6000F4F5A /* MOLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOLoginViewController.m; sourceTree = "<group>"; };
+		F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		F0BBFBEE1C04E9B600F7686D /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
+		F0BBFBEF1C04E9B600F7686D /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
+		F0BBFBF51C05056400F7686D /* SideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideViewController.h; sourceTree = "<group>"; };
+		F0BBFBF61C05056400F7686D /* SideViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SideViewController.m; sourceTree = "<group>"; };
+		F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F0CEC2C11BCB04DE009B0149 /* MODareTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareTableViewCell.h; sourceTree = "<group>"; };
+		F0CEC2C21BCB04DE009B0149 /* MODareTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareTableViewCell.m; sourceTree = "<group>"; };
+		F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		F0FD84E51BB1EFB500A43F83 /* MOAddFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAddFundsViewController.h; sourceTree = "<group>"; };
+		F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAddFundsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -58,6 +131,27 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0ECDB851BD3530B005297B0 /* MobileCoreServices.framework in Frameworks */,
+				F0BAAD0C1BAD0D69000F4F5A /* Social.framework in Frameworks */,
+				F0BAAD0A1BAD0D64000F4F5A /* Accounts.framework in Frameworks */,
+				F0BAAD081BAD0D5B000F4F5A /* libsqlite3.dylib in Frameworks */,
+				F0BAAD061BAD0D44000F4F5A /* libz.dylib in Frameworks */,
+				F0BAAD041BAD0CBE000F4F5A /* SystemConfiguration.framework in Frameworks */,
+				F0BAAD191BAD1E17000F4F5A /* FBSDKCoreKit.framework in Frameworks */,
+				F0BAAD1B1BAD1E17000F4F5A /* FBSDKShareKit.framework in Frameworks */,
+				F0BAAD001BAD0CAF000F4F5A /* Security.framework in Frameworks */,
+				F0BAACFE1BAD0CA5000F4F5A /* QuartzCore.framework in Frameworks */,
+				F0BAACFC1BAD0C9E000F4F5A /* CoreLocation.framework in Frameworks */,
+				F0BAACFA1BAD0C98000F4F5A /* CoreGraphics.framework in Frameworks */,
+				F0BAAD1A1BAD1E17000F4F5A /* FBSDKLoginKit.framework in Frameworks */,
+				F0BAACF81BAD0C8F000F4F5A /* CFNetwork.framework in Frameworks */,
+				F0BAACF61BAD0C8A000F4F5A /* AudioToolbox.framework in Frameworks */,
+				F0BAACEF1BAD0C20000F4F5A /* Parse.framework in Frameworks */,
+				F0BAACF01BAD0C20000F4F5A /* ParseCrashReporting.framework in Frameworks */,
+				F0BAACF41BAD0C20000F4F5A /* ParseUI.framework in Frameworks */,
+				F0BAACED1BAD0C20000F4F5A /* Bolts.framework in Frameworks */,
+				F0BAACF31BAD0C20000F4F5A /* ParseTwitterUtils.framework in Frameworks */,
+				F0BAACF21BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,66 +172,148 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F01470281BDEBECE00F4074D /* User  */ = {
+			isa = PBXGroup;
+			children = (
+				F0BAAD0D1BAD16B6000F4F5A /* MOLoginViewController.h */,
+				F0BAAD0E1BAD16B6000F4F5A /* MOLoginViewController.m */,
+			);
+			name = "User ";
+			sourceTree = "<group>";
+		};
+		F01470291BDEBEDE00F4074D /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				F01470251BDEBEBF00F4074D /* MOSubmissionsCell.h */,
+				F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */,
+				F0CEC2C11BCB04DE009B0149 /* MODareTableViewCell.h */,
+				F0CEC2C21BCB04DE009B0149 /* MODareTableViewCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
+		F014702A1BDEBF1200F4074D /* Tabs */ = {
+			isa = PBXGroup;
+			children = (
+				F01470221BDEAFE000F4074D /* MOCompletedDaresViewController.h */,
+				F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */,
+				F076003D1BAE640A0052BFBB /* MOMainViewController.h */,
+				F076003E1BAE640A0052BFBB /* MOMainViewController.m */,
+				F0FD84E51BB1EFB500A43F83 /* MOAddFundsViewController.h */,
+				F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */,
+				F06556241C2110BF000DDB42 /* MOCurrentDaresViewController.h */,
+				F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */,
+				F084712C1C239A350068EEC5 /* MOActivityViewController.h */,
+				F084712D1C239A350068EEC5 /* MOActivityViewController.m */,
+			);
+			name = Tabs;
+			sourceTree = "<group>";
+		};
+		F014702B1BDEC11D00F4074D /* Post */ = {
+			isa = PBXGroup;
+			children = (
+				F07600401BAE6CEC0052BFBB /* MOPostViewController.h */,
+				F07600411BAE6CEC0052BFBB /* MOPostViewController.m */,
+			);
+			name = Post;
+			sourceTree = "<group>";
+		};
+		F06556271C211ED7000DDB42 /* Other */ = {
+			isa = PBXGroup;
+			children = (
+				F065562B1C211FBD000DDB42 /* MOVotingViewController.h */,
+				F065562C1C211FBD000DDB42 /* MOVotingViewController.m */,
+				F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */,
+				F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */,
+				F09F77771C290DFE003071CC /* MODareTargetViewController.h */,
+				F09F77781C290DFE003071CC /* MODareTargetViewController.m */,
+			);
+			name = Other;
+			sourceTree = "<group>";
+		};
 		F0BAACA01BAD06F9000F4F5A = {
 			isa = PBXGroup;
 			children = (
 				F0BAACAB1BAD06F9000F4F5A /* Dare Devil */,
-				F0BAACC51BAD06F9000F4F5A /* Dare DevilTests */,
-				F0BAACD01BAD06F9000F4F5A /* Dare DevilUITests */,
-				F0BAACAA1BAD06F9000F4F5A /* Products */,
+				F0BAACE41BAD0B96000F4F5A /* Images */,
+				F0BAACE51BAD0B9D000F4F5A /* Frameworks */,
+				F0BAACEE1BAD0C20000F4F5A /* Dare Devil.app */,
+				F076003B1BAE62E70052BFBB /* Dare DevilTests.xctest */,
+				F076003C1BAE62E70052BFBB /* Dare DevilUITests.xctest */,
 			);
-			sourceTree = "<group>";
-		};
-		F0BAACAA1BAD06F9000F4F5A /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				F0BAACA91BAD06F9000F4F5A /* Dare Devil.app */,
-				F0BAACC21BAD06F9000F4F5A /* Dare DevilTests.xctest */,
-				F0BAACCD1BAD06F9000F4F5A /* Dare DevilUITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		F0BAACAB1BAD06F9000F4F5A /* Dare Devil */ = {
 			isa = PBXGroup;
 			children = (
+				F06556271C211ED7000DDB42 /* Other */,
+				F0BBFBED1C04E97300F7686D /* Side View */,
+				F014702B1BDEC11D00F4074D /* Post */,
+				F014702A1BDEBF1200F4074D /* Tabs */,
+				F01470291BDEBEDE00F4074D /* Cells */,
+				F01470281BDEBECE00F4074D /* User  */,
 				F0BAACAF1BAD06F9000F4F5A /* AppDelegate.h */,
 				F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */,
-				F0BAACB21BAD06F9000F4F5A /* ViewController.h */,
-				F0BAACB31BAD06F9000F4F5A /* ViewController.m */,
-				F0BAACB51BAD06F9000F4F5A /* Main.storyboard */,
-				F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */,
-				F0BAACBA1BAD06F9000F4F5A /* LaunchScreen.storyboard */,
+				F0BAACAD1BAD06F9000F4F5A /* main.m */,
 				F0BAACBD1BAD06F9000F4F5A /* Info.plist */,
-				F0BAACAC1BAD06F9000F4F5A /* Supporting Files */,
 			);
 			path = "Dare Devil";
 			sourceTree = "<group>";
 		};
-		F0BAACAC1BAD06F9000F4F5A /* Supporting Files */ = {
+		F0BAACE41BAD0B96000F4F5A /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				F0BAACAD1BAD06F9000F4F5A /* main.m */,
+				F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */,
+				F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */,
 			);
-			name = "Supporting Files";
+			name = Images;
 			sourceTree = "<group>";
 		};
-		F0BAACC51BAD06F9000F4F5A /* Dare DevilTests */ = {
+		F0BAACE51BAD0B9D000F4F5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F0BAACC61BAD06F9000F4F5A /* Dare_DevilTests.m */,
-				F0BAACC81BAD06F9000F4F5A /* Info.plist */,
+				F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */,
+				F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */,
+				F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */,
+				F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */,
+				F0BAAD0B1BAD0D69000F4F5A /* Social.framework */,
+				F0BAAD091BAD0D64000F4F5A /* Accounts.framework */,
+				F0BAAD071BAD0D5B000F4F5A /* libsqlite3.dylib */,
+				F0BAAD051BAD0D44000F4F5A /* libz.dylib */,
+				F0BAAD031BAD0CBE000F4F5A /* SystemConfiguration.framework */,
+				F0BAACFF1BAD0CAF000F4F5A /* Security.framework */,
+				F0BAACFD1BAD0CA5000F4F5A /* QuartzCore.framework */,
+				F0BAACFB1BAD0C9E000F4F5A /* CoreLocation.framework */,
+				F0BAACF91BAD0C98000F4F5A /* CoreGraphics.framework */,
+				F0BAACF71BAD0C8F000F4F5A /* CFNetwork.framework */,
+				F0BAACF51BAD0C8A000F4F5A /* AudioToolbox.framework */,
+				F0BAACE61BAD0C20000F4F5A /* Bolts.framework */,
+				F0BAACE71BAD0C20000F4F5A /* Parse.framework */,
+				F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */,
+				F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */,
+				F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */,
+				F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */,
 			);
-			path = "Dare DevilTests";
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F0BAACD01BAD06F9000F4F5A /* Dare DevilUITests */ = {
+		F0BBFBED1C04E97300F7686D /* Side View */ = {
 			isa = PBXGroup;
 			children = (
-				F0BAACD11BAD06F9000F4F5A /* Dare_DevilUITests.m */,
-				F0BAACD31BAD06F9000F4F5A /* Info.plist */,
+				F0BBFBF11C04E9BA00F7686D /* SWRevealViewController */,
+				F0BBFBF51C05056400F7686D /* SideViewController.h */,
+				F0BBFBF61C05056400F7686D /* SideViewController.m */,
 			);
-			path = "Dare DevilUITests";
+			name = "Side View";
+			sourceTree = "<group>";
+		};
+		F0BBFBF11C04E9BA00F7686D /* SWRevealViewController */ = {
+			isa = PBXGroup;
+			children = (
+				F0BBFBEE1C04E9B600F7686D /* SWRevealViewController.h */,
+				F0BBFBEF1C04E9B600F7686D /* SWRevealViewController.m */,
+			);
+			name = SWRevealViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -157,7 +333,7 @@
 			);
 			name = "Dare Devil";
 			productName = "Dare Devil";
-			productReference = F0BAACA91BAD06F9000F4F5A /* Dare Devil.app */;
+			productReference = F0BAACEE1BAD0C20000F4F5A /* Dare Devil.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F0BAACC11BAD06F9000F4F5A /* Dare DevilTests */ = {
@@ -175,7 +351,7 @@
 			);
 			name = "Dare DevilTests";
 			productName = "Dare DevilTests";
-			productReference = F0BAACC21BAD06F9000F4F5A /* Dare DevilTests.xctest */;
+			productReference = F076003B1BAE62E70052BFBB /* Dare DevilTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		F0BAACCC1BAD06F9000F4F5A /* Dare DevilUITests */ = {
@@ -193,7 +369,7 @@
 			);
 			name = "Dare DevilUITests";
 			productName = "Dare DevilUITests";
-			productReference = F0BAACCD1BAD06F9000F4F5A /* Dare DevilUITests.xctest */;
+			productReference = F076003C1BAE62E70052BFBB /* Dare DevilUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -207,6 +383,18 @@
 				TargetAttributes = {
 					F0BAACA81BAD06F9000F4F5A = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = TH5V2K4K28;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 0;
+							};
+							com.apple.InAppPurchase = {
+								enabled = 0;
+							};
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 					F0BAACC11BAD06F9000F4F5A = {
 						CreatedOnToolsVersion = 7.0;
@@ -227,7 +415,7 @@
 				Base,
 			);
 			mainGroup = F0BAACA01BAD06F9000F4F5A;
-			productRefGroup = F0BAACAA1BAD06F9000F4F5A /* Products */;
+			productRefGroup = F0BAACA01BAD06F9000F4F5A;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -243,9 +431,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0BAACBC1BAD06F9000F4F5A /* LaunchScreen.storyboard in Resources */,
 				F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */,
-				F0BAACB71BAD06F9000F4F5A /* Main.storyboard in Resources */,
+				F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -270,9 +457,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0BAACB41BAD06F9000F4F5A /* ViewController.m in Sources */,
+				F0BBFBF71C05056400F7686D /* SideViewController.m in Sources */,
 				F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */,
+				F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */,
+				F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */,
 				F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */,
+				F09F77791C290DFE003071CC /* MODareTargetViewController.m in Sources */,
+				F0CEC2C31BCB04DE009B0149 /* MODareTableViewCell.m in Sources */,
+				F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */,
+				F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */,
+				F0BBFBF01C04E9B600F7686D /* SWRevealViewController.m in Sources */,
+				F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */,
+				F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */,
+				F0BAAD0F1BAD16B6000F4F5A /* MOLoginViewController.m in Sources */,
+				F065562D1C211FBD000DDB42 /* MOVotingViewController.m in Sources */,
+				F06556261C2110BF000DDB42 /* MOCurrentDaresViewController.m in Sources */,
+				F0FD84E71BB1EFB500A43F83 /* MOAddFundsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,7 +480,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0BAACC71BAD06F9000F4F5A /* Dare_DevilTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -288,7 +487,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0BAACD21BAD06F9000F4F5A /* Dare_DevilUITests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -306,25 +504,6 @@
 			targetProxy = F0BAACCE1BAD06F9000F4F5A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		F0BAACB51BAD06F9000F4F5A /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F0BAACB61BAD06F9000F4F5A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		F0BAACBA1BAD06F9000F4F5A /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F0BAACBB1BAD06F9000F4F5A /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		F0BAACD41BAD06F9000F4F5A /* Debug */ = {
@@ -413,10 +592,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				CONFIGURATION_TEMP_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Molson.Dare-Devil";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Molson.DareDevil;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -424,10 +613,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				CONFIGURATION_TEMP_DIR = "$(BUILD_DIR)/$(CONFIGURATION)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = "Molson.Dare-Devil";
+				PRODUCT_BUNDLE_IDENTIFIER = com.Molson.DareDevil;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
@@ -498,6 +697,7 @@
 				F0BAACD81BAD06F9000F4F5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F0BAACD91BAD06F9000F4F5A /* Build configuration list for PBXNativeTarget "Dare DevilTests" */ = {
 			isa = XCConfigurationList;
@@ -506,6 +706,7 @@
 				F0BAACDB1BAD06F9000F4F5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F0BAACDC1BAD06F9000F4F5A /* Build configuration list for PBXNativeTarget "Dare DevilUITests" */ = {
 			isa = XCConfigurationList;
@@ -514,6 +715,7 @@
 				F0BAACDE1BAD06F9000F4F5A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

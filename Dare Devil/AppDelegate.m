@@ -7,39 +7,90 @@
 //
 
 #import "AppDelegate.h"
+#import "MOLoginViewController.h"
+#import "MOMainViewController.h"
+#import "MOCompletedDaresViewController.h"
+#import "SideViewController.h"
+#import "SWRevealViewController.h"
+#import <Parse/Parse.h>
+#import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <ParseFacebookUtilsV4/PFFacebookUtils.h>
+#import "MOActivityViewController.h"
 
-@interface AppDelegate ()
 
+@interface AppDelegate () <SWRevealViewControllerDelegate>
 @end
 
-@implementation AppDelegate
-
+@implementation AppDelegate 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    // PARSE SET UP
+    [Parse enableLocalDatastore];
+    [Parse setApplicationId:@"a6E3JVOxkXWJLnzg8f9sP2qBvVb0c1GuC2SkqfS2" clientKey:@"yoBwVLe5jZQJbavZHVu0MAycNVslRWNwOjTJ4yM0"];
+    
+    // FACEBOOK SETUP
+    [FBSDKAppEvents activateApp];
+    [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    
+    UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
+                                                    UIUserNotificationTypeBadge |
+                                                    UIUserNotificationTypeSound);
+    UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:userNotificationTypes
+                                                                             categories:nil];
+    [application registerUserNotificationSettings:settings];
+    [application registerForRemoteNotifications];
+
+    // WINDOW SET UP
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
+    
+    //ROOT VIEW CONTROLLER SET UP/LOGIN
+    if (![PFUser currentUser]) {
+        self.window.rootViewController = [[MOLoginViewController alloc] init];
+    } else {
+        [self presentTabBar];
+    }
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+// FACEBOOK SETUP
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
+    return [[FBSDKApplicationDelegate sharedInstance] application:application openURL:url sourceApplication:sourceApplication annotation:annotation];
 }
 
-- (void)applicationDidEnterBackground:(UIApplication *)application {
-    // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
-    // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+// TAB BAR SETUP
+- (void)presentTabBar{
+    UINavigationController *completedDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOCompletedDaresViewController alloc] initWithStyle:UITableViewStylePlain]];
+    SideViewController *sideViewController = [[SideViewController alloc] init];
+    
+    SWRevealViewController *mainRevealController = [[SWRevealViewController alloc] initWithRearViewController:sideViewController frontViewController:completedDaresViewController];
+    mainRevealController.delegate = self;
+    
+    self.window.rootViewController = mainRevealController;
 }
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
-    // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    // Store the deviceToken in the current installation and save it to Parse.
+    PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+    [currentInstallation setDeviceTokenFromData:deviceToken];
+    currentInstallation.channels = @[ @"global" ];
+    [currentInstallation saveInBackground];
 }
 
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-    // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
-}
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+        // Track app opens due to a push notification being acknowledged while the app wasn't active.
+        [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+    }
+    // TODO(2): Fix when opening up from inactive
+    if (application.applicationState != UIApplicationStateActive) {
+        UINavigationController *currentDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain]];
+        SWRevealViewController *vc = (SWRevealViewController *)self.window.rootViewController;
+        [vc setFrontViewController: currentDaresViewController];
+    } else {
+      [PFPush handlePush:userInfo];  
+    }
 }
 
 @end
