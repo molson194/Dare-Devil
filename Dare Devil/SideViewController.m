@@ -24,7 +24,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 280)];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 250)];
     PFImageView *imageView = [[PFImageView alloc] initWithFrame:CGRectMake(20, 10, 200, 200)];
     imageView.file = [[PFUser currentUser] objectForKey:@"profilePic"];
     [imageView loadInBackground];
@@ -35,15 +35,6 @@
     personSubmitted.textAlignment = NSTextAlignmentCenter;
     personSubmitted.text = [[PFUser currentUser] objectForKey:@"name"];
     [headerView addSubview:personSubmitted];
-    UITextField *phoneField = [[UITextField alloc] initWithFrame:CGRectMake(20, 250, 200, 30)];
-    phoneField.delegate = self;
-    phoneField.layer.cornerRadius=8.0f;
-    phoneField.layer.masksToBounds=YES;
-    phoneField.layer.borderColor=[[UIColor blackColor]CGColor];
-    phoneField.layer.borderWidth= 1.0f;
-    phoneField.textAlignment = NSTextAlignmentCenter;
-    phoneField.placeholder = @"Enter phone number...";
-    [headerView addSubview:phoneField];
     [self.tableView setTableHeaderView:headerView];
 }
 

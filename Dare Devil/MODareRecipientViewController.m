@@ -58,34 +58,6 @@
     self.tableView.tableHeaderView = headerView;
     [self.view addSubview:self.tableView];
     
-    
-    
-    self.allContacts = [NSMutableArray array];
-    CNContactStore *store = [[CNContactStore alloc] init];
-    NSArray *keys = @[CNContactFamilyNameKey, CNContactGivenNameKey, CNContactPhoneNumbersKey];
-    NSString *containerId = store.defaultContainerIdentifier;
-    NSPredicate *predicate = [CNContact predicateForContactsInContainerWithIdentifier:containerId];
-    NSError *error;
-    NSArray *cnContacts = [store unifiedContactsMatchingPredicate:predicate keysToFetch:keys error:&error];
-    if (error) {
-        NSLog(@"error fetching contacts %@", error);
-    } else {
-        for (CNContact *contact in cnContacts) {
-            for (CNLabeledValue<CNPhoneNumber*>* labeledValue in contact.phoneNumbers)
-            {
-                if ([labeledValue.label isEqualToString:CNLabelPhoneNumberMobile] || [labeledValue.label isEqualToString:CNLabelPhoneNumberiPhone])
-                {
-                    NSString *contactName = [NSString stringWithFormat:@"%@ %@", contact.givenName, contact.familyName];
-                    NSString *phoneNumber = labeledValue.value.stringValue;
-                    [self.allContacts addObject:[NSArray arrayWithObjects:contactName, phoneNumber, nil]];
-                    break;
-                }
-            }
-        }
-    }
-    self.allPeople = [NSMutableArray arrayWithArray:self.allContacts];
-    self.searchResults = [self.allPeople mutableCopy];
-    
     self.allFacebook = [NSMutableArray array];
     FBSDKGraphRequest *request = [[FBSDKGraphRequest alloc] initWithGraphPath:@"me/friends" parameters:@{@"fields": @"id, name"} HTTPMethod:@"GET"];
     [request startWithCompletionHandler:^(FBSDKGraphRequestConnection *connection, id result, NSError *error) {
@@ -93,9 +65,7 @@
             NSArray *friendInfo = [NSArray arrayWithObjects:[friend objectForKey:@"name"], [friend objectForKey:@"id"], nil];
             [self.allFacebook addObject:friendInfo];
         }
-        self.allPeople = [NSMutableArray arrayWithArray:self.allFacebook];
-        [self.allPeople addObjectsFromArray:self.allContacts];
-        self.searchResults = [self.allPeople mutableCopy];
+        self.searchResults = [self.allFacebook mutableCopy];
         [self.tableView reloadData];
     }];
 
@@ -113,9 +83,6 @@
     UIBarButtonItem *tagButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(tagPeople)];
     self.navigationItem.rightBarButtonItem = tagButton;
     
-    if (self.taggedContacts == nil) {
-        self.taggedContacts = [NSMutableArray array];
-    }
     if (self.taggedFacebook == nil) {
         self.taggedFacebook = [NSMutableArray array];
     }
@@ -125,13 +92,12 @@
 @synthesize delegate;
 -(void)viewWillDisappear:(BOOL)animated
 {
-    [delegate sendDataToPostViewfacebook:self.taggedFacebook contacts:self.taggedContacts world:[self.worldButton.backgroundColor isEqual:[UIColor lightGrayColor]]];
+    [delegate sendDataToPostViewfacebook:self.taggedFacebook world:[self.worldButton.backgroundColor isEqual:[UIColor lightGrayColor]]];
     
 }
 
-- (void) reopenWithFacebook:(NSMutableArray*)facebookTags contacts:(NSMutableArray *)contactTags world:(BOOL)world {
+- (void) reopenWithFacebook:(NSMutableArray*)facebookTags world:(BOOL)world {
     self.taggedFacebook = facebookTags;
-    self.taggedContacts = contactTags;
     self.toWorld = world;
     [self.tableView reloadData];
     
@@ -179,18 +145,10 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.contentView.backgroundColor != [UIColor lightGrayColor]){
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
-        if([cell.detailTextLabel.text length] > 14){
-            [self.taggedFacebook addObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
-        } else {
-            [self.taggedContacts addObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
-        }
+        [self.taggedFacebook addObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
     } else {
         [cell.contentView setBackgroundColor:[UIColor whiteColor]];
-        if([cell.detailTextLabel.text length] > 14){
-            [self.taggedFacebook removeObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
-        } else {
-            [self.taggedContacts removeObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
-        }
+        [self.taggedFacebook removeObject:[NSArray arrayWithObjects:cell.textLabel.text, cell.detailTextLabel.text, nil]];
     }
 }
 
@@ -207,7 +165,7 @@
     cell.textLabel.text = self.searchResults[indexPath.row][0];
     cell.detailTextLabel.text = self.searchResults[indexPath.row][1];
     
-    if ([self.taggedFacebook containsObject:self.searchResults[indexPath.row]] || [self.taggedContacts containsObject:self.searchResults[indexPath.row]]) {
+    if ([self.taggedFacebook containsObject:self.searchResults[indexPath.row]]) {
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
     }
     
@@ -224,10 +182,10 @@
 {
     NSString *searchString = self.searchController.searchBar.text;
     if ([searchString isEqualToString:@""]){
-        self.searchResults = [self.allPeople mutableCopy];
+        self.searchResults = [self.allFacebook mutableCopy];
     } else {
         self.searchResults = [[NSMutableArray alloc] init];
-        for (NSArray *contact in self.allPeople) {
+        for (NSArray *contact in self.allFacebook) {
             if ([contact[0] rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound){
                 [self.searchResults addObject:contact];
             }

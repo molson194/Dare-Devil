@@ -10,7 +10,6 @@
 #import "MOAddFundsViewController.h"
 #import <Parse/Parse.h>
 #import "MODareRecipientViewController.h"
-#import "MODareTargetViewController.h"
 
 @interface MOPostViewController ()
 @property (nonatomic, strong) UITextView *textView;
@@ -21,11 +20,8 @@
 @property (nonatomic, strong) PFGeoPoint *geoPoint;
 @property (nonatomic, strong) UIButton *toButton;
 @property (nonatomic, strong) NSMutableArray *facebookTags;
-@property (nonatomic, strong) NSMutableArray *contactTags;
 @property (nonatomic, strong) NSMutableArray *facebookIds;
-@property (nonatomic, strong) NSMutableArray *contactPhones;
 @property (nonatomic) BOOL world;
-@property (nonatomic, strong) NSString *targetId;
 @end
 
 @implementation MOPostViewController
@@ -41,22 +37,10 @@
     UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postDare)];
     self.navigationItem.rightBarButtonItem = postButton;
     
-    UITextField *iDare = [[UITextField alloc] initWithFrame:CGRectMake(3, 100, 50, 25)];
-    iDare.text = @"I dare";
+    UITextField *iDare = [[UITextField alloc] initWithFrame:CGRectMake(3, 100, self.view.bounds.size.width, 25)];
+    iDare.text = @"I dare someone tagged to...";
     iDare.textColor = [UIColor blackColor];
     [self.view addSubview:iDare];
-    
-    self.dareTarget = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.dareTarget.backgroundColor = [UIColor lightGrayColor];
-    self.dareTarget.frame = CGRectMake(53, 100, self.view.bounds.size.width-90, 25);
-    [self.dareTarget addTarget:self action:@selector(dareTargetPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.dareTarget setTitle:@"Someone" forState:UIControlStateNormal];
-    [self.view addSubview:self.dareTarget];
-    
-    UITextField *to = [[UITextField alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-35, 100, 35, 25)];
-    to.text = @"to...";
-    to.textColor = [UIColor blackColor];
-    [self.view addSubview:to];
     
     // DARE TEXT VIEW
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 130, [[UIScreen mainScreen] bounds].size.width-6, [[UIScreen mainScreen] bounds].size.height - 390)];
@@ -84,19 +68,10 @@
         }
     }];
     
-    self.targetId = [NSString string];
     self.facebookIds = [NSMutableArray array];
-    self.contactPhones = [NSMutableArray array];
 }
 - (void)postDare {
     [self attemptToPost];
-}
-
-- (void)dareTargetPressed {
-    MODareTargetViewController *targetView = [[MODareTargetViewController alloc] init];
-    targetView.delegate = self;
-    UIViewController *targetNav =  [[UINavigationController alloc] initWithRootViewController:targetView];
-    [self presentViewController:targetNav animated:YES completion:nil];
 }
 
 // USER PRESSED CANCEL BUTTON
@@ -125,84 +100,24 @@
 - (void)toButtonPressed {
     MODareRecipientViewController *recipientView = [[MODareRecipientViewController alloc] init];
     recipientView.delegate = self;
-    [recipientView reopenWithFacebook:self.facebookTags contacts:self.contactTags world:self.world];
+    [recipientView reopenWithFacebook:self.facebookTags world:self.world];
     UIViewController *recipientNav =  [[UINavigationController alloc] initWithRootViewController:recipientView];
     [self presentViewController:recipientNav animated:YES completion:nil];
-}
-
--(void)sendDataToPostView:(NSArray *)contact {
-    if ([contact count] == 0) {
-        [self.dareTarget setTitle:@"Someone" forState:UIControlStateNormal];
-    } else {
-        [self.dareTarget setTitle:contact[0] forState:UIControlStateNormal];
-        if ([contact[1] length]<=14){
-            NSString *phone = contact[1];
-            phone = [phone stringByReplacingOccurrencesOfString:@" " withString:@""];
-            NSMutableString *result = [NSMutableString string];
-            NSCharacterSet *numbers = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
-            NSScanner *scanner = [NSScanner scannerWithString:phone];
-            while ([scanner isAtEnd] == NO){
-                NSString *buffer;
-                if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
-                    [result appendString:buffer];
-                } else {
-                    [scanner setScanLocation:([scanner scanLocation] + 1)];
-                }
-            }
-            NSString *firstLetter = [phone substringToIndex:1];
-            if ([firstLetter isEqualToString:@"+"]) {
-                self.targetId = result;
-            } else {
-                self.targetId = [NSString stringWithFormat:@"+1%@",result];
-            }
-        } else {
-            self.targetId = contact[1];
-        }
-    }
 }
 
 -(void)sendDataToPostViewfacebook:(NSMutableArray *)facebookTags contacts:(NSMutableArray *)contactTags world:(BOOL)worldPost {
     NSMutableArray *allContacts = [NSMutableArray arrayWithArray:facebookTags];
     [allContacts addObjectsFromArray:contactTags];
     self.facebookTags = facebookTags;
-    self.contactTags = contactTags;
     self.world = worldPost;
     
     for (NSArray *array in facebookTags) {
         [self.facebookIds addObject:array[1]];
     }
-    for (NSArray *array in contactTags) {
-        NSString *phone = array[1];
-        phone = [phone stringByReplacingOccurrencesOfString:@" " withString:@""];
-        NSMutableString *result = [NSMutableString string];
-        NSCharacterSet *numbers = [NSCharacterSet characterSetWithCharactersInString:@"+0123456789"];
-        NSScanner *scanner = [NSScanner scannerWithString:phone];
-        while ([scanner isAtEnd] == NO){
-            NSString *buffer;
-            if ([scanner scanCharactersFromSet:numbers intoString:&buffer]) {
-                [result appendString:buffer];
-            } else {
-                [scanner setScanLocation:([scanner scanLocation] + 1)];
-            }
-        }
-    
-        NSString *firstLetter = [phone substringToIndex:1];
-        if ([firstLetter isEqualToString:@"+"]) {
-            [self.contactPhones addObject:result];
-        } else {
-            [self.contactPhones addObject:[NSString stringWithFormat:@"+1%@",result]];
-        }
-    }
     
     NSString *buttonString;
     if (worldPost == YES){
-        if ([allContacts count]>1) {
-            buttonString = [NSString stringWithFormat:@"To: World, %@, and %li others", allContacts[0][0], [allContacts count]-1];
-        } else if ([allContacts count] == 1){
-            buttonString = [NSString stringWithFormat:@"To: World and %@", allContacts[0][0]];
-        } else {
-            buttonString = @"To: World";
-        }
+        buttonString = @"To: World";
     } else {
         if ([allContacts count]>1) {
             buttonString = [NSString stringWithFormat:@"To: %@ and %li others", allContacts[0][0], [allContacts count]-1];
@@ -258,25 +173,15 @@
     
     dare[@"funders"] = [NSMutableArray arrayWithObject:[PFUser currentUser].objectId];
     dare[@"submissions"] = [NSMutableArray array];
-    dare[@"phonenubmers"] = self.contactPhones;
     dare[@"facebookIds"] = self.facebookIds;
     dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
-    dare[@"target"] = self.targetId;
     [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
             [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
             [[PFUser currentUser] saveEventually];
             
-            for (NSString *phoneNumber in self.contactPhones) {
-                [PFCloud callFunctionInBackground:@"sendSmsPlivo" withParameters:@{ @"phonenumber" : phoneNumber, @"messagebody" : [NSString stringWithFormat:@"%@ tagged you in a dare. Download Dare Devil and add '%@' to the side menu", [[PFUser currentUser] objectForKey:@"name"], phoneNumber]}];
-            }
             // TODO(0) Push notifiaction to all people in self.facebookIds
-            if ([[self.targetId substringToIndex:1] isEqualToString:@"+"]) {
-                [PFCloud callFunctionInBackground:@"sendSmsPlivo" withParameters:@{ @"phonenumber" : self.targetId, @"messagebody" : [NSString stringWithFormat:@"%@ tagged you in a dare. Download Dare Devil and add '%@' to the side menu", [[PFUser currentUser] objectForKey:@"name"], self.targetId]}];
-            } else {
-                // TODO(0): Notification targeted in dare - to single user
-            }
             // TODO(3): Reload the root view controller
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
