@@ -10,6 +10,7 @@
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */; };
 		F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */; };
+		F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F05AAD1A1C2D1201009C5D28 /* Stripe.framework */; };
 		F06556261C2110BF000DDB42 /* MOCurrentDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */; };
 		F065562D1C211FBD000DDB42 /* MOVotingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F065562C1C211FBD000DDB42 /* MOVotingViewController.m */; };
 		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
@@ -72,6 +73,7 @@
 		F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSubmissionsCell.m; sourceTree = "<group>"; };
 		F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareRecipientViewController.h; sourceTree = "<group>"; };
 		F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareRecipientViewController.m; sourceTree = "<group>"; };
+		F05AAD1A1C2D1201009C5D28 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
 		F06556241C2110BF000DDB42 /* MOCurrentDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCurrentDaresViewController.h; sourceTree = "<group>"; };
 		F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCurrentDaresViewController.m; sourceTree = "<group>"; };
 		F065562B1C211FBD000DDB42 /* MOVotingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOVotingViewController.h; sourceTree = "<group>"; };
@@ -140,6 +142,7 @@
 				F0BAAD191BAD1E17000F4F5A /* FBSDKCoreKit.framework in Frameworks */,
 				F0BAAD1B1BAD1E17000F4F5A /* FBSDKShareKit.framework in Frameworks */,
 				F0BAAD001BAD0CAF000F4F5A /* Security.framework in Frameworks */,
+				F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */,
 				F0BAACFE1BAD0CA5000F4F5A /* QuartzCore.framework in Frameworks */,
 				F0BAACFC1BAD0C9E000F4F5A /* CoreLocation.framework in Frameworks */,
 				F0BAACFA1BAD0C98000F4F5A /* CoreGraphics.framework in Frameworks */,
@@ -272,6 +275,7 @@
 		F0BAACE51BAD0B9D000F4F5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F05AAD1A1C2D1201009C5D28 /* Stripe.framework */,
 				F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */,
 				F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */,
 				F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */,
@@ -603,6 +607,7 @@
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Molson.DareDevil;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
@@ -624,6 +629,7 @@
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Molson.DareDevil;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";

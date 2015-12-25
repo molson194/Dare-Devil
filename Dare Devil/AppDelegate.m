@@ -16,6 +16,9 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import "MOActivityViewController.h"
+#import <Stripe/Stripe.h>
+
+NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
 
 
 @interface AppDelegate () <SWRevealViewControllerDelegate>
@@ -31,6 +34,9 @@
     // FACEBOOK SETUP
     [FBSDKAppEvents activateApp];
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
+    
+    // STRIPE SETUP
+    [Stripe setDefaultPublishableKey:StripePublishableKey];
     
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
                                                     UIUserNotificationTypeBadge |

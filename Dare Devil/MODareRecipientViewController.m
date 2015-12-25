@@ -159,8 +159,6 @@
     if ([self.taggedFacebook containsObject:self.searchResults[indexPath.row]]) {
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
     }
-    
-    //TODO(0): fix bug with color of cell on reload data (need to check if
 
     return cell;
 }

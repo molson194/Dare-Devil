@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Stripe/Stripe.h>
 
-@interface MOAddFundsViewController : UIViewController <UITextFieldDelegate, UIGestureRecognizerDelegate>
+#define STPCardErrorUserMessage NSLocalizedString(@"Your card is invalid", @"Error when the card is not valid")
+
+@interface MOAddFundsViewController : UIViewController <UITextFieldDelegate, UIGestureRecognizerDelegate,STPPaymentCardTextFieldDelegate>
+
+typedef void (^STPCheckoutTokenBlock)(STPToken* token, NSError* error);
 
 @end

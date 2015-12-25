@@ -12,7 +12,11 @@
 
 @interface MOAddFundsViewController ()
 
-@property(nonatomic, strong) UITextField *moneyField;
+@property(nonatomic, strong) UILabel *currentFunds;
+@property(nonatomic, strong) NSNumberFormatter *currencyFormatter;
+@property(nonatomic) STPPaymentCardTextField *paymentTextField;
+@property(nonatomic, strong) UIButton *addFunds;
+@property(nonatomic, strong) UIButton *cashOut;
 
 @end
 
@@ -32,50 +36,35 @@
     [self.view addGestureRecognizer:tap];
     
     // FUNDS REMAINING LABEL
-    NSNumberFormatter *currencyFormatter = [[NSNumberFormatter alloc] init];
-    [currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    UILabel *currentFunds = [[UILabel alloc] initWithFrame:CGRectMake(0, 70, [[UIScreen mainScreen] bounds].size.width, 40)];
-    currentFunds.text = [NSString stringWithFormat:@"%@ %@", @"Current Funds Remaining:", [currencyFormatter stringFromNumber:[[PFUser currentUser] objectForKey:@"funds"]]];
-    currentFunds.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:currentFunds];
+    self.currencyFormatter = [[NSNumberFormatter alloc] init];
+    [self.currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    self.currentFunds = [[UILabel alloc] initWithFrame:CGRectMake(0, 60, [[UIScreen mainScreen] bounds].size.width, 40)];
+    self.currentFunds.text = [NSString stringWithFormat:@"%@ %@", @"Current Funds Remaining:", [self.currencyFormatter stringFromNumber:[[PFUser currentUser] objectForKey:@"funds"]]];
+    self.currentFunds.textAlignment = NSTextAlignmentCenter;
+    [self.view addSubview:self.currentFunds];
     
-    // DOLLAR SIGN LABEL
-    UILabel *dollarSign = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width/2-40, 120, 30, 40)];
-    dollarSign.text = @"$";
-    dollarSign.font = [dollarSign.font fontWithSize:40];
-    [self.view addSubview:dollarSign];
-    
-    // MONEY TO ADD TEXT FIELD
-    self.moneyField = [[UITextField alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width/2-12, 120, 130, 40)];
-    self.moneyField.font = [UIFont systemFontOfSize:40];
-    self.moneyField.placeholder = @"10";
-    self.moneyField.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.moneyField setKeyboardType:UIKeyboardTypeNumberPad];
-    self.moneyField.delegate = self;
-    [self.view addSubview:self.moneyField];
-    
-    // DESCRIPTION LABEL
-    UILabel *requirements = [[UILabel alloc] initWithFrame:CGRectMake(0, 160, [[UIScreen mainScreen] bounds].size.width, 40)];
-    requirements.text = @"Add funds or cash out. $10 minimum.";
-    requirements.textColor = [UIColor lightGrayColor];
-    requirements.textAlignment = NSTextAlignmentCenter;
-    [self.view addSubview:requirements];
     
     // ADD FUNDS BUTTON
-    UIButton *addFunds=[UIButton buttonWithType:UIButtonTypeCustom];
-    addFunds.backgroundColor=[UIColor blueColor];
-    addFunds.frame=CGRectMake(20,220,[[UIScreen mainScreen] bounds].size.width/2-21,40);
-    [addFunds setTitle: @"Add Funds" forState: UIControlStateNormal];
-    [addFunds addTarget:self action:@selector(addFundsPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:addFunds];
+    self.addFunds=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.addFunds.backgroundColor=[UIColor lightGrayColor];
+    self.addFunds.frame=CGRectMake(20,145,[[UIScreen mainScreen] bounds].size.width/2-21,40);
+    [self.addFunds setTitle: @"Add $10" forState: UIControlStateNormal];
+    [self.addFunds addTarget:self action:@selector(addFundsPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.addFunds];
     
     // CASH OUT BUTTON
-    UIButton *cashOut=[UIButton buttonWithType:UIButtonTypeCustom];
-    cashOut.backgroundColor=[UIColor blueColor];
-    cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2,220,[[UIScreen mainScreen] bounds].size.width/2-21,40);
-    [cashOut setTitle: @"Cash Out" forState: UIControlStateNormal];
-    [cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:cashOut];
+    self.cashOut=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.cashOut.backgroundColor=[UIColor lightGrayColor];
+    self.cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2,145,[[UIScreen mainScreen] bounds].size.width/2-21,40);
+    [self.cashOut setTitle: @"Cash Out $10" forState: UIControlStateNormal];
+    [self.cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:self.cashOut];
+    
+    //TODO
+    self.paymentTextField = [[STPPaymentCardTextField alloc] initWithFrame:CGRectMake(15, 95, CGRectGetWidth(self.view.frame) - 30, 44)];
+    self.paymentTextField.delegate = self;
+    [self.view addSubview:self.paymentTextField];
+    [self.view bringSubviewToFront:self.paymentTextField];
     
 }
 
@@ -92,49 +81,78 @@
 
 // ADD FUNDS BUTTON PRESSED ACTION
 - (void)addFundsPressed{
-    float funds = [[NSDecimalNumber decimalNumberWithString:self.moneyField.text]floatValue];
-    if (funds >= 10) {
-        [self addFunds:funds];
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Invalid funding level" message:@"Enter at least $10" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
+    if (self.addFunds.backgroundColor != [UIColor lightGrayColor]) {
+        [self createToken:^(STPToken *token, NSError *error) {
+            if (error) {
+                //TODO
+            } else {
+                [self charge:token];
+            }
+    }];
     }
     
 }
 
-// ADD FUNDS
-- (void)addFunds:(float)funds {
-    // TODO(2): Make credit card processing
-    int newTotal = [[[PFUser currentUser] objectForKey:@"funds"] integerValue] + funds;
-    [[PFUser currentUser] setObject:@(newTotal) forKey:@"funds"];
-    [[PFUser currentUser] saveEventually];
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 // CASH OUT BUTTON PRESSED ACTION
 - (void)cashOutPressed {
-    float cash = [[NSDecimalNumber decimalNumberWithString:self.moneyField.text]floatValue];
-    if (cash>=10 && cash<=[[[PFUser currentUser] objectForKey:@"funds"] integerValue]) {
-        [self cashOut:cash];
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Invalid cash level" message:@"Enter at least $10 and at most your current funds remaining" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-        return;
+    //TODO and greater than 10 current funds
+    if (self.cashOut.backgroundColor != [UIColor lightGrayColor]) {
+        long newTotal = [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 10;
+        [[PFUser currentUser] setObject:@((int) newTotal) forKey:@"funds"];
+        [[PFUser currentUser] saveEventually];
+        self.currentFunds.text = [NSString stringWithFormat:@"%@ %@", @"Current Funds Remaining:", [self.currencyFormatter stringFromNumber:[[PFUser currentUser] objectForKey:@"funds"]]];
     }
 }
 
-// CASH OUT
-- (void)cashOut:(float)cash {
-    // TODO(2): Make credit card processing
-    int newTotal = [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - cash;
-    [[PFUser currentUser] setObject:@(newTotal) forKey:@"funds"];
-    [[PFUser currentUser] saveEventually];
-    [self.navigationController popViewControllerAnimated:YES];
+- (void)paymentCardTextFieldDidChange:(STPPaymentCardTextField *)textField {
+    // Toggle navigation, for example
+    if(textField.isValid) {
+        self.addFunds.backgroundColor = [UIColor blueColor];
+        self.cashOut.backgroundColor = [UIColor blueColor];
+    }
+}
+
+- (void)charge:(STPToken *)token {
+    
+    NSDictionary *info = @{ @"cardToken": token.tokenId, };
+    [PFCloud callFunctionInBackground:@"addFunds" withParameters:info block:^(id object, NSError *error) {
+                                    if (error) {
+                                        //TODO(2): Error
+                                    } else {
+                                        long newTotal = [[[PFUser currentUser] objectForKey:@"funds"] integerValue] + 10;
+                                        [[PFUser currentUser] setObject:@((int)newTotal) forKey:@"funds"];
+                                        [[PFUser currentUser] saveEventually];
+                                        self.currentFunds.text = [NSString stringWithFormat:@"%@ %@", @"Current Funds Remaining:", [self.currencyFormatter stringFromNumber:[[PFUser currentUser] objectForKey:@"funds"]]];
+                                    }
+                                }];
+}
+
+- (void)createToken:(STPCheckoutTokenBlock)block
+{
+    
+    if ( ![self.paymentTextField isValid] ) {
+        NSError* error = [[NSError alloc] initWithDomain:StripeDomain
+                                                    code:STPCardError
+                                                userInfo:@{NSLocalizedDescriptionKey: STPCardErrorUserMessage}];
+        
+        block(nil, error);
+        return;
+    }
+    
+    
+    STPCardParams* card = self.paymentTextField.card;
+    STPCardParams* scard = [[STPCard alloc] init];
+    
+    scard.number = card.number;
+    scard.expMonth = card.expMonth;
+    scard.expYear = card.expYear;
+    scard.cvc = card.cvc;
+    
+    [[STPAPIClient sharedClient] createTokenWithCard:scard
+                                          completion:^(STPToken *token, NSError *error) {
+                                              block(token, error);
+                                          }];
+    
 }
 
 @end
