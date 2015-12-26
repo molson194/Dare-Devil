@@ -15,8 +15,6 @@
 
 - (void)setObject:(PFObject *)object;
 @property (nonatomic, strong) __block PFObject *obj;
-@property (nonatomic, strong) PFObject *uploadObject;
-@property (nonatomic, strong) NSNumber *indexPathRow;
 
 
 @end

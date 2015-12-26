@@ -10,12 +10,12 @@
 #import "MODareTableViewCell.h"
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
+#import "MBProgressHUD.h"
 
 @implementation MOSingleDareController
 
 -(void)viewDidLoad {
     self.tableView.delegate = self;
-    // TODO(0): Get buttons to work
 }
 
 - (void)setObject:(PFObject *)object {
@@ -24,6 +24,11 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 1;
+}
+
+// HEIGHT OF CELL
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -41,14 +46,12 @@
     // FUNDS BUTTON
     [cell.fundsButton setTitle: [NSString stringWithFormat:@"$ %lu", (unsigned long) [[self.obj objectForKey:@"funders"] count]] forState: UIControlStateSelected];
     [cell.fundsButton setTitle: [NSString stringWithFormat:@"$ %lu", (unsigned long) [[self.obj objectForKey:@"funders"] count]] forState: UIControlStateNormal];
-    cell.fundsButton.tag = indexPath.row;
     if ([[self.obj objectForKey:@"funders"] containsObject:[PFUser currentUser].objectId]) {
         cell.fundsButton.selected = true;
     } else {
         cell.fundsButton.selected = false;
     }
     [cell.fundsButton addTarget:self action:@selector(fundDare:) forControlEvents:UIControlEventTouchUpInside];
-    [[cell.fundsButton layer] setValue:self.obj forKey:@"dareObject"];
     [cell.contentView addSubview:cell.fundsButton];
     
     // UPLOAD CONTENT BUTTON
@@ -61,8 +64,6 @@
         }
     }];
     [cell.uploadButton addTarget:self action:@selector(uploadSubmission:) forControlEvents:UIControlEventTouchUpInside];
-    cell.uploadButton.tag = indexPath.row;
-    [[cell.uploadButton layer] setValue:self.obj forKey:@"dareObject"];
     PFQuery *userUploadsQuery = [PFQuery queryWithClassName:@"Submissions"];
     [userUploadsQuery whereKey:@"dare" equalTo:self.obj];
     [userUploadsQuery whereKey:@"user" equalTo:[PFUser currentUser]];
@@ -94,10 +95,9 @@
 // FUND DARE
 - (void)fundDare:(UIButton *)sender{
     if (!sender.selected) {
-        PFObject *object = [[sender layer] valueForKey:@"dareObject"];
-        NSMutableArray *funders = [object objectForKey:@"funders"];
+        NSMutableArray *funders = [self.obj objectForKey:@"funders"];
         [funders addObject:[PFUser currentUser].objectId];
-        [object saveInBackground];
+        [self.obj saveInBackground];
         int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
         [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
         [[PFUser currentUser] saveEventually];
@@ -113,15 +113,15 @@
         imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
         imagePicker.delegate = self;
         imagePicker.mediaTypes = [[NSMutableArray alloc] initWithObjects:(NSString *)kUTTypeMovie, kUTTypeImage, nil];
-        [self presentViewController:imagePicker animated:YES completion:^{
-            self.uploadObject = [[sender layer] valueForKey:@"dareObject"];
-            self.indexPathRow = [NSNumber numberWithInt:(int)sender.tag];
-        }];
+        [self presentViewController:imagePicker animated:YES completion:nil];
     }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [self dismissViewControllerAnimated:YES completion:^{
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeIndeterminate;
+        hud.labelText = @"Loading";
         NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
         PFObject *submission = [PFObject objectWithClassName:@"Submissions"];
         
@@ -138,28 +138,35 @@
             submission[@"image"] = imageFile;
         }
         
-        submission[@"dare"] = self.uploadObject;
+        submission[@"dare"] = self.obj;
         submission[@"votingFavorites"] = [NSMutableArray array];
         submission[@"user"] = [PFUser currentUser];
         submission[@"isWinner"] = [NSNumber numberWithBool:NO];
-        [submission saveInBackground];
+        [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if(succeeded) {
+                [hud hide:YES];
+                [self.tableView reloadData];
+            } else {
+                [hud hide:YES];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error Uploading Submission" message:error.description preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:ok];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+        }];
         // Create our push query
-        NSMutableArray *fundersPush = [self.uploadObject objectForKey:@"funders"];
+        NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
         // Send push notification to query
-        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.uploadObject objectForKey:@"text"]]];
+        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.obj objectForKey:@"text"]]];
         
         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-        notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.uploadObject objectForKey:@"text"]];
-        notification[@"dare"] = self.uploadObject;
+        notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.obj objectForKey:@"text"]];
+        notification[@"dare"] = self.obj;
         notification[@"type"] = @"New Submission";
         notification[@"followers"] = fundersPush;
         [notification saveInBackground];
-        
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.indexPathRow integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
     }];
 }
 

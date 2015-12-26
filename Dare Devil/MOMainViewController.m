@@ -14,6 +14,7 @@
 #import "SWRevealViewController.h"
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
+#import "MBProgressHUD.h"
 
 @interface MOMainViewController ()
 @property (nonatomic, strong) PFObject *uploadObject;
@@ -245,15 +246,26 @@
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     [self dismissViewControllerAnimated:YES completion:^{
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeIndeterminate;
+        hud.labelText = @"Loading";
+        
         NSString *mediaType = [info objectForKey: UIImagePickerControllerMediaType];
         PFObject *submission = [PFObject objectWithClassName:@"Submissions"];
     
         if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
             NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
             PFFile *videoFile = [PFFile fileWithName:@"video.mp4" contentsAtPath:[videoUrl path]];
+            
+            //TODO isVertical
             submission[@"video"] = videoFile;
         } else if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {
             UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
+            if (image.size.height > image.size.width) {
+                submission[@"isVertical"] = [NSNumber numberWithBool:YES];
+            } else {
+                submission[@"isVertical"] = [NSNumber numberWithBool:NO];
+            }
             image = [self scaleAndRotateImage:image];
             NSData *imgData= UIImageJPEGRepresentation(image,0.8 /*compressionQuality*/);
             image = [UIImage imageWithData:imgData];
@@ -265,7 +277,18 @@
         submission[@"votingFavorites"] = [NSMutableArray array];
         submission[@"user"] = [PFUser currentUser];
         submission[@"isWinner"] = [NSNumber numberWithBool:NO];
-        [submission saveInBackground];
+        [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if(succeeded) {
+                [hud hide:YES];
+                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.indexPathRow integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+            } else {
+                [hud hide:YES];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error Uploading Submission" message:error.description preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                [alertController addAction:ok];
+                [self presentViewController:alertController animated:YES completion:nil];
+            }
+        }];
         // Create our push query
         NSMutableArray *fundersPush = [self.uploadObject objectForKey:@"funders"];
         PFQuery *pushQuery = [PFInstallation query];
@@ -279,10 +302,6 @@
         notification[@"type"] = @"New Submission";
         notification[@"followers"] = fundersPush;
         [notification saveInBackground];
-        
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.indexPathRow integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
     }];
 }
 

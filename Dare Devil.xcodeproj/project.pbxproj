@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */; };
+		F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */; };
 		F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */; };
 		F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F05AAD1A1C2D1201009C5D28 /* Stripe.framework */; };
 		F06556261C2110BF000DDB42 /* MOCurrentDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */; };
@@ -72,6 +73,8 @@
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
 		F01470251BDEBEBF00F4074D /* MOSubmissionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSubmissionsCell.h; sourceTree = "<group>"; };
 		F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSubmissionsCell.m; sourceTree = "<group>"; };
+		F04C5CAC1C2F1702007AE863 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareRecipientViewController.h; sourceTree = "<group>"; };
 		F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareRecipientViewController.m; sourceTree = "<group>"; };
 		F05AAD1A1C2D1201009C5D28 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
@@ -223,9 +226,19 @@
 			name = Post;
 			sourceTree = "<group>";
 		};
+		F04C5CAB1C2F16E6007AE863 /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				F04C5CAC1C2F1702007AE863 /* MBProgressHUD.h */,
+				F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */,
+			);
+			name = MBProgressHUD;
+			sourceTree = "<group>";
+		};
 		F06556271C211ED7000DDB42 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				F04C5CAB1C2F16E6007AE863 /* MBProgressHUD */,
 				F065562B1C211FBD000DDB42 /* MOVotingViewController.h */,
 				F065562C1C211FBD000DDB42 /* MOVotingViewController.m */,
 				F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */,
@@ -472,6 +485,7 @@
 				F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */,
 				F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */,
 				F0CEC2C31BCB04DE009B0149 /* MODareTableViewCell.m in Sources */,
+				F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */,
 				F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */,
 				F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */,
 				F0BBFBF01C04E9B600F7686D /* SWRevealViewController.m in Sources */,
