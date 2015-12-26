@@ -22,13 +22,12 @@
     [super viewDidLoad];
     [self.navigationController setNavigationBarHidden:YES];
     self.navigationItem.hidesBackButton = YES;
-    // TODO(3): JUST ADD FACEBOOK BUTTON
+    
     // FACEBOOK BUTTON SETUP
+    UIImage *btnImage = [UIImage imageNamed:@"facebook.png"];
     UIButton *myLoginButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    myLoginButton.backgroundColor=[UIColor darkGrayColor];
-    myLoginButton.frame=CGRectMake(0,0,180,40);
-    myLoginButton.center = self.view.center;
-    [myLoginButton setTitle: @"Login Button" forState: UIControlStateNormal];
+    myLoginButton.frame=CGRectMake(self.view.frame.size.width/2 - 100, self.view.frame.size.height/3, 200, 40);
+    [myLoginButton setImage:btnImage forState:UIControlStateNormal];
     [myLoginButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:myLoginButton];
 }

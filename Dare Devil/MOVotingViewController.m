@@ -71,6 +71,7 @@
     } else if (object[@"image"]) {
         cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
         cell.imageView.file = [object objectForKey:@"image"];
+        [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
         [cell.imageView loadInBackground];
         [cell addSubview:cell.imageView];
     }

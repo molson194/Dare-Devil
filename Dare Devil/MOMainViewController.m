@@ -41,7 +41,8 @@
 }
 
 -(void)viewDidAppear:(BOOL)animated {
-    
+    [super viewWillAppear:animated];
+    [self loadObjects];
 }
 
 - (void)viewDidLoad {

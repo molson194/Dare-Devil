@@ -27,6 +27,7 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 250)];
     PFImageView *imageView = [[PFImageView alloc] initWithFrame:CGRectMake(20, 10, 200, 200)];
     imageView.file = [[PFUser currentUser] objectForKey:@"profilePic"];
+    [imageView setContentMode:UIViewContentModeScaleAspectFit];
     [imageView loadInBackground];
     [headerView addSubview:imageView];
     UILabel *personSubmitted = [[UILabel alloc] initWithFrame:CGRectMake(20, 220, 200, 30)];

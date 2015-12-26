@@ -16,6 +16,7 @@
 		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
 		F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F07600411BAE6CEC0052BFBB /* MOPostViewController.m */; };
 		F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F084712D1C239A350068EEC5 /* MOActivityViewController.m */; };
+		F097A3D71C2E5D9500BA167C /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = F097A3D61C2E5D9500BA167C /* facebook.png */; };
 		F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACAD1BAD06F9000F4F5A /* main.m */; };
 		F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */; };
 		F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */; };
@@ -86,6 +87,7 @@
 		F07600411BAE6CEC0052BFBB /* MOPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPostViewController.m; sourceTree = "<group>"; };
 		F084712C1C239A350068EEC5 /* MOActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOActivityViewController.h; sourceTree = "<group>"; };
 		F084712D1C239A350068EEC5 /* MOActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOActivityViewController.m; sourceTree = "<group>"; };
+		F097A3D61C2E5D9500BA167C /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		F0BAACAD1BAD06F9000F4F5A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F0BAACAF1BAD06F9000F4F5A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 		F0BAACE41BAD0B96000F4F5A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F097A3D61C2E5D9500BA167C /* facebook.png */,
 				F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */,
 				F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */,
 			);
@@ -436,6 +439,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */,
+				F097A3D71C2E5D9500BA167C /* facebook.png in Resources */,
 				F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

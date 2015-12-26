@@ -193,8 +193,6 @@
             notification[@"type"] = @"New Dare";
             notification[@"facebook"] = self.facebookIds;
             [notification saveInBackground];
-
-            // TODO(3): Reload the root view controller
             [self.navigationController popToRootViewControllerAnimated:YES];
         } else {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error uploading dare." message:error.description preferredStyle:UIAlertControllerStyleAlert];

@@ -85,15 +85,18 @@
         cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
         cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
         cell.videoView.frame = CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60);
-        cell.videoView.videoGravity = AVLayerVideoGravityResizeAspect;
+        cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         cell.videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:cell.videoView];
     } else if (object[@"image"]) {
         cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
         cell.imageView.file = [object objectForKey:@"image"];
+        [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
         [cell.imageView loadInBackground];
         [cell addSubview:cell.imageView];
     }
+    
+    // TODO: Save and get orientation of image/video and change cell size depending on orientation (will resize accordingly)
     return cell;
 }
 
