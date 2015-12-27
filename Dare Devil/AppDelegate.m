@@ -89,7 +89,7 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
         // Track app opens due to a push notification being acknowledged while the app wasn't active.
         [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
     }
-    // TODO(2): Fix when opening up from inactive
+
     if (application.applicationState != UIApplicationStateActive) {
         UINavigationController *currentDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain]];
         SWRevealViewController *vc = (SWRevealViewController *)self.window.rootViewController;

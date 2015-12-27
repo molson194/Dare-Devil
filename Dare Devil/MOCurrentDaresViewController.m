@@ -66,6 +66,7 @@
     
     // DARE TEXT
     cell.dareLabel.text = [object objectForKey:@"text"];
+    [cell.dareLabel setUserInteractionEnabled:NO];
     [cell.contentView addSubview:cell.dareLabel];
     
     // UPLOAD CONTENT BUTTON

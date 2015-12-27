@@ -101,8 +101,6 @@
         [cell.imageView loadInBackground];
         [cell.contentView addSubview:cell.imageView];
     }
-    
-    // TODO: Save and get orientation of image/video and change cell size depending on orientation (will resize accordingly)
     return cell;
 }
 

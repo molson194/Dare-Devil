@@ -48,8 +48,10 @@
     }
     
     PFUser *userSubmitted = (PFUser *)[object objectForKey:@"user"];
-    [userSubmitted fetchIfNeededInBackground];
-    cell.personSubmitted.text = [userSubmitted objectForKey:@"username"];
+    [userSubmitted fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        cell.personSubmitted.text = [object objectForKey:@"name"];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
     if ([[object objectForKey:@"votingFavorites"] containsObject:[PFUser currentUser].objectId]) {
         cell.favoriteButton.selected = true;
     } else {
@@ -69,10 +71,16 @@
         cell.videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:cell.videoView];
     } else if (object[@"image"]) {
-        cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
+        cell.imageView = nil;
+        if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
+        } else {
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width-100)];
+        }
         cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
         cell.imageView.file = [object objectForKey:@"image"];
-        [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
+        [cell.imageView setClipsToBounds:YES];
+        [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
         [cell.imageView loadInBackground];
         [cell addSubview:cell.imageView];
     }
@@ -81,7 +89,12 @@
 
 // HEIGHT OF CELL
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.view.bounds.size.width + 110;
+    PFObject *obj = [self.objects objectAtIndex:indexPath.row];
+    if (obj[@"isVertical"] == [NSNumber numberWithBool:YES]){
+        return self.view.bounds.size.width + 120;
+    } else {
+        return self.view.bounds.size.width-50;
+    }
 }
 
 - (PFQuery *)queryForTable {

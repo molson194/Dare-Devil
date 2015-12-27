@@ -37,6 +37,14 @@
     personSubmitted.text = [[PFUser currentUser] objectForKey:@"name"];
     [headerView addSubview:personSubmitted];
     [self.tableView setTableHeaderView:headerView];
+    
+    UIView *footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+    UILabel *emailLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 20, 250, 15)];
+    emailLabel.text = @"Email questions to daredevilllc@gmail.com";
+    emailLabel.textAlignment = NSTextAlignmentCenter;
+    [emailLabel setFont:[UIFont systemFontOfSize:10]];
+    [footerView addSubview:emailLabel];
+    [self.tableView setTableFooterView:footerView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {

@@ -94,7 +94,7 @@
 
 // FUND DARE
 - (void)fundDare:(UIButton *)sender{
-    if (!sender.selected) {
+    if (!sender.selected && (int)[[PFUser currentUser] objectForKey:@"funds"] >= 1) {
         NSMutableArray *funders = [self.obj objectForKey:@"funders"];
         [funders addObject:[PFUser currentUser].objectId];
         [self.obj saveInBackground];
