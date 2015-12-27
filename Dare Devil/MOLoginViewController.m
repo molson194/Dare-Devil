@@ -51,6 +51,7 @@
                 [[PFUser currentUser] setObject:@0 forKey:@"funds"];
                 [[PFUser currentUser] setObject:result[@"id"] forKey:@"fbId"];
                 [[PFUser currentUser] setObject:result[@"name"] forKey:@"name"];
+                [[PFUser currentUser] setObject:[NSNumber numberWithBool:NO] forKey:@"isAdmin"];
                 [[PFUser currentUser] saveInBackground];
             }];
 

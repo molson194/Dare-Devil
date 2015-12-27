@@ -13,6 +13,7 @@
 #import "MOMainViewController.h"
 #import "MOCurrentDaresViewController.h"
 #import "MOActivityViewController.h"
+#import "MOAdminDareViewController.h"
 #import <Parse/Parse.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -65,7 +66,11 @@
 #pragma marl - UITableView Data Source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 5;
+    if ([PFUser currentUser][@"isAdmin"] == [NSNumber numberWithBool:YES]) {
+        return 6;
+    } else {
+        return 5;
+    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,6 +94,8 @@
         text = @"Current Funded Dares";
     } else if (row ==4) {
         text = @"Activity";
+    } else if (row == 5) {
+        text = @"Admin Activities";
     }
     cell.textLabel.text = NSLocalizedString( text, nil );
     
@@ -116,6 +123,9 @@
     } else if (row==4) {
         MOActivityViewController *activityViewController = [[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:activityViewController];
+    } else if (row==5) {
+        MOAdminDareViewController *adminViewController = [[MOAdminDareViewController alloc] initWithStyle:UITableViewStylePlain];
+        newFrontController = [[UINavigationController alloc] initWithRootViewController:adminViewController];
     }
     [revealController pushFrontViewController:newFrontController animated:YES];
 }

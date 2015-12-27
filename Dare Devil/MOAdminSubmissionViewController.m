@@ -1,21 +1,21 @@
 //
-//  MOVotingViewController.m
+//  MOAdminSubmissionViewController.m
 //  Dare Devil
 //
-//  Created by Matthew Olson on 12/15/15.
+//  Created by Matthew Olson on 12/26/15.
 //  Copyright © 2015 Molson. All rights reserved.
 //
 
-#import "MOVotingViewController.h"
+#import "MOAdminSubmissionViewController.h"
 #import "MOSubmissionsCell.h"
 #import <Parse/Parse.h>
 
-@interface MOVotingViewController ()
+@interface MOAdminSubmissionViewController ()
 @property (nonatomic, strong) PFObject *obj;
 @property (nonatomic) CGFloat previousScrollViewYOffset;
 @end
 
-@implementation MOVotingViewController
+@implementation MOAdminSubmissionViewController
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -31,11 +31,46 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
+    // ADD FUNDS BUTTON
+    UIButton *returnFunds=[UIButton buttonWithType:UIButtonTypeCustom];
+    returnFunds.backgroundColor=[UIColor blueColor];
+    returnFunds.frame=CGRectMake(20,5,self.view.bounds.size.width/2-21,30);
+    [returnFunds setTitle: @"Return $1" forState: UIControlStateNormal];
+    [returnFunds addTarget:self action:@selector(returnFundsPressed) forControlEvents:UIControlEventTouchUpInside];
+    [headerView addSubview:returnFunds];
+    
+    // CASH OUT BUTTON
+    UIButton *winner=[UIButton buttonWithType:UIButtonTypeCustom];
+    winner.backgroundColor=[UIColor blueColor];
+    winner.frame=CGRectMake(self.view.bounds.size.width/2+1,5,self.view.bounds.size.width/2-21,30);
+    [winner setTitle: @"Winner Payout" forState: UIControlStateNormal];
+    [winner addTarget:self action:@selector(winnerPressed) forControlEvents:UIControlEventTouchUpInside]; // TODO: function: isFinished -> true, add $ to most liked, pop
+    [headerView addSubview:winner];
+    self.tableView.tableHeaderView = headerView;
 }
 
 - (void)setObject:(PFObject *)object {
-    [object fetchIfNeededInBackground];
     self.obj = object;
+}
+
+- (void) returnFundsPressed {
+    NSArray *funders = [self.obj objectForKey:@"funders"];
+    PFQuery * query = [PFUser query];
+    [query whereKey:@"objectId" containedIn:funders];
+    [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            [PFCloud callFunctionInBackground:@"refund" withParameters:@{@"idArray": funders} block:^(id  _Nullable object, NSError * _Nullable error) {
+                if (!error) {
+                    [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+                    [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                        if (succeeded){
+                            [self.navigationController popToRootViewControllerAnimated:YES];
+                        }
+                    }];
+                }
+                
+            }];
+    }];
 }
 
 // SETUP CELL WITH PARSE DATA
@@ -52,15 +87,6 @@
         cell.personSubmitted.text = [object objectForKey:@"name"];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
-    if ([[object objectForKey:@"votingFavorites"] containsObject:[PFUser currentUser].objectId]) {
-        cell.favoriteButton.selected = true;
-    } else {
-        cell.favoriteButton.selected = false;
-    }
-    [cell.favoriteButton addTarget:self action:@selector(favoriteDare:) forControlEvents:UIControlEventTouchUpInside];
-    [[cell.favoriteButton layer] setValue:object forKey:@"submissionObject"];
-    cell.favoriteButton.tag = indexPath.row;
-    [cell addSubview:cell.favoriteButton];
     
     if (object[@"video"]) {
         PFFile *video = [object objectForKey:@"video"];
@@ -104,21 +130,6 @@
     [query whereKey:@"dare" equalTo:self.obj];
     [query orderByDescending:@"createdAt"];
     return query;
-}
-
-// FAVORITE DARE ACTION
-- (void)favoriteDare:(UIButton *)sender {
-    if (!sender.selected) {
-        PFObject *object = [[sender layer] valueForKey:@"submissionObject"];
-        NSMutableArray *array = [object objectForKey:@"votingFavorites"];
-        [array addObject:[PFUser currentUser].objectId];
-        [object saveInBackground];
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-        
-        sender.selected = YES;
-    }
 }
 
 @end

@@ -1,23 +1,22 @@
 //
-//  MOCurrentDaresViewController.m
+//  MOAdminDareViewController.m
 //  Dare Devil
 //
-//  Created by Matthew Olson on 12/15/15.
+//  Created by Matthew Olson on 12/26/15.
 //  Copyright © 2015 Molson. All rights reserved.
 //
 
-#import "MOCurrentDaresViewController.h"
+#import "MOAdminDareViewController.h"
 #import "SWRevealViewController.h"
 #import "MOPostViewController.h"
 #import "MODareTableViewCell.h"
 #import <Parse/Parse.h>
-#import "MOVotingViewController.h"
+#import "MOAdminSubmissionViewController.h"
 
-@interface MOCurrentDaresViewController ()
-@property (nonatomic) CGFloat previousScrollViewYOffset;
+@interface MOAdminDareViewController ()
 @end
 
-@implementation MOCurrentDaresViewController
+@implementation MOAdminDareViewController
 
 - (instancetype)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
@@ -36,8 +35,6 @@
     
     // NAVIGATION BAR SETUP
     self.navigationItem.hidesBackButton = YES;
-    UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addDare)];
-    self.navigationItem.rightBarButtonItem = addButton;
     SWRevealViewController *revealController = [self revealViewController];
     UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:revealController action:@selector(revealToggle:)];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
@@ -48,11 +45,9 @@
     [self.view addGestureRecognizer:tap];
 }
 
-// POST DARE NAVIGATION BUTTON ACTION
-- (void)addDare {
-    MOPostViewController *postViewController = [[MOPostViewController alloc] init];
-    self.navigationController.navigationBar.hidden = NO;
-    [self.navigationController pushViewController:postViewController animated:YES];
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadObjects];
 }
 
 // SETUP CELL WITH PARSE DATA
@@ -69,26 +64,6 @@
     [cell.dareLabel setUserInteractionEnabled:NO];
     [cell.contentView addSubview:cell.dareLabel];
     
-    // UPLOAD CONTENT BUTTON
-    PFQuery *uploadsQuery = [PFQuery queryWithClassName:@"Submissions"];
-    [uploadsQuery whereKey:@"dare" equalTo:object];
-    [uploadsQuery findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        if (!error) {
-            [cell.uploadButton setTitle: [NSString stringWithFormat:@"\u2191%lu", (unsigned long) [objects count]] forState: UIControlStateSelected];
-            [cell.uploadButton setTitle: [NSString stringWithFormat:@"\u2191%lu", (unsigned long) [objects count]] forState: UIControlStateNormal];
-        }
-    }];
-    
-    // TIME LEFT LABEL
-    NSDate *endDate = [[object createdAt] dateByAddingTimeInterval:60*60*24*2];
-    NSInteger diff = [endDate timeIntervalSinceDate:[NSDate date]]/60;
-    if (diff>60) {
-        cell.timeLeft.text = [NSMutableString stringWithFormat:@"%ldh", (long) diff/60];
-    } else {
-        cell.timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
-    }
-    [cell.contentView addSubview:cell.timeLeft];
-    
     return cell;
 }
 
@@ -100,17 +75,19 @@
 // ORGANIZE QUERY
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:@"createdAt" greaterThan:[[NSDate date] dateByAddingTimeInterval:-2*24*60*60]];
-    [query whereKey:@"funders" containsAllObjectsInArray:@[[PFUser currentUser].objectId]];
+    [query whereKey:@"isFinished" equalTo:[NSNumber numberWithBool:NO]];
+    [query whereKey:@"createdAt" lessThan:[[NSDate date] dateByAddingTimeInterval:-2*24*60*60]];
     return query;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
-    MOVotingViewController *votingView = [[MOVotingViewController alloc] initWithStyle:UITableViewStylePlain];
-    [votingView setObject:obj];
-    [self.navigationController pushViewController:votingView animated:YES];
+    [obj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        MOAdminSubmissionViewController *adminView = [[MOAdminSubmissionViewController alloc] initWithStyle:UITableViewStylePlain];
+        [adminView setObject:object];
+        [self.navigationController pushViewController:adminView animated:YES];
+    }];
 }
 
 @end

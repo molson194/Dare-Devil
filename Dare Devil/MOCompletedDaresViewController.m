@@ -87,7 +87,7 @@
         cell.videoView.frame = CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60);
         cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         cell.videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:cell.videoView];
+        [cell.layer addSublayer:cell.videoView]; // TODO fix+test video sizing
     } else if (object[@"image"]) {
         cell.imageView = nil;
         if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
@@ -98,7 +98,9 @@
         cell.imageView.file = [object objectForKey:@"image"];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
         [cell.imageView setClipsToBounds:YES];
-        [cell.imageView loadInBackground];
+        [cell.imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }];
         [cell.contentView addSubview:cell.imageView];
     }
     return cell;
@@ -115,7 +117,7 @@
 }
 
 - (PFQuery *)queryForTable {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName]; // TODO handle private dares
     [query orderByDescending:@"createdAt"];
     [query whereKey:@"isWinner" equalTo:[NSNumber numberWithBool:YES]];
     return query;

@@ -45,6 +45,8 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
                                                                              categories:nil];
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
+    
+    [[PFUser currentUser] fetch]; // TODO
 
     // WINDOW SET UP
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -89,7 +91,7 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
         // Track app opens due to a push notification being acknowledged while the app wasn't active.
         [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
     }
-
+//TODO fix opening app
     if (application.applicationState != UIApplicationStateActive) {
         UINavigationController *currentDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain]];
         SWRevealViewController *vc = (SWRevealViewController *)self.window.rootViewController;

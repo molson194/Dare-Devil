@@ -171,6 +171,7 @@
     dare[@"submissions"] = [NSMutableArray array];
     dare[@"facebookIds"] = self.facebookIds;
     dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
+    dare[@"isFinished"] = [NSNumber numberWithBool:NO];
     [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
         if (succeeded) {
             int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
