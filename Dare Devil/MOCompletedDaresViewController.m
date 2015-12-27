@@ -78,7 +78,7 @@
             cell.personSubmitted.text = [object objectForKey:@"name"];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
-
+    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
 
     if (object[@"video"]) {
         PFFile *video = [object objectForKey:@"video"];
@@ -89,11 +89,17 @@
         cell.videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:cell.videoView];
     } else if (object[@"image"]) {
-        cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
+        cell.imageView = nil;
+        if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60)];
+        } else {
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width-100)];
+        }
         cell.imageView.file = [object objectForKey:@"image"];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
+        [cell.imageView setClipsToBounds:YES];
         [cell.imageView loadInBackground];
-        [cell addSubview:cell.imageView];
+        [cell.contentView addSubview:cell.imageView];
     }
     
     // TODO: Save and get orientation of image/video and change cell size depending on orientation (will resize accordingly)
@@ -102,7 +108,12 @@
 
 // HEIGHT OF CELL
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return self.view.bounds.size.width + 170;
+    PFObject *obj = [self.objects objectAtIndex:indexPath.row];
+    if (obj[@"isVertical"] == [NSNumber numberWithBool:YES]){
+        return self.view.bounds.size.width + 150;
+    } else {
+        return self.view.bounds.size.width-20;
+    }
 }
 
 - (PFQuery *)queryForTable {

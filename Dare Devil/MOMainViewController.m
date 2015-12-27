@@ -255,9 +255,15 @@
     
         if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
             NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
+            AVAsset *avAsset = [AVAsset assetWithURL:videoUrl];
+            AVAssetTrack* videoTrack = [[avAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
+            CGSize size = [videoTrack naturalSize];
+            if (size.height >size.width) {
+                submission[@"isVertical"] = [NSNumber numberWithBool:YES];
+            } else {
+                submission[@"isVertical"] = [NSNumber numberWithBool:NO];
+            }
             PFFile *videoFile = [PFFile fileWithName:@"video.mp4" contentsAtPath:[videoUrl path]];
-            
-            //TODO isVertical
             submission[@"video"] = videoFile;
         } else if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {
             UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];

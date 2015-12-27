@@ -70,6 +70,7 @@
         [cell.layer addSublayer:cell.videoView];
     } else if (object[@"image"]) {
         cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60)];
+        cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
         cell.imageView.file = [object objectForKey:@"image"];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFit];
         [cell.imageView loadInBackground];

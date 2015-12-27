@@ -19,9 +19,9 @@
         self.selectionStyle = UITableViewCellSelectionStyleNone;
         
         // SPECIFIC DARE
-        self.dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(50, self.bounds.size.width+120, self.bounds.size.width-50, 60)];
+        self.dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(3, 30, self.bounds.size.width-6, 50)];
         self.dareLabel.textColor = [UIColor blackColor];
-        [self.dareLabel setFont:[UIFont systemFontOfSize:15]];
+        [self.dareLabel setFont:[UIFont systemFontOfSize:12]];
         self.dareLabel.scrollEnabled = false;
         self.dareLabel.editable = false;
         

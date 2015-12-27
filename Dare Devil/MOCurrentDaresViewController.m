@@ -99,7 +99,7 @@
 // ORGANIZE QUERY
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
-    [query whereKey:@"createdAt" greaterThan:[[NSDate date] dateByAddingTimeInterval:-1*24*60*60]];
+    [query whereKey:@"createdAt" greaterThan:[[NSDate date] dateByAddingTimeInterval:-2*24*60*60]];
     [query whereKey:@"funders" containsAllObjectsInArray:@[[PFUser currentUser].objectId]];
     return query;
 }

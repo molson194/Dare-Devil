@@ -37,18 +37,13 @@
     UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postDare)];
     self.navigationItem.rightBarButtonItem = postButton;
     
-    UITextField *iDare = [[UITextField alloc] initWithFrame:CGRectMake(3, 100, self.view.bounds.size.width, 25)];
-    iDare.text = @"I dare someone tagged to...";
-    iDare.textColor = [UIColor blackColor];
-    [self.view addSubview:iDare];
-    
     // DARE TEXT VIEW
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 130, [[UIScreen mainScreen] bounds].size.width-6, [[UIScreen mainScreen] bounds].size.height - 390)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 90, [[UIScreen mainScreen] bounds].size.width-6, [[UIScreen mainScreen] bounds].size.height - 390)];
     [self.textView setFont:[UIFont systemFontOfSize:16]];
     [self.textView setReturnKeyType:UIReturnKeySend];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.textView.delegate = self;
-    self.textView.text = @"Write dare here!";
+    self.textView.text = @"I dare someone tagged to...";
     self.textView.textColor = [UIColor lightGrayColor];
     [self.view addSubview:self.textView];
     
@@ -82,7 +77,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:@"Write dare here!"]) {
+    if ([textView.text isEqualToString:@"I dare someone tagged to..."]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
     }
@@ -92,7 +87,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     if ([textView.text isEqualToString:@""]) {
-        textView.text = @"Write dare here!";
+        textView.text = @"I dare someone tagged to...";
         textView.textColor = [UIColor lightGrayColor];
     }
     [textView resignFirstResponder];
