@@ -35,17 +35,29 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addDare)];
     self.navigationItem.rightBarButtonItem = addButton;
+    [addButton setTintColor:[UIColor whiteColor]];
     SWRevealViewController *revealController = [self revealViewController];
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:revealController action:@selector(revealToggle:)];
+    UIImage* menuImage = [UIImage imageNamed:@"menuicon.png"];
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [menuButton setBackgroundImage:menuImage forState:UIControlStateNormal];
+    [menuButton addTarget:revealController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
+   
+    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     UITapGestureRecognizer *tap = [revealController tapGestureRecognizer];
     tap.cancelsTouchesInView = NO;
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 // POST DARE NAVIGATION BUTTON ACTION
@@ -57,7 +69,8 @@
 
 // SETUP CELL WITH PARSE DATA
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = nil;
+    CellIdentifier = [NSString stringWithFormat: @"Cell%li", (long)indexPath.row];
     MOSubmissionsCell *cell = (MOSubmissionsCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
@@ -78,16 +91,20 @@
             cell.personSubmitted.text = [object objectForKey:@"name"];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
-    cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
-
-    if (object[@"video"]) {
-        PFFile *video = [object objectForKey:@"video"];
-        cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
-        cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
-        cell.videoView.frame = CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width+60);
-        cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        cell.videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:cell.videoView]; // TODO fix+test video sizing
+    
+    if (object[@"video"]) { // TODO
+    /*    PFFile *video = [object objectForKey:@"video"];
+        [video getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+            NSString *urlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]; // Or any other appropriate encoding
+            cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:urlString]];
+            cell.videoView = nil;
+            cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
+            cell.videoView.frame = CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60);
+            cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            cell.videoView.needsDisplayOnBoundsChange = YES;
+            [cell.layer addSublayer:cell.videoView];
+            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }];*/
     } else if (object[@"image"]) {
         cell.imageView = nil;
         if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
@@ -95,6 +112,7 @@
         } else {
             cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width-100)];
         }
+        cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
         cell.imageView.file = [object objectForKey:@"image"];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
         [cell.imageView setClipsToBounds:YES];
@@ -109,6 +127,7 @@
 // HEIGHT OF CELL
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
+    [obj fetchInBackground];
     if (obj[@"isVertical"] == [NSNumber numberWithBool:YES]){
         return self.view.bounds.size.width + 150;
     } else {

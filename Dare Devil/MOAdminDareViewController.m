@@ -34,9 +34,15 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
     SWRevealViewController *revealController = [self revealViewController];
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:revealController action:@selector(revealToggle:)];
+    UIImage* menuImage = [UIImage imageNamed:@"menuicon.png"];
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [menuButton setBackgroundImage:menuImage forState:UIControlStateNormal];
+    [menuButton addTarget:revealController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
+    
+    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     UITapGestureRecognizer *tap = [revealController tapGestureRecognizer];

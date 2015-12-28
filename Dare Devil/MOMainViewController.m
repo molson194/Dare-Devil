@@ -50,11 +50,21 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addDare)];
     self.navigationItem.rightBarButtonItem = addButton;
+    [addButton setTintColor:[UIColor whiteColor]];
     SWRevealViewController *revealController = [self revealViewController];
-    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemBookmarks target:revealController action:@selector(revealToggle:)];
+    UIImage* menuImage = [UIImage imageNamed:@"menuicon.png"];
+    UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    [menuButton setBackgroundImage:menuImage forState:UIControlStateNormal];
+    [menuButton addTarget:revealController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Open Dares";
+    
+    UIBarButtonItem *revealButtonItem = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     UITapGestureRecognizer *tap = [revealController tapGestureRecognizer];
@@ -66,12 +76,14 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 75)];
     NSArray *popularitySort = [NSArray arrayWithObjects: @"Recent", @"Hot", nil];
     UISegmentedControl *popularityControl = [[UISegmentedControl alloc] initWithItems:popularitySort];
+    popularityControl.tintColor = [UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
     popularityControl.frame = CGRectMake(5, 5, self.view.bounds.size.width-10, 30);
     [popularityControl addTarget:self action:@selector(popularityControlAction:) forControlEvents:UIControlEventValueChanged];
     popularityControl.selectedSegmentIndex = 0;
     [headerView addSubview:popularityControl];
     NSArray *peopleSort = [NSArray arrayWithObjects: @"World", @"Friends", @"Local", nil];
     UISegmentedControl *peopleControl = [[UISegmentedControl alloc] initWithItems:peopleSort];
+    peopleControl.tintColor = [UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
     peopleControl.frame = CGRectMake(5, 40, self.view.bounds.size.width-10, 30);
     [peopleControl addTarget:self action:@selector(peopleControlAction:) forControlEvents:UIControlEventValueChanged];
     peopleControl.selectedSegmentIndex = 0;
@@ -255,14 +267,7 @@
     
         if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeMovie, 0) == kCFCompareEqualTo) {
             NSURL *videoUrl=(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL];
-            AVAsset *avAsset = [AVAsset assetWithURL:videoUrl];
-            AVAssetTrack* videoTrack = [[avAsset tracksWithMediaType:AVMediaTypeVideo] objectAtIndex:0];
-            CGSize size = [videoTrack naturalSize];
-            if (size.height >size.width) {
-                submission[@"isVertical"] = [NSNumber numberWithBool:YES];
-            } else {
-                submission[@"isVertical"] = [NSNumber numberWithBool:NO];
-            }
+            submission[@"isVertical"] = [NSNumber numberWithBool:YES];
             PFFile *videoFile = [PFFile fileWithName:@"video.mp4" contentsAtPath:[videoUrl path]];
             submission[@"video"] = videoFile;
         } else if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {

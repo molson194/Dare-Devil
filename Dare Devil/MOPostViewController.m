@@ -31,11 +31,19 @@
     
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
+    // NAVIGATION BAR SETUP
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    
     // CANCEL BUTTON IN NAV BAR
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPost)];
+    [cancelButton setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = cancelButton;
     UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postDare)];
+    [postButton setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = postButton;
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Add a Dare";
     
     // DARE TEXT VIEW
     self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 90, [[UIScreen mainScreen] bounds].size.width-6, [[UIScreen mainScreen] bounds].size.height - 390)];
@@ -47,13 +55,22 @@
     self.textView.textColor = [UIColor lightGrayColor];
     [self.view addSubview:self.textView];
     
+    // BORDERS
+    UIView *bottomBorder = [[UIView alloc] initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 1)];
+    bottomBorder.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:bottomBorder];
+    
     // TO BUTTON
     self.toButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.toButton.backgroundColor=[UIColor lightGrayColor];
+    self.toButton.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
     self.toButton.frame=CGRectMake(0,65,[[UIScreen mainScreen] bounds].size.width,30);
     self.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.toButton setTitle: @"To:" forState: UIControlStateNormal];
+    [self.toButton setTitle: @"Tag:" forState: UIControlStateNormal];
     [self.toButton addTarget:self action:@selector(toButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
+    imageHolder.image = image;
+    [self.toButton addSubview:imageHolder];
     [self.view addSubview:self.toButton];
     
     // LOCATION SERVICES
@@ -102,13 +119,13 @@
 }
 
 -(void)sendWorld:(BOOL)worldPost {
-    [self.toButton setTitle:@"To: World" forState: UIControlStateNormal];
+    [self.toButton setTitle:@"Tag: World" forState: UIControlStateNormal];
     self.world = worldPost;
     self.facebookTags = [NSMutableArray array];
 }
 
 -(void)sendFacebook:(NSMutableArray *)facebookPost {
-    [self.toButton setTitle:@"To: Current Facebook Friends" forState: UIControlStateNormal];
+    [self.toButton setTitle:@"Tag: Current Facebook Friends" forState: UIControlStateNormal];
     self.world = NO;
     for (NSArray *array in facebookPost) {
         [self.facebookIds addObject:array[1]];
@@ -123,11 +140,11 @@
     }
     NSString *buttonString;
     if ([individuals count]>1) {
-        buttonString = [NSString stringWithFormat:@"To: %@ and %li others", individuals[0][0], [individuals count]-1];
+        buttonString = [NSString stringWithFormat:@"Tag: %@ and %li others", individuals[0][0], [individuals count]-1];
     } else if ([individuals count] == 1){
-        buttonString = [NSString stringWithFormat:@"To: %@", individuals[0][0]];
+        buttonString = [NSString stringWithFormat:@"Tag: %@", individuals[0][0]];
     } else {
-        buttonString = @"To:";
+        buttonString = @"Tag:";
     }
 
     [self.toButton setTitle:buttonString forState: UIControlStateNormal];

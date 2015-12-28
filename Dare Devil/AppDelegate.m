@@ -46,7 +46,9 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
     [application registerUserNotificationSettings:settings];
     [application registerForRemoteNotifications];
     
-    [[PFUser currentUser] fetch]; // TODO
+    [[PFUser currentUser] fetchInBackground];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 
     // WINDOW SET UP
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
@@ -60,6 +62,11 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
         [self presentTabBar];
     }
     return YES;
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return UIStatusBarStyleLightContent;
 }
 
 // FACEBOOK SETUP

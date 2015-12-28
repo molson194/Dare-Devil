@@ -31,6 +31,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    // NAVIGATION BAR SETUP
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 40)];
     // ADD FUNDS BUTTON
     UIButton *returnFunds=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -64,6 +68,19 @@
                     [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
                     [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                         if (succeeded){
+                            // Create our push query
+                            NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
+                            PFQuery *pushQuery = [PFInstallation query];
+                            [pushQuery whereKey:@"userObject" containedIn:fundersPush];
+                            // Send push notification to query
+                            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"The following dare was refunded: %@", [self.obj objectForKey:@"text"]]];
+                            
+                            PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                            notification[@"text"] = [NSString stringWithFormat:@"The following dare was refunded: %@", [self.obj objectForKey:@"text"]];
+                            notification[@"dare"] = self.obj;
+                            notification[@"type"] = @"Refund";
+                            notification[@"followers"] = fundersPush;
+                            [notification saveInBackground];
                             [self.navigationController popToRootViewControllerAnimated:YES];
                         }
                     }];
