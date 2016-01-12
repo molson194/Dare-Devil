@@ -49,7 +49,7 @@
     winner.backgroundColor=[UIColor blueColor];
     winner.frame=CGRectMake(self.view.bounds.size.width/2+1,5,self.view.bounds.size.width/2-21,30);
     [winner setTitle: @"Winner Payout" forState: UIControlStateNormal];
-    [winner addTarget:self action:@selector(winnerPressed) forControlEvents:UIControlEventTouchUpInside]; // TODO: function: isFinished -> true, add $ to most liked, pop
+    [winner addTarget:self action:@selector(winnerPressed) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:winner];
     self.tableView.tableHeaderView = headerView;
 }
@@ -87,6 +87,47 @@
                 }
                 
             }];
+    }];
+}
+
+- (void) winnerPressed {
+    int max = -1;
+    PFUser *winner;
+    for (PFObject *current in self.objects){
+        int count = (int)[[current objectForKey:@"votingFavorites"] count];
+        if (count > max) {
+            max = count;
+            winner = [current objectForKey:@"user"];
+        }
+    }
+    [winner fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        int funds = [[object objectForKey:@"funds"] intValue];
+        int winnings = (int)[[self.obj objectForKey:@"funders" ] count];
+        [PFCloud callFunctionInBackground:@"winner" withParameters:@{@"id":winner.objectId, @"newFunds":[NSNumber numberWithInt:(funds+winnings)]} block:^(id  _Nullable object, NSError * _Nullable error) {
+            if (!error) {
+                [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+                [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded){
+                        // Create our push query
+                        NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
+                        PFQuery *pushQuery = [PFInstallation query];
+                        [pushQuery whereKey:@"userObject" containedIn:fundersPush];
+                        PFQuery *pushQueryWinner = [PFInstallation query];
+                        [pushQueryWinner whereKey:@"userObject" containedIn:@[winner.objectId]];
+                        [PFPush sendPushMessageToQueryInBackground:[PFQuery orQueryWithSubqueries:@[pushQuery, pushQueryWinner]] withMessage:[NSString stringWithFormat:@"%@ won the following dare: %@", [winner objectForKey:@"name"], [self.obj objectForKey:@"text"]]];
+                        
+                        PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                        notification[@"text"] = [NSString stringWithFormat:@"%@ won the following dare: %@", [winner objectForKey:@"name"], [self.obj objectForKey:@"text"]];
+                        notification[@"dare"] = self.obj;
+                        notification[@"type"] = @"Winner";
+                        notification[@"followers"] = fundersPush;
+                        [notification saveInBackground];
+                        [self.navigationController popToRootViewControllerAnimated:YES];
+                    }
+                }];
+            }
+        }];
+
     }];
 }
 

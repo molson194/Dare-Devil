@@ -92,19 +92,16 @@
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
     
-    if (object[@"video"]) { // TODO
-    /*    PFFile *video = [object objectForKey:@"video"];
-        [video getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-            NSString *urlString = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]; // Or any other appropriate encoding
-            cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:urlString]];
-            cell.videoView = nil;
-            cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
-            cell.videoView.frame = CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60);
-            cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-            cell.videoView.needsDisplayOnBoundsChange = YES;
-            [cell.layer addSublayer:cell.videoView];
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        }];*/
+    if (object[@"video"]) {
+        PFFile *video = [object objectForKey:@"video"];
+        cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
+        cell.videoView = nil;
+        cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
+        cell.videoView.frame = CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60);
+        cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        cell.videoView.needsDisplayOnBoundsChange = YES;
+        [cell.layer addSublayer:cell.videoView];
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else if (object[@"image"]) {
         cell.imageView = nil;
         if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {

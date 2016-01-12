@@ -130,7 +130,7 @@
     }
 }
 
-- (void)cashOut:(STPToken *)token {
+- (void)cashOut:(STPToken *)token { // TODO store recipient string to user... if recipient use that with the card
     if (token.card.funding != STPCardFundingTypeDebit) {
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:@"Need to use debit card for cash out" preferredStyle:UIAlertControllerStyleAlert];
         UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];

@@ -22,6 +22,7 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
 
 
 @interface AppDelegate () <SWRevealViewControllerDelegate>
+@property (nonatomic) BOOL notificationRecieved;
 @end
 
 @implementation AppDelegate 
@@ -76,10 +77,15 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
 
 // TAB BAR SETUP
 - (void)presentTabBar{
-    UINavigationController *completedDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOCompletedDaresViewController alloc] initWithStyle:UITableViewStylePlain]];
+    UINavigationController *frontViewController;
+    if (self.notificationRecieved) {
+        frontViewController = [[UINavigationController alloc] initWithRootViewController:[[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain]];
+    } else {
+        frontViewController = [[UINavigationController alloc] initWithRootViewController:[[MOCompletedDaresViewController alloc] initWithStyle:UITableViewStylePlain]];
+    }
     SideViewController *sideViewController = [[SideViewController alloc] init];
     
-    SWRevealViewController *mainRevealController = [[SWRevealViewController alloc] initWithRearViewController:sideViewController frontViewController:completedDaresViewController];
+    SWRevealViewController *mainRevealController = [[SWRevealViewController alloc] initWithRearViewController:sideViewController frontViewController:frontViewController];
     mainRevealController.delegate = self;
     
     self.window.rootViewController = mainRevealController;
@@ -97,8 +103,9 @@ NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
     if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
         // Track app opens due to a push notification being acknowledged while the app wasn't active.
         [PFAnalytics trackAppOpenedWithRemoteNotificationPayload:userInfo];
+        self.notificationRecieved = YES;
     }
-//TODO fix opening app
+
     if (application.applicationState != UIApplicationStateActive) {
         UINavigationController *currentDaresViewController = [[UINavigationController alloc] initWithRootViewController:[[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain]];
         SWRevealViewController *vc = (SWRevealViewController *)self.window.rootViewController;

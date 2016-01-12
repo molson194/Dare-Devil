@@ -91,6 +91,11 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
+    if ((indexPath.row + 1) > [self.objects count]) {
+        [self loadNextPage];
+        return;
+    }
+    
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
     //if created at > 2 days or if new dare and > 1 day
     NSDate *createdAt = obj.createdAt;
