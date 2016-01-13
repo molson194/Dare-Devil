@@ -13,7 +13,6 @@
 @interface MOSubmissionsCell : PFTableViewCell
 
 @property (nonatomic, strong) UITextView *dareLabel;
-@property (nonatomic, strong) UIButton *favoriteButton;
 @property (nonatomic, strong) UILabel *personSubmitted;
 @property (nonatomic, strong) UILabel *moneyRaised;
 @property (nonatomic, strong) PFImageView *imageView;

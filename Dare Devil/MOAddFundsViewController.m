@@ -52,18 +52,10 @@
     [self.view addSubview:self.currentFunds];
     
     
-    // ADD FUNDS BUTTON
-    self.addFunds=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.addFunds.backgroundColor=[UIColor lightGrayColor];
-    self.addFunds.frame=CGRectMake(20,145,[[UIScreen mainScreen] bounds].size.width/2-21,40);
-    [self.addFunds setTitle: @"Add $10" forState: UIControlStateNormal];
-    [self.addFunds addTarget:self action:@selector(addFundsPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:self.addFunds];
-    
     // CASH OUT BUTTON
     self.cashOut=[UIButton buttonWithType:UIButtonTypeCustom];
     self.cashOut.backgroundColor=[UIColor lightGrayColor];
-    self.cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2,145,[[UIScreen mainScreen] bounds].size.width/2-21,40);
+    self.cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2-60,145,120,40);
     [self.cashOut setTitle: @"Cash Out $10" forState: UIControlStateNormal];
     [self.cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:self.cashOut];
@@ -88,6 +80,7 @@
 
 // ADD FUNDS BUTTON PRESSED ACTION
 - (void)addFundsPressed{
+    //TODO store card
     if (self.addFunds.backgroundColor != [UIColor lightGrayColor]) {
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
@@ -106,6 +99,7 @@
 // CASH OUT BUTTON PRESSED ACTION
 - (void)cashOutPressed {
     if (self.cashOut.backgroundColor != [UIColor lightGrayColor] && [[[PFUser currentUser] objectForKey:@"funds"] integerValue] >=10) {
+        
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];
@@ -153,6 +147,11 @@
                 NSLog(@"%@",[json objectForKey:@"id"]);
                 
                 NSDictionary *newInfo = @{ @"id": [json objectForKey:@"id"], @"cardId":[json objectForKey:@"default_card"]};
+                // TODO store card and recipient
+                [[PFUser currentUser] setObject:[json objectForKey:@"id"] forKey:@"recipient"];
+                [[PFUser currentUser] setObject:[json objectForKey:@"default_card"] forKey:@"card"];
+                [[PFUser currentUser] saveInBackground];
+                
                 [PFCloud callFunctionInBackground:@"cashOut" withParameters:newInfo block:^(id object, NSError *error) {
                     if (error) {
                         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Cash Out Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];

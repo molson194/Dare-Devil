@@ -9,11 +9,22 @@
 /* Begin PBXBuildFile section */
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */; };
+		F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01585861C46EF2B001ED67F /* MODareFundsViewController.m */; };
 		F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */; };
 		F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */; };
 		F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F05AAD1A1C2D1201009C5D28 /* Stripe.framework */; };
 		F06556261C2110BF000DDB42 /* MOCurrentDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */; };
 		F065562D1C211FBD000DDB42 /* MOVotingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F065562C1C211FBD000DDB42 /* MOVotingViewController.m */; };
+		F0674A591C46A3770016CC3F /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A581C46A3770016CC3F /* Stripe.framework */; };
+		F0674A621C46A39D0016CC3F /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5A1C46A39D0016CC3F /* Bolts.framework */; };
+		F0674A631C46A39D0016CC3F /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5B1C46A39D0016CC3F /* FBSDKCoreKit.framework */; };
+		F0674A641C46A39D0016CC3F /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5C1C46A39D0016CC3F /* FBSDKLoginKit.framework */; };
+		F0674A651C46A39D0016CC3F /* FBSDKShareKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5D1C46A39D0016CC3F /* FBSDKShareKit.framework */; };
+		F0674A661C46A39D0016CC3F /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5E1C46A39D0016CC3F /* Parse.framework */; };
+		F0674A671C46A39D0016CC3F /* ParseCrashReporting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A5F1C46A39D0016CC3F /* ParseCrashReporting.framework */; };
+		F0674A681C46A39D0016CC3F /* ParseFacebookUtilsV4.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A601C46A39D0016CC3F /* ParseFacebookUtilsV4.framework */; };
+		F0674A691C46A39D0016CC3F /* ParseUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0674A611C46A39D0016CC3F /* ParseUI.framework */; };
+		F0674A6C1C46AA470016CC3F /* MODareTargetViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0674A6B1C46AA470016CC3F /* MODareTargetViewController.m */; };
 		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
 		F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F07600411BAE6CEC0052BFBB /* MOPostViewController.m */; };
 		F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F084712D1C239A350068EEC5 /* MOActivityViewController.m */; };
@@ -78,15 +89,28 @@
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
 		F01470251BDEBEBF00F4074D /* MOSubmissionsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSubmissionsCell.h; sourceTree = "<group>"; };
 		F01470261BDEBEBF00F4074D /* MOSubmissionsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSubmissionsCell.m; sourceTree = "<group>"; };
+		F01585851C46EF2B001ED67F /* MODareFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareFundsViewController.h; sourceTree = "<group>"; };
+		F01585861C46EF2B001ED67F /* MODareFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareFundsViewController.m; sourceTree = "<group>"; };
 		F04C5CAC1C2F1702007AE863 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareRecipientViewController.h; sourceTree = "<group>"; };
 		F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareRecipientViewController.m; sourceTree = "<group>"; };
-		F05AAD1A1C2D1201009C5D28 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Stripe.framework; sourceTree = "<group>"; };
+		F05AAD1A1C2D1201009C5D28 /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stripe.framework; path = "/Users/Olson/Drive/Software/Dare Devil/Stripe.framework"; sourceTree = "<absolute>"; };
 		F06556241C2110BF000DDB42 /* MOCurrentDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCurrentDaresViewController.h; sourceTree = "<group>"; };
 		F06556251C2110BF000DDB42 /* MOCurrentDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCurrentDaresViewController.m; sourceTree = "<group>"; };
 		F065562B1C211FBD000DDB42 /* MOVotingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOVotingViewController.h; sourceTree = "<group>"; };
 		F065562C1C211FBD000DDB42 /* MOVotingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOVotingViewController.m; sourceTree = "<group>"; };
+		F0674A581C46A3770016CC3F /* Stripe.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stripe.framework; path = Frameworks/Stripe.framework; sourceTree = "<group>"; };
+		F0674A5A1C46A39D0016CC3F /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Frameworks/Bolts.framework; sourceTree = "<group>"; };
+		F0674A5B1C46A39D0016CC3F /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = Frameworks/FBSDKCoreKit.framework; sourceTree = "<group>"; };
+		F0674A5C1C46A39D0016CC3F /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = Frameworks/FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		F0674A5D1C46A39D0016CC3F /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = Frameworks/FBSDKShareKit.framework; sourceTree = "<group>"; };
+		F0674A5E1C46A39D0016CC3F /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = Frameworks/Parse.framework; sourceTree = "<group>"; };
+		F0674A5F1C46A39D0016CC3F /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseCrashReporting.framework; path = Frameworks/ParseCrashReporting.framework; sourceTree = "<group>"; };
+		F0674A601C46A39D0016CC3F /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = Frameworks/ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
+		F0674A611C46A39D0016CC3F /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = Frameworks/ParseUI.framework; sourceTree = "<group>"; };
+		F0674A6A1C46AA470016CC3F /* MODareTargetViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareTargetViewController.h; sourceTree = "<group>"; };
+		F0674A6B1C46AA470016CC3F /* MODareTargetViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareTargetViewController.m; sourceTree = "<group>"; };
 		F076003B1BAE62E70052BFBB /* Dare DevilTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F076003C1BAE62E70052BFBB /* Dare DevilUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Dare DevilUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F076003D1BAE640A0052BFBB /* MOMainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMainViewController.h; sourceTree = "<group>"; };
@@ -101,12 +125,12 @@
 		F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = "Dare Devil/Assets.xcassets"; sourceTree = "<group>"; };
 		F0BAACBD1BAD06F9000F4F5A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F0BAACE61BAD0C20000F4F5A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
-		F0BAACE71BAD0C20000F4F5A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
-		F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseCrashReporting.framework; sourceTree = "<group>"; };
-		F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseFacebookUtilsV4.framework; sourceTree = "<group>"; };
-		F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseTwitterUtils.framework; sourceTree = "<group>"; };
-		F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = ParseUI.framework; sourceTree = "<group>"; };
+		F0BAACE61BAD0C20000F4F5A /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = "/Users/Olson/Drive/Software/Dare Devil/Bolts.framework"; sourceTree = "<absolute>"; };
+		F0BAACE71BAD0C20000F4F5A /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Parse.framework; path = "/Users/Olson/Drive/Software/Dare Devil/Parse.framework"; sourceTree = "<absolute>"; };
+		F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseCrashReporting.framework; path = "/Users/Olson/Drive/Software/Dare Devil/ParseCrashReporting.framework"; sourceTree = "<absolute>"; };
+		F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseFacebookUtilsV4.framework; path = "/Users/Olson/Drive/Software/Dare Devil/ParseFacebookUtilsV4.framework"; sourceTree = "<absolute>"; };
+		F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseTwitterUtils.framework; path = "/Users/Olson/Drive/Software/Dare Devil/ParseTwitterUtils.framework"; sourceTree = "<absolute>"; };
+		F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ParseUI.framework; path = "/Users/Olson/Drive/Software/Dare Devil/ParseUI.framework"; sourceTree = "<absolute>"; };
 		F0BAACEE1BAD0C20000F4F5A /* Dare Devil.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Dare Devil.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F0BAACF51BAD0C8A000F4F5A /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F0BAACF71BAD0C8F000F4F5A /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -121,9 +145,9 @@
 		F0BAAD0B1BAD0D69000F4F5A /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		F0BAAD0D1BAD16B6000F4F5A /* MOLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOLoginViewController.h; sourceTree = "<group>"; };
 		F0BAAD0E1BAD16B6000F4F5A /* MOLoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOLoginViewController.m; sourceTree = "<group>"; };
-		F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
-		F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
-		F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKShareKit.framework; sourceTree = "<group>"; };
+		F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKCoreKit.framework; path = "/Users/Olson/Drive/Software/Dare Devil/FBSDKCoreKit.framework"; sourceTree = "<absolute>"; };
+		F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKLoginKit.framework; path = "/Users/Olson/Drive/Software/Dare Devil/FBSDKLoginKit.framework"; sourceTree = "<absolute>"; };
+		F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FBSDKShareKit.framework; path = "/Users/Olson/Drive/Software/Dare Devil/FBSDKShareKit.framework"; sourceTree = "<absolute>"; };
 		F0BBFBEE1C04E9B600F7686D /* SWRevealViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWRevealViewController.h; sourceTree = "<group>"; };
 		F0BBFBEF1C04E9B600F7686D /* SWRevealViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWRevealViewController.m; sourceTree = "<group>"; };
 		F0BBFBF51C05056400F7686D /* SideViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SideViewController.h; sourceTree = "<group>"; };
@@ -150,23 +174,32 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0674A591C46A3770016CC3F /* Stripe.framework in Frameworks */,
 				F0ECDB851BD3530B005297B0 /* MobileCoreServices.framework in Frameworks */,
+				F0674A671C46A39D0016CC3F /* ParseCrashReporting.framework in Frameworks */,
 				F0BAAD0C1BAD0D69000F4F5A /* Social.framework in Frameworks */,
 				F0BAAD0A1BAD0D64000F4F5A /* Accounts.framework in Frameworks */,
 				F0BAAD081BAD0D5B000F4F5A /* libsqlite3.dylib in Frameworks */,
+				F0674A651C46A39D0016CC3F /* FBSDKShareKit.framework in Frameworks */,
 				F0BAAD061BAD0D44000F4F5A /* libz.dylib in Frameworks */,
 				F0BAAD041BAD0CBE000F4F5A /* SystemConfiguration.framework in Frameworks */,
 				F0BAAD191BAD1E17000F4F5A /* FBSDKCoreKit.framework in Frameworks */,
 				F0BAAD1B1BAD1E17000F4F5A /* FBSDKShareKit.framework in Frameworks */,
+				F0674A661C46A39D0016CC3F /* Parse.framework in Frameworks */,
 				F0BAAD001BAD0CAF000F4F5A /* Security.framework in Frameworks */,
 				F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */,
+				F0674A681C46A39D0016CC3F /* ParseFacebookUtilsV4.framework in Frameworks */,
 				F0BAACFE1BAD0CA5000F4F5A /* QuartzCore.framework in Frameworks */,
 				F0BAACFC1BAD0C9E000F4F5A /* CoreLocation.framework in Frameworks */,
+				F0674A691C46A39D0016CC3F /* ParseUI.framework in Frameworks */,
 				F0BAACFA1BAD0C98000F4F5A /* CoreGraphics.framework in Frameworks */,
 				F0BAAD1A1BAD1E17000F4F5A /* FBSDKLoginKit.framework in Frameworks */,
+				F0674A631C46A39D0016CC3F /* FBSDKCoreKit.framework in Frameworks */,
+				F0674A621C46A39D0016CC3F /* Bolts.framework in Frameworks */,
 				F0BAACF81BAD0C8F000F4F5A /* CFNetwork.framework in Frameworks */,
 				F0BAACF61BAD0C8A000F4F5A /* AudioToolbox.framework in Frameworks */,
 				F0BAACEF1BAD0C20000F4F5A /* Parse.framework in Frameworks */,
+				F0674A641C46A39D0016CC3F /* FBSDKLoginKit.framework in Frameworks */,
 				F0BAACF01BAD0C20000F4F5A /* ParseCrashReporting.framework in Frameworks */,
 				F0BAACF41BAD0C20000F4F5A /* ParseUI.framework in Frameworks */,
 				F0BAACED1BAD0C20000F4F5A /* Bolts.framework in Frameworks */,
@@ -257,6 +290,10 @@
 				F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */,
 				F0FA415C1C2A005700AA0FCD /* MOSingleDareController.h */,
 				F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */,
+				F0674A6A1C46AA470016CC3F /* MODareTargetViewController.h */,
+				F0674A6B1C46AA470016CC3F /* MODareTargetViewController.m */,
+				F01585851C46EF2B001ED67F /* MODareFundsViewController.h */,
+				F01585861C46EF2B001ED67F /* MODareFundsViewController.m */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -307,11 +344,16 @@
 		F0BAACE51BAD0B9D000F4F5A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F05AAD1A1C2D1201009C5D28 /* Stripe.framework */,
+				F0674A5A1C46A39D0016CC3F /* Bolts.framework */,
+				F0674A5B1C46A39D0016CC3F /* FBSDKCoreKit.framework */,
+				F0674A5C1C46A39D0016CC3F /* FBSDKLoginKit.framework */,
+				F0674A5D1C46A39D0016CC3F /* FBSDKShareKit.framework */,
+				F0674A5E1C46A39D0016CC3F /* Parse.framework */,
+				F0674A5F1C46A39D0016CC3F /* ParseCrashReporting.framework */,
+				F0674A601C46A39D0016CC3F /* ParseFacebookUtilsV4.framework */,
+				F0674A611C46A39D0016CC3F /* ParseUI.framework */,
+				F0674A581C46A3770016CC3F /* Stripe.framework */,
 				F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */,
-				F0BAAD161BAD1E17000F4F5A /* FBSDKCoreKit.framework */,
-				F0BAAD171BAD1E17000F4F5A /* FBSDKLoginKit.framework */,
-				F0BAAD181BAD1E17000F4F5A /* FBSDKShareKit.framework */,
 				F0BAAD0B1BAD0D69000F4F5A /* Social.framework */,
 				F0BAAD091BAD0D64000F4F5A /* Accounts.framework */,
 				F0BAAD071BAD0D5B000F4F5A /* libsqlite3.dylib */,
@@ -323,12 +365,6 @@
 				F0BAACF91BAD0C98000F4F5A /* CoreGraphics.framework */,
 				F0BAACF71BAD0C8F000F4F5A /* CFNetwork.framework */,
 				F0BAACF51BAD0C8A000F4F5A /* AudioToolbox.framework */,
-				F0BAACE61BAD0C20000F4F5A /* Bolts.framework */,
-				F0BAACE71BAD0C20000F4F5A /* Parse.framework */,
-				F0BAACE81BAD0C20000F4F5A /* ParseCrashReporting.framework */,
-				F0BAACEA1BAD0C20000F4F5A /* ParseFacebookUtilsV4.framework */,
-				F0BAACEB1BAD0C20000F4F5A /* ParseTwitterUtils.framework */,
-				F0BAACEC1BAD0C20000F4F5A /* ParseUI.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -513,10 +549,12 @@
 				F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */,
 				F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */,
 				F0F3E4C61C2FA263003369CD /* MOAdminSubmissionViewController.m in Sources */,
+				F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */,
 				F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */,
 				F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */,
 				F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */,
 				F0CEC2C31BCB04DE009B0149 /* MODareTableViewCell.m in Sources */,
+				F0674A6C1C46AA470016CC3F /* MODareTargetViewController.m in Sources */,
 				F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */,
 				F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */,
 				F01470271BDEBEBF00F4074D /* MOSubmissionsCell.m in Sources */,
@@ -654,6 +692,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
@@ -677,6 +716,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Frameworks",
 				);
 				INFOPLIST_FILE = "Dare Devil/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;

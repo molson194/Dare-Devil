@@ -52,15 +52,6 @@
         cell.personSubmitted.text = [object objectForKey:@"name"];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
-    if ([[object objectForKey:@"votingFavorites"] containsObject:[PFUser currentUser].objectId]) {
-        cell.favoriteButton.selected = true;
-    } else {
-        cell.favoriteButton.selected = false;
-    }
-    [cell.favoriteButton addTarget:self action:@selector(favoriteDare:) forControlEvents:UIControlEventTouchUpInside];
-    [[cell.favoriteButton layer] setValue:object forKey:@"submissionObject"];
-    cell.favoriteButton.tag = indexPath.row;
-    [cell addSubview:cell.favoriteButton];
     
     if (object[@"video"]) {
         PFFile *video = [object objectForKey:@"video"];
@@ -77,7 +68,6 @@
         } else {
             cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 50, cell.bounds.size.width, cell.bounds.size.width-100)];
         }
-        cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
         cell.imageView.file = [object objectForKey:@"image"];
         [cell.imageView setClipsToBounds:YES];
         [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
@@ -104,21 +94,6 @@
     [query whereKey:@"dare" equalTo:self.obj];
     [query orderByDescending:@"createdAt"];
     return query;
-}
-
-// FAVORITE DARE ACTION
-- (void)favoriteDare:(UIButton *)sender {
-    if (!sender.selected) {
-        PFObject *object = [[sender layer] valueForKey:@"submissionObject"];
-        NSMutableArray *array = [object objectForKey:@"votingFavorites"];
-        [array addObject:[PFUser currentUser].objectId];
-        [object saveInBackground];
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-        
-        sender.selected = YES;
-    }
 }
 
 @end

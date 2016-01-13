@@ -97,7 +97,7 @@
         cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
         cell.videoView = nil;
         cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
-        cell.videoView.frame = CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60);
+        cell.videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
         cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         cell.videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:cell.videoView];
@@ -105,9 +105,9 @@
     } else if (object[@"image"]) {
         cell.imageView = nil;
         if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
-            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width+60)];
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60)];
         } else {
-            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, cell.bounds.size.width, cell.bounds.size.width-100)];
+            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
         }
         cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
         cell.imageView.file = [object objectForKey:@"image"];

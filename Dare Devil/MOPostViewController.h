@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
 
-@interface MOPostViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate>
+@interface MOPostViewController : UIViewController <UITextViewDelegate, CLLocationManagerDelegate, UIKeyInput>
 
 @end

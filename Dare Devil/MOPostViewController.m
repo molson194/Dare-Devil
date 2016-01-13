@@ -10,6 +10,8 @@
 #import "MOAddFundsViewController.h"
 #import <Parse/Parse.h>
 #import "MODareRecipientViewController.h"
+#import "MODareTargetViewController.h"
+#import "MODareFundsViewController.h"
 
 @interface MOPostViewController ()
 @property (nonatomic, strong) UITextView *textView;
@@ -22,6 +24,11 @@
 @property (nonatomic, strong) NSMutableArray *facebookTags;
 @property (nonatomic, strong) NSMutableArray *facebookIds;
 @property (nonatomic) BOOL world;
+@property (nonatomic, strong) UIButton *target;
+@property (nonatomic, strong) UIButton *daysOpen;
+@property (nonatomic, strong) UILabel *numDays;
+@property (nonatomic) BOOL displayText;
+@property (nonatomic, strong) UIButton *funds;
 @end
 
 @implementation MOPostViewController
@@ -45,13 +52,47 @@
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     self.navigationItem.title = @"Add a Dare";
     
+    self.target=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.target.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.target.frame=CGRectMake(0,98,[[UIScreen mainScreen] bounds].size.width,30);
+    self.target.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.target setTitle: @"Target:" forState: UIControlStateNormal];
+    [self.target addTarget:self action:@selector(recipientPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
+    imageHolder.image = image;
+    [self.target addSubview:imageHolder];
+    [self.view addSubview:self.target];
+    
+    self.daysOpen=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.daysOpen.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.daysOpen.frame=CGRectMake(0,130,[[UIScreen mainScreen] bounds].size.width,30);
+    self.daysOpen.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.daysOpen setTitle: @"Open: 0 days" forState: UIControlStateNormal];
+    [self.daysOpen addTarget:self action:@selector(daysPressed) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imageHolder3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    imageHolder3.image = image;
+    [self.daysOpen addSubview:imageHolder3];
+    [self.view addSubview:self.daysOpen];
+    
+    self.funds=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.funds.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.funds.frame=CGRectMake(0,162,[[UIScreen mainScreen] bounds].size.width,30);
+    self.funds.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.funds setTitle: @"Add: $0" forState: UIControlStateNormal];
+    [self.funds addTarget:self action:@selector(addFunds) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imageHolder4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    imageHolder4.image = image;
+    [self.funds addSubview:imageHolder4];
+    [self.view addSubview:self.funds];
+    
     // DARE TEXT VIEW
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 90, [[UIScreen mainScreen] bounds].size.width-6, [[UIScreen mainScreen] bounds].size.height - 390)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 192, [[UIScreen mainScreen] bounds].size.width-6, 60)];
     [self.textView setFont:[UIFont systemFontOfSize:16]];
     [self.textView setReturnKeyType:UIReturnKeySend];
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.textView.delegate = self;
-    self.textView.text = @"I dare someone tagged to...";
+    self.textView.text = @"I dare the target to...";
     self.textView.textColor = [UIColor lightGrayColor];
     [self.view addSubview:self.textView];
     
@@ -63,14 +104,13 @@
     // TO BUTTON
     self.toButton=[UIButton buttonWithType:UIButtonTypeCustom];
     self.toButton.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
-    self.toButton.frame=CGRectMake(0,65,[[UIScreen mainScreen] bounds].size.width,30);
+    self.toButton.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
     self.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.toButton setTitle: @"Tag:" forState: UIControlStateNormal];
     [self.toButton addTarget:self action:@selector(toButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
-    UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
-    imageHolder.image = image;
-    [self.toButton addSubview:imageHolder];
+    UIImageView *imageHolder2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    imageHolder2.image = image;
+    [self.toButton addSubview:imageHolder2];
     [self.view addSubview:self.toButton];
     
     // LOCATION SERVICES
@@ -81,10 +121,42 @@
     }];
     
     self.world = NO;
+    self.displayText = NO;
     self.facebookIds = [NSMutableArray array];
 }
 - (void)postDare {
     [self attemptToPost];
+}
+
+- (void)daysPressed {
+    self.displayText = YES;
+    [self becomeFirstResponder];
+}
+
+- (UIKeyboardType) keyboardType {
+    return UIKeyboardTypeNumberPad;
+}
+
+- (BOOL)canBecomeFirstResponder { return self.displayText; }
+
+- (BOOL)hasText {
+    return YES;
+}
+
+- (void)insertText:(NSString *)theText {
+    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",theText.lastPathComponent] forState: UIControlStateNormal];
+    //TODO store
+}
+
+- (void)deleteBackward {
+    return;
+}
+
+- (void) recipientPressed {
+    MODareTargetViewController *targetVC = [[MODareTargetViewController alloc] init];
+    targetVC.delegate = self;
+    UIViewController *targetNav =  [[UINavigationController alloc] initWithRootViewController:targetVC];
+    [self presentViewController:targetNav animated:YES completion:nil];
 }
 
 // USER PRESSED CANCEL BUTTON
@@ -94,7 +166,7 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    if ([textView.text isEqualToString:@"I dare someone tagged to..."]) {
+    if ([textView.text isEqualToString:@"I dare the target to..."]) {
         textView.text = @"";
         textView.textColor = [UIColor blackColor];
     }
@@ -104,7 +176,7 @@
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
     if ([textView.text isEqualToString:@""]) {
-        textView.text = @"I dare someone tagged to...";
+        textView.text = @"I dare the target to...";
         textView.textColor = [UIColor lightGrayColor];
     }
     [textView resignFirstResponder];
@@ -116,6 +188,12 @@
     [recipientView reopenWithFacebook:self.facebookTags];
     UIViewController *recipientNav =  [[UINavigationController alloc] initWithRootViewController:recipientView];
     [self presentViewController:recipientNav animated:YES completion:nil];
+}
+
+- (void)sendPerson:(NSArray *)person {
+    [self.target setTitle:[NSString stringWithFormat:@"Target: %@", person[0]] forState:UIControlStateNormal];
+    
+    //todo
 }
 
 -(void)sendWorld:(BOOL)worldPost {
@@ -218,7 +296,7 @@
 }
 
 - (void) addFunds {
-    MOAddFundsViewController *addFundsViewController = [[MOAddFundsViewController alloc] init];
+    MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
     self.navigationController.navigationBar.hidden = NO;
     [self.navigationController pushViewController:addFundsViewController animated:YES];
 }

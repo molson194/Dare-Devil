@@ -139,7 +139,6 @@
         }
         
         submission[@"dare"] = self.obj;
-        submission[@"votingFavorites"] = [NSMutableArray array];
         submission[@"user"] = [PFUser currentUser];
         submission[@"isWinner"] = [NSNumber numberWithBool:NO];
         [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {

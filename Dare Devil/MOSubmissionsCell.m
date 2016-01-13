@@ -38,14 +38,6 @@
         [self.moneyRaised setFont:[UIFont systemFontOfSize:15]];
         [self addSubview:self.moneyRaised];
         
-        // FAVORITE BUTTON
-        self.favoriteButton = [[UIButton alloc] initWithFrame:CGRectMake(self.bounds.size.width-60, 2, 52, 50)];
-        [self.favoriteButton setTitleColor:[UIColor redColor] forState:UIControlStateSelected];
-        [self.favoriteButton setTitleColor:[UIColor lightGrayColor] forState:UIControlStateNormal];
-        [self.favoriteButton setTitle:@"\u2661" forState:UIControlStateNormal];
-        [self.favoriteButton setTitle:@"\u2665" forState:UIControlStateSelected];
-        self.favoriteButton.titleLabel.font = [UIFont systemFontOfSize:50];
-        
     }
     return self;
 }
