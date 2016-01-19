@@ -67,9 +67,9 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if ([PFUser currentUser][@"isAdmin"] == [NSNumber numberWithBool:YES]) {
-        return 6;
-    } else {
         return 5;
+    } else {
+        return 4;
     }
 }
 
@@ -90,11 +90,9 @@
         text = @"Dares Feed";
     } else if (row == 2) {
         text = @"Completed Dares";
-    } else if (row == 3) {
-        text = @"Current Funded Dares";
-    } else if (row ==4) {
+    } else if (row ==3) {
         text = @"Activity";
-    } else if (row == 5) {
+    } else if (row == 4) {
         text = @"Admin Activities";
     }
     cell.textLabel.text = NSLocalizedString( text, nil );

@@ -78,28 +78,10 @@
     return newLength <= 5;
 }
 
-// ADD FUNDS BUTTON PRESSED ACTION
-- (void)addFundsPressed{
-    //TODO store card
-    if (self.addFunds.backgroundColor != [UIColor lightGrayColor]) {
-        [self createToken:^(STPToken *token, NSError *error) {
-            if (error) {
-                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];
-                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-                [alertController addAction:ok];
-                [self presentViewController:alertController animated:YES completion:nil];
-            } else {
-                [self charge:token];
-            }
-        }];
-    }
-    
-}
-
 // CASH OUT BUTTON PRESSED ACTION
 - (void)cashOutPressed {
     if (self.cashOut.backgroundColor != [UIColor lightGrayColor] && [[[PFUser currentUser] objectForKey:@"funds"] integerValue] >=10) {
-        
+        /* TODO
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];
@@ -109,7 +91,7 @@
             } else {
                 [self cashOut:token];
             }
-        }];
+        }];*/
     }
 }
 
@@ -188,32 +170,6 @@
     }];
 }
 
-- (void)createToken:(STPCheckoutTokenBlock)block
-{
-    
-    if ( ![self.paymentTextField isValid] ) {
-        NSError* error = [[NSError alloc] initWithDomain:StripeDomain
-                                                    code:STPCardError
-                                                userInfo:@{NSLocalizedDescriptionKey: STPCardErrorUserMessage}];
-        
-        block(nil, error);
-        return;
-    }
-    
-    
-    STPCardParams* card = self.paymentTextField.card;
-    STPCardParams* scard = [[STPCard alloc] init];
-    
-    scard.number = card.number;
-    scard.expMonth = card.expMonth;
-    scard.expYear = card.expYear;
-    scard.cvc = card.cvc;
-    
-    [[STPAPIClient sharedClient] createTokenWithCard:scard
-                                          completion:^(STPToken *token, NSError *error) {
-                                              block(token, error);
-                                          }];
-    
-}
+
 
 @end

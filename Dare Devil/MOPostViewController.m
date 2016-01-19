@@ -144,7 +144,8 @@
 }
 
 - (void)insertText:(NSString *)theText {
-    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",theText.lastPathComponent] forState: UIControlStateNormal];
+    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",theText] forState: UIControlStateNormal];
+    [self resignFirstResponder];
     //TODO store
 }
 
