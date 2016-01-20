@@ -9,7 +9,6 @@
 #import "MOMainViewController.h"
 #import "MOPostViewController.h"
 #import "MOAddFundsViewController.h"
-#import "MODareTableViewCell.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SWRevealViewController.h"
 #import <Parse/Parse.h>
@@ -110,64 +109,41 @@
 // SETUP CELL WITH PARSE DATA
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     static NSString *CellIdentifier = @"Cell";
-    MODareTableViewCell *cell = (MODareTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[MODareTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // DARE TEXT
-    cell.dareLabel.text = [object objectForKey:@"text"];
-    [cell.contentView addSubview:cell.dareLabel];
+    UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(5, 0, 7*self.view.bounds.size.width/8, 70)];
+    dareLabel.textColor = [UIColor blackColor];
+    [dareLabel setFont:[UIFont systemFontOfSize:15]];
+    dareLabel.scrollEnabled = false;
+    dareLabel.editable = false;
+    dareLabel.text = [object objectForKey:@"text"];
+    [cell.contentView addSubview:dareLabel];
     
     // FUNDS BUTTON
-    [cell.fundsButton setTitle: [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]] forState: UIControlStateSelected];
-    [cell.fundsButton setTitle: [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]] forState: UIControlStateNormal];
-    cell.fundsButton.tag = indexPath.row;
-    if ([[object objectForKey:@"funders"] containsObject:[PFUser currentUser].objectId]) {
-        cell.fundsButton.selected = true;
-    } else {
-        cell.fundsButton.selected = false;
-    }
-    [cell.fundsButton addTarget:self action:@selector(fundDare:) forControlEvents:UIControlEventTouchUpInside];
-    [[cell.fundsButton layer] setValue:object forKey:@"dareObject"];
-    [cell.contentView addSubview:cell.fundsButton];
-    
-    // UPLOAD CONTENT BUTTON
-    PFQuery *uploadsQuery = [PFQuery queryWithClassName:@"Submissions"];
-    [uploadsQuery whereKey:@"dare" equalTo:object];
-    [uploadsQuery findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        if (!error) {
-            [cell.uploadButton setTitle: [NSString stringWithFormat:@"\u2191%lu", (unsigned long) [objects count]] forState: UIControlStateSelected];
-            [cell.uploadButton setTitle: [NSString stringWithFormat:@"\u2191%lu", (unsigned long) [objects count]] forState: UIControlStateNormal];
-        }
-    }];
-    [cell.uploadButton addTarget:self action:@selector(uploadSubmission:) forControlEvents:UIControlEventTouchUpInside];
-    cell.uploadButton.tag = indexPath.row;
-    [[cell.uploadButton layer] setValue:object forKey:@"dareObject"];
-    PFQuery *userUploadsQuery = [PFQuery queryWithClassName:@"Submissions"];
-    [userUploadsQuery whereKey:@"dare" equalTo:object];
-    [userUploadsQuery whereKey:@"user" equalTo:[PFUser currentUser]];
-    [userUploadsQuery findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-        if (!error) {
-            if ([objects count] >= 1) {
-                cell.uploadButton.selected = true;
-            } else {
-                cell.uploadButton.selected = false;
-            }
-        }
-    }];
-    [cell.contentView addSubview:cell.uploadButton];
+    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8, 40, self.view.bounds.size.width/8, 12)];
+    fundsLabel.textColor = [UIColor blackColor];
+    fundsLabel.text = @"$103"; // TODO add totalFunds
+    [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
+    UILabel* timeLeft = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-35, 5, 30, 12)];
+    timeLeft.textColor = [UIColor lightGrayColor];
+    [timeLeft setTextAlignment:NSTextAlignmentCenter];
+    timeLeft.font = [UIFont systemFontOfSize:13];
     NSDate *endDate = [[object createdAt] dateByAddingTimeInterval:60*60*24*1];
     NSInteger diff = [endDate timeIntervalSinceDate:[NSDate date]]/60;
     if (diff>60) {
-        cell.timeLeft.text = [NSMutableString stringWithFormat:@"%ldh", (long) diff/60];
+        timeLeft.text = [NSMutableString stringWithFormat:@"%ldh", (long) diff/60];
     } else {
-        cell.timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
+        timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
     }
-    [cell.contentView addSubview:cell.timeLeft];
+    [cell.contentView addSubview:timeLeft];
     
     return cell;
 }

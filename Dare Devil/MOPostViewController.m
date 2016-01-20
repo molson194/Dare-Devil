@@ -301,4 +301,13 @@
     self.navigationController.navigationBar.hidden = NO;
     [self.navigationController pushViewController:addFundsViewController animated:YES];
 }
+/* TODO charge card
+if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
+    [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"]} block:^(id object, NSError *error) {
+        if (error) {
+            
+        } else {
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+    }];*/
 @end

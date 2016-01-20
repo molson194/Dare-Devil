@@ -9,12 +9,13 @@
 #import "MOCompletedDaresViewController.h"
 #import "MOPostViewController.h"
 #import "MOAddFundsViewController.h"
-#import "MOSubmissionsCell.h"
 #import "SWRevealViewController.h"
 #import <Parse/Parse.h>
+#import <AVFoundation/AVFoundation.h>
 
 @interface MOCompletedDaresViewController ()
 @property (nonatomic) CGFloat previousScrollViewYOffset;
+@property (nonatomic) NSMutableDictionary* players;
 @end
 
 @implementation MOCompletedDaresViewController
@@ -53,6 +54,8 @@
     tap.cancelsTouchesInView = NO;
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
+    
+    self.players = [NSMutableDictionary dictionary];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
@@ -71,52 +74,68 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     static NSString *CellIdentifier = nil;
     CellIdentifier = [NSString stringWithFormat: @"Cell%li", (long)indexPath.row];
-    MOSubmissionsCell *cell = (MOSubmissionsCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
-        cell = [[MOSubmissionsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
-
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    
     PFObject *dareObject = [object objectForKey:@"dare"];
     [dareObject fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        cell.dareLabel.text = [object objectForKey:@"text"];
-        [cell.contentView addSubview:cell.dareLabel];
-        cell.moneyRaised.text = [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]];
+        UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(3, 30, self.view.bounds.size.width-6, 50)];
+        dareLabel.textColor = [UIColor blackColor];
+        [dareLabel setFont:[UIFont systemFontOfSize:12]];
+        dareLabel.scrollEnabled = false;
+        dareLabel.editable = false;
+        dareLabel.text = [object objectForKey:@"text"];
+        [cell.contentView addSubview:dareLabel];
+        UILabel *moneyRaised = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 15, 50, 15)];
+        moneyRaised.textColor = [UIColor blackColor];
+        [moneyRaised setTextAlignment:NSTextAlignmentRight];
+        [moneyRaised setFont:[UIFont systemFontOfSize:15]];
+        [cell.contentView addSubview:moneyRaised];
+        moneyRaised.text = [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
 
     
     PFUser *userSubmitted = (PFUser *)[object objectForKey:@"user"];
     [userSubmitted fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-            cell.personSubmitted.text = [object objectForKey:@"name"];
+        UILabel *personSubmitted = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, self.view.bounds.size.width-80, 15)];
+        personSubmitted.textColor = [UIColor blackColor];
+        [personSubmitted setFont:[UIFont systemFontOfSize:15]];
+        [cell.contentView addSubview:personSubmitted];
+        personSubmitted.text = [object objectForKey:@"name"];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
     
     if (object[@"video"]) {
         PFFile *video = [object objectForKey:@"video"];
-        cell.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
-        cell.videoView = nil;
-        cell.videoView = [AVPlayerLayer playerLayerWithPlayer:cell.player];
-        cell.videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
-        cell.videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        cell.videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:cell.videoView];
+        AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
+        AVPlayerLayer *videoView = nil;
+        videoView = [AVPlayerLayer playerLayerWithPlayer:player];
+        videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
+        videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        videoView.needsDisplayOnBoundsChange = YES;
+        [cell.layer addSublayer:videoView];
+        [self.players setObject:player forKey:[NSNumber numberWithLong:indexPath.row]];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else if (object[@"image"]) {
-        cell.imageView = nil;
+        PFImageView *imageView = nil;
         if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
-            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60)];
+            imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60)];
         } else {
-            cell.imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
+            imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
         }
-        cell.imageView.image = [UIImage imageNamed:@"placeholder.png"];
-        cell.imageView.file = [object objectForKey:@"image"];
-        [cell.imageView setContentMode:UIViewContentModeScaleAspectFill];
-        [cell.imageView setClipsToBounds:YES];
-        [cell.imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
+        imageView.image = [UIImage imageNamed:@"placeholder.png"];
+        imageView.file = [object objectForKey:@"image"];
+        [imageView setContentMode:UIViewContentModeScaleAspectFill];
+        [imageView setClipsToBounds:YES];
+        [imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
             [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         }];
-        [cell.contentView addSubview:cell.imageView];
+        [cell.contentView addSubview:imageView];
     }
     return cell;
 }
@@ -141,12 +160,12 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-    MOSubmissionsCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    AVPlayer *player = [self.players objectForKey:[NSNumber numberWithLong:indexPath.row]];
     if ((indexPath.row + 1) > [self.objects count]) {
         [self loadNextPage];
-    } else if (cell.player!=nil) {
-        [cell.player seekToTime:kCMTimeZero];
-        [cell.player play];
+    } else if (player!=nil) {
+        [player seekToTime:kCMTimeZero];
+        [player play];
     }
 }
 

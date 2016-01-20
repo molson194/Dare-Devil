@@ -11,7 +11,6 @@
 #import "MOAddFundsViewController.h"
 #import "MOCompletedDaresViewController.h"
 #import "MOMainViewController.h"
-#import "MOCurrentDaresViewController.h"
 #import "MOActivityViewController.h"
 #import "MOAdminDareViewController.h"
 #import <Parse/Parse.h>
@@ -115,13 +114,10 @@
     } else if (row==2) {
         MOCompletedDaresViewController *completedDaresViewController = [[MOCompletedDaresViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:completedDaresViewController];
-    } else if (row==3){
-        MOCurrentDaresViewController *currentDaresViewController = [[MOCurrentDaresViewController alloc] initWithStyle:UITableViewStylePlain];
-        newFrontController = [[UINavigationController alloc] initWithRootViewController:currentDaresViewController];
-    } else if (row==4) {
+    } else if (row==3) {
         MOActivityViewController *activityViewController = [[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:activityViewController];
-    } else if (row==5) {
+    } else if (row==4) {
         MOAdminDareViewController *adminViewController = [[MOAdminDareViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:adminViewController];
     }

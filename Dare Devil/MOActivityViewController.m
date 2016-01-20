@@ -10,7 +10,6 @@
 #import "SWRevealViewController.h"
 #import "MOPostViewController.h"
 #import <Parse/Parse.h>
-#import "MOVotingViewController.h"
 #import "MOSingleDareController.h"
 
 @interface MOActivityViewController ()
@@ -114,12 +113,7 @@
     } else {
     
         if ([obj[@"type"] isEqualToString:@"New Submission"]) {
-            PFObject *dareObj = obj[@"dare"];
-            [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-                MOVotingViewController *votingView = [[MOVotingViewController alloc] initWithStyle:UITableViewStylePlain];
-                [votingView setObject:object];
-                [self.navigationController pushViewController:votingView animated:YES];
-            }];
+
         } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
             PFObject *dareObj = obj[@"dare"];
             [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {

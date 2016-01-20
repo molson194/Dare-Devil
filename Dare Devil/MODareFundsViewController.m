@@ -34,7 +34,7 @@
         changeCard.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
         changeCard.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [changeCard setTitle:[NSString stringWithFormat:@"Card ending in %@ - Different Card?", [[PFUser currentUser] objectForKey:@"Last4"]] forState: UIControlStateNormal];
+        [changeCard setTitle:[NSString stringWithFormat:@"Change card ending in %@?", [[PFUser currentUser] objectForKey:@"Last4"]] forState: UIControlStateNormal];
         [changeCard addTarget:self action:@selector(changeCard:) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
         UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
@@ -47,56 +47,47 @@
     }
 }
 
+- (void)changeCard:(UIButton *)sender{
+    [sender removeFromSuperview];
+    [self.view addSubview:self.paymentTextField];
+    [self.view bringSubviewToFront:self.paymentTextField];
+}
+
 - (void)paymentCardTextFieldDidChange:(STPPaymentCardTextField *)textField {
-    // Toggle navigation, for example
     self.canSave = textField.isValid;
 }
 
 -(void) donePressed {
-    // TODO [delegate sendWorld:YES];
-    if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
-        [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"]} block:^(id object, NSError *error) {
-            if (error) {
-                
-            } else {
-                [self.navigationController popViewControllerAnimated:YES];
-            }
-        }];
-    } else if (self.canSave) {
+    if (self.canSave) {
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
                 
             } else {
-                [[PFUser currentUser] setObject:token.card.last4 forKey:@"Last4"];
-                [[PFUser currentUser] saveInBackground];
-                [PFCloud callFunctionInBackground:@"createCustomer" withParameters:@{@"tokenId":token.tokenId,} block:^(id object, NSError *error) {
-                    if (error) {
+                if (token.card.funding != STPCardFundingTypeDebit) {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:@"Need to use debit card" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                    [alertController addAction:ok];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                } else {
+                    [[PFUser currentUser] setObject:token.card.last4 forKey:@"Last4"];
+                    [[PFUser currentUser] saveInBackground];
+                    [PFCloud callFunctionInBackground:@"createCustomer" withParameters:@{@"tokenId":token.tokenId,} block:^(id object, NSError *error) {
+                        if (error) {
                         
-                    } else {
-                        NSString* customer = (NSString *)object;
-                        [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
-                        [[PFUser currentUser] saveInBackground];
-                        [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":customer} block:^(id object, NSError *error) {
-                            if (error) {
-                                
-                            } else {
-                                [self.navigationController popViewControllerAnimated:YES];
-                            }
-                        }];
+                        } else {
+                            NSString* customer = (NSString *)object;
+                            [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
+                            [[PFUser currentUser] saveInBackground];
+                            [self.navigationController popViewControllerAnimated:YES];
+                        
                         //TODO do recipient also
-                        
-                    }
-                }];
-                
-                
+                        }
+                    }];
+                }
             }
         }];
     }
 }
-
-//todo add text field to put how much money
-// credit card only shows if customer not in database
-// create customer
 
 - (void)createToken:(STPCheckoutTokenBlock)block
 {
