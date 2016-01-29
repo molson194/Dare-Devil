@@ -54,7 +54,7 @@
     
     // CASH OUT BUTTON
     self.cashOut=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.cashOut.backgroundColor=[UIColor lightGrayColor];
+    self.cashOut.backgroundColor=[UIColor blueColor];
     self.cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2-60,145,120,40);
     [self.cashOut setTitle: @"Cash Out $10" forState: UIControlStateNormal];
     [self.cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
@@ -80,7 +80,6 @@
 
 // CASH OUT BUTTON PRESSED ACTION
 - (void)cashOutPressed {
-    if (self.cashOut.backgroundColor != [UIColor lightGrayColor] && [[[PFUser currentUser] objectForKey:@"funds"] integerValue] >=10) {
         /* TODO
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
@@ -92,18 +91,6 @@
                 [self cashOut:token];
             }
         }];*/
-    }
-}
-
-- (void)paymentCardTextFieldDidChange:(STPPaymentCardTextField *)textField {
-    // Toggle navigation, for example
-    if(textField.isValid) {
-        self.addFunds.backgroundColor = [UIColor blueColor];
-        self.cashOut.backgroundColor = [UIColor blueColor];
-    } else {
-        self.addFunds.backgroundColor = [UIColor lightGrayColor];
-        self.cashOut.backgroundColor = [UIColor lightGrayColor];
-    }
 }
 
 - (void)cashOut:(STPToken *)token { // TODO store recipient string to user... if recipient use that with the card
@@ -129,7 +116,6 @@
                 NSLog(@"%@",[json objectForKey:@"id"]);
                 
                 NSDictionary *newInfo = @{ @"id": [json objectForKey:@"id"], @"cardId":[json objectForKey:@"default_card"]};
-                // TODO store card and recipient
                 [[PFUser currentUser] setObject:[json objectForKey:@"id"] forKey:@"recipient"];
                 [[PFUser currentUser] setObject:[json objectForKey:@"default_card"] forKey:@"card"];
                 [[PFUser currentUser] saveInBackground];
@@ -151,25 +137,5 @@
         }];
     }
 }
-
-- (void)charge:(STPToken *)token {
-    
-    NSDictionary *info = @{ @"cardToken": token.tokenId, };
-    [PFCloud callFunctionInBackground:@"addFunds" withParameters:info block:^(id object, NSError *error) {
-        if (error) {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Add Funds Error" message:error.description preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-            [alertController addAction:ok];
-            [self presentViewController:alertController animated:YES completion:nil];
-        } else {
-            long newTotal = [[[PFUser currentUser] objectForKey:@"funds"] integerValue] + 10;
-            [[PFUser currentUser] setObject:@((int)newTotal) forKey:@"funds"];
-            [[PFUser currentUser] saveEventually];
-            self.currentFunds.text = [NSString stringWithFormat:@"%@ %@", @"Current Funds Remaining:", [self.currencyFormatter stringFromNumber:[[PFUser currentUser] objectForKey:@"funds"]]];
-        }
-    }];
-}
-
-
 
 @end

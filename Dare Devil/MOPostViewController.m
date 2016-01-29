@@ -24,11 +24,16 @@
 @property (nonatomic, strong) NSMutableArray *facebookTags;
 @property (nonatomic, strong) NSMutableArray *facebookIds;
 @property (nonatomic) BOOL world;
+@property (nonatomic,strong) NSArray* targetPerson;
 @property (nonatomic, strong) UIButton *target;
 @property (nonatomic, strong) UIButton *daysOpen;
 @property (nonatomic, strong) UILabel *numDays;
 @property (nonatomic) BOOL displayText;
 @property (nonatomic, strong) UIButton *funds;
+@property (nonatomic, strong) UIButton *amount;
+@property (nonatomic) BOOL chargeAmountText;
+@property (nonatomic,strong) NSString* chargeAmount;
+@property (nonatomic,strong) NSString* daysOpenAmount;
 @end
 
 @implementation MOPostViewController
@@ -45,7 +50,7 @@
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPost)];
     [cancelButton setTintColor:[UIColor whiteColor]];
     self.navigationItem.leftBarButtonItem = cancelButton;
-    UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postDare)];
+    UIBarButtonItem *postButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(postToCloud)];
     [postButton setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = postButton;
     [self.navigationController.navigationBar
@@ -54,11 +59,11 @@
     
     self.target=[UIButton buttonWithType:UIButtonTypeCustom];
     self.target.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
-    self.target.frame=CGRectMake(0,98,[[UIScreen mainScreen] bounds].size.width,30);
+    self.target.frame=CGRectMake(0,93,[[UIScreen mainScreen] bounds].size.width,25);
     self.target.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.target setTitle: @"Target:" forState: UIControlStateNormal];
     [self.target addTarget:self action:@selector(recipientPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
     UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
     imageHolder.image = image;
     [self.target addSubview:imageHolder];
@@ -66,28 +71,32 @@
     
     self.daysOpen=[UIButton buttonWithType:UIButtonTypeCustom];
     self.daysOpen.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
-    self.daysOpen.frame=CGRectMake(0,130,[[UIScreen mainScreen] bounds].size.width,30);
+    self.daysOpen.frame=CGRectMake(0,120,[[UIScreen mainScreen] bounds].size.width,25);
     self.daysOpen.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.daysOpen setTitle: @"Open: 0 days" forState: UIControlStateNormal];
     [self.daysOpen addTarget:self action:@selector(daysPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImageView *imageHolder3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
     imageHolder3.image = image;
     [self.daysOpen addSubview:imageHolder3];
     [self.view addSubview:self.daysOpen];
     
     self.funds=[UIButton buttonWithType:UIButtonTypeCustom];
     self.funds.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
-    self.funds.frame=CGRectMake(0,162,[[UIScreen mainScreen] bounds].size.width,30);
+    self.funds.frame=CGRectMake(0,147,[[UIScreen mainScreen] bounds].size.width,25);
     self.funds.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.funds setTitle: @"Add: $0" forState: UIControlStateNormal];
+    if ([[PFUser currentUser] objectForKey:@"Last4"]) {
+        [self.funds setTitle: [NSString stringWithFormat:@"Card ending in %@", [[PFUser currentUser] objectForKey:@"Last4"]]forState: UIControlStateNormal];
+    } else {
+        [self.funds setTitle: @"Add Card" forState: UIControlStateNormal];
+    }
     [self.funds addTarget:self action:@selector(addFunds) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImageView *imageHolder4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
     imageHolder4.image = image;
     [self.funds addSubview:imageHolder4];
     [self.view addSubview:self.funds];
     
     // DARE TEXT VIEW
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 192, [[UIScreen mainScreen] bounds].size.width-6, 60)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 197, [[UIScreen mainScreen] bounds].size.width-6, 60)];
     [self.textView setFont:[UIFont systemFontOfSize:16]];
     [self.textView setReturnKeyType:UIReturnKeySend];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -104,14 +113,25 @@
     // TO BUTTON
     self.toButton=[UIButton buttonWithType:UIButtonTypeCustom];
     self.toButton.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
-    self.toButton.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
+    self.toButton.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,25);
     self.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.toButton setTitle: @"Tag:" forState: UIControlStateNormal];
     [self.toButton addTarget:self action:@selector(toButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
+    UIImageView *imageHolder2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
     imageHolder2.image = image;
     [self.toButton addSubview:imageHolder2];
     [self.view addSubview:self.toButton];
+    
+    self.amount=[UIButton buttonWithType:UIButtonTypeCustom];
+    self.amount.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.amount.frame=CGRectMake(0,174,[[UIScreen mainScreen] bounds].size.width,25);
+    self.amount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+    [self.amount setTitle: @"Add: $0" forState: UIControlStateNormal];
+    [self.amount addTarget:self action:@selector(changeAmount) forControlEvents:UIControlEventTouchUpInside];
+    UIImageView *imageHolder5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
+    imageHolder5.image = image;
+    [self.amount addSubview:imageHolder5];
+    [self.view addSubview:self.amount];
     
     // LOCATION SERVICES
     [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
@@ -123,13 +143,29 @@
     self.world = NO;
     self.displayText = NO;
     self.facebookIds = [NSMutableArray array];
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
 }
-- (void)postDare {
-    [self attemptToPost];
+
+-(void)dismissKeyboard {
+    [self resignFirstResponder];
+}
+
+- (void) changeAmount {
+    self.displayText = YES;
+    self.chargeAmountText = YES;
+    self.chargeAmount = @"";
+    [self becomeFirstResponder];
 }
 
 - (void)daysPressed {
     self.displayText = YES;
+    self.chargeAmountText = NO;
+    self.daysOpenAmount = @"";
     [self becomeFirstResponder];
 }
 
@@ -144,13 +180,23 @@
 }
 
 - (void)insertText:(NSString *)theText {
-    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",theText] forState: UIControlStateNormal];
-    [self resignFirstResponder];
-    //TODO store
+    if (self.chargeAmountText) {
+        self.chargeAmount = [NSString stringWithFormat:@"%@%@",self.chargeAmount,theText];
+        [self.amount setTitle: [NSString stringWithFormat:@"Add $%@",self.chargeAmount] forState: UIControlStateNormal];
+    } else {
+        self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
+        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    }
 }
 
 - (void)deleteBackward {
-    return;
+    if (self.chargeAmountText && [self.chargeAmount length]>0) {
+        self.chargeAmount = [self.chargeAmount substringToIndex:[self.chargeAmount length] - 1];
+        [self.amount setTitle: [NSString stringWithFormat:@"Add $%@",self.chargeAmount] forState: UIControlStateNormal];
+    } else if (!self.chargeAmountText && [self.daysOpenAmount length]>0){
+        self.daysOpenAmount = [self.daysOpenAmount substringToIndex:[self.daysOpenAmount length] - 1];
+        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    }
 }
 
 - (void) recipientPressed {
@@ -192,9 +238,8 @@
 }
 
 - (void)sendPerson:(NSArray *)person {
+    self.targetPerson = person;
     [self.target setTitle:[NSString stringWithFormat:@"Target: %@", person[0]] forState:UIControlStateNormal];
-    
-    //todo
 }
 
 -(void)sendWorld:(BOOL)worldPost {
@@ -229,71 +274,48 @@
     [self.toButton setTitle:buttonString forState: UIControlStateNormal];
 }
 
-// USER PRESSED POST, FIND IF ABLE TO POST
-- (void)attemptToPost {
-    
-    if ([[[PFUser currentUser] objectForKey:@"funds"] integerValue] >= 1){
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Are you okay with funding $1?" message:nil preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *yesSelect = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){[self postToCloud];}];
-        UIAlertAction *noSelect = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:yesSelect];
-        [alertController addAction:noSelect];
-        [self presentViewController:alertController animated:YES completion:nil];
-        
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Not enough funds" message:@"Add funds or cancel" preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction *addFunds = [UIAlertAction actionWithTitle:@"Add Funds" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){[self addFunds];}];
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action){return;}];
-        [alertController addAction:addFunds];
-        [alertController addAction:cancel];
-        [self presentViewController:alertController animated:YES completion:nil];
-    }
-}
-
 // USER ABLE TO POST, POST TO CLOUD
 - (void)postToCloud {
-    
-    PFObject *dare = [PFObject objectWithClassName:@"Dare"];
-    dare[@"text"] = self.textView.text;
-    dare[@"user"] = [PFUser currentUser];
-    if (self.geoPoint) {
-        dare[@"location"] = self.geoPoint;
-    } else {
-        dare[@"location"] = [PFGeoPoint geoPointWithLatitude:0 longitude:0];
+    if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
+        [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"], @"amount":[NSNumber numberWithInt:self.chargeAmount.intValue*100], } block:^(id object, NSError *error) {
+            if (error) {
+                
+            } else {
+                PFObject *dare = [PFObject objectWithClassName:@"Dare"];
+                dare[@"text"] = [NSString stringWithFormat:@"I dare %@ to %@", self.targetPerson[0],self.textView.text];
+                dare[@"user"] = [PFUser currentUser];
+                if (self.geoPoint) {
+                    dare[@"location"] = self.geoPoint;
+                } else {
+                    dare[@"location"] = [PFGeoPoint geoPointWithLatitude:0 longitude:0];
+                }
+                dare[@"funders"] = [NSMutableDictionary dictionaryWithDictionary:@{[PFUser currentUser].objectId : [NSNumber numberWithInt:self.chargeAmount.intValue]}];
+                dare[@"totalFunding"] = [NSNumber numberWithInt:self.chargeAmount.intValue];
+                dare[@"closeDate"] = [[NSDate date] dateByAddingTimeInterval:60*60*24*self.daysOpenAmount.intValue];
+                dare[@"facebookIds"] = self.facebookIds;
+                dare[@"target"] = self.targetPerson[1];
+                dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
+                dare[@"isFinished"] = [NSNumber numberWithBool:NO];
+                [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    if (succeeded) {
+                        PFQuery *pushQuery = [PFInstallation query];
+                        [pushQuery whereKey:@"facebook" containedIn:self.facebookIds];
+                        // Send push notification to query
+                        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
+                        
+                        PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                        notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a dare", [[PFUser currentUser] objectForKey:@"name"]];
+                        notification[@"dare"] = dare;
+                        notification[@"type"] = @"New Dare";
+                        notification[@"facebook"] = self.facebookIds;
+                        [notification saveInBackground];
+                        [self.navigationController popToRootViewControllerAnimated:YES];
+                    }
+                }];
+
+            }
+        }];
     }
-    
-    dare[@"funders"] = [NSMutableArray arrayWithObject:[PFUser currentUser].objectId];
-    dare[@"submissions"] = [NSMutableArray array];
-    dare[@"facebookIds"] = self.facebookIds;
-    dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
-    dare[@"isFinished"] = [NSNumber numberWithBool:NO];
-    [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-        if (succeeded) {
-            int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
-            [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
-            [[PFUser currentUser] saveEventually];
-            
-            PFQuery *pushQuery = [PFInstallation query];
-            [pushQuery whereKey:@"facebook" containedIn:self.facebookIds];
-            // Send push notification to query
-            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
-            
-            PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-            notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a dare", [[PFUser currentUser] objectForKey:@"name"]];
-            notification[@"dare"] = dare;
-            notification[@"type"] = @"New Dare";
-            notification[@"facebook"] = self.facebookIds;
-            [notification saveInBackground];
-            [self.navigationController popToRootViewControllerAnimated:YES];
-        } else {
-            UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error uploading dare." message:error.description preferredStyle:UIAlertControllerStyleAlert];
-            UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-            [alertController addAction:ok];
-            [self presentViewController:alertController animated:YES completion:nil];
-            return;
-        }
-    }];
 }
 
 - (void) addFunds {
@@ -301,13 +323,5 @@
     self.navigationController.navigationBar.hidden = NO;
     [self.navigationController pushViewController:addFundsViewController animated:YES];
 }
-/* TODO charge card
-if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
-    [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"]} block:^(id object, NSError *error) {
-        if (error) {
-            
-        } else {
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }];*/
+
 @end

@@ -128,7 +128,7 @@
     // FUNDS BUTTON
     UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8, 40, self.view.bounds.size.width/8, 12)];
     fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = @"$103"; // TODO add totalFunds
+    fundsLabel.text = [[object objectForKey:@"totalFunding"] stringValue];
     [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
@@ -177,9 +177,9 @@
     if (self.queryHotRecent==1 || self.queryHotRecent == 0) {
         [query orderByDescending:@"createdAt"];
     } else if (self.queryHotRecent == 2) {
-        [query orderByDescending:@"funders"];
+        [query orderByDescending:@"totalFunding"];
     }
-    [query whereKey:@"createdAt" greaterThan:[[NSDate date] dateByAddingTimeInterval:-1*24*60*60]];
+    [query whereKey:@"closeDate" greaterThan:[NSDate date]];
     return query;
 }
 

@@ -19,7 +19,10 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.navigationItem.hidesBackButton = NO;
+    self.navigationItem.hidesBackButton = YES;
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
+    [cancelButton setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = cancelButton;
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(donePressed)];
@@ -34,7 +37,7 @@
         changeCard.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
         changeCard.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [changeCard setTitle:[NSString stringWithFormat:@"Change card ending in %@?", [[PFUser currentUser] objectForKey:@"Last4"]] forState: UIControlStateNormal];
+        [changeCard setTitle:@"Change card?" forState: UIControlStateNormal];
         [changeCard addTarget:self action:@selector(changeCard:) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
         UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
@@ -45,6 +48,11 @@
         [self.view addSubview:self.paymentTextField];
         [self.view bringSubviewToFront:self.paymentTextField];
     }
+}
+
+// USER PRESSED CANCEL BUTTON
+- (void)cancel{
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)changeCard:(UIButton *)sender{
@@ -79,9 +87,21 @@
                             [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
                             [[PFUser currentUser] saveInBackground];
                             [self.navigationController popViewControllerAnimated:YES];
-                        
-                        //TODO do recipient also
                         }
+                    }];
+                    
+                    NSString *firstName = [[[PFUser currentUser] objectForKey:@"name"]componentsSeparatedByString:@" "][0];
+                    NSString *lastName = [[[PFUser currentUser] objectForKey:@"name"]componentsSeparatedByString:@" "][1];
+                    NSDictionary *info = @{ @"cardToken": token.tokenId, @"firstName":firstName, @"lastName":lastName};
+                    [PFCloud callFunctionInBackground:@"recipient" withParameters:info block:^(id object, NSError *error) {
+                        NSString *stringData = (NSString*) object;
+                        NSData *data = [stringData dataUsingEncoding:NSUTF8StringEncoding];
+                        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                        NSLog(@"%@",[json objectForKey:@"id"]);
+
+                        [[PFUser currentUser] setObject:[json objectForKey:@"id"] forKey:@"recipient"];
+                        [[PFUser currentUser] setObject:[json objectForKey:@"default_card"] forKey:@"card"];
+                        [[PFUser currentUser] saveInBackground];
                     }];
                 }
             }

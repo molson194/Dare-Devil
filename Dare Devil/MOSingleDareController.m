@@ -51,7 +51,7 @@
     // FUNDS BUTTON
     UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8, 40, self.view.bounds.size.width/8, 12)];
     fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = @"$103"; // TODO add totalFunds
+    fundsLabel.text = [[self.obj objectForKey:@"totalFunding"] stringValue];
     [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
