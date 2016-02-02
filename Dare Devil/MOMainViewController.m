@@ -14,6 +14,7 @@
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
 #import "MBProgressHUD.h"
+#import "MODareFundsViewController.h"
 
 @interface MOMainViewController ()
 @property (nonatomic, strong) PFObject *uploadObject;
@@ -203,22 +204,6 @@
     [self loadObjects];
 }
 
-// FUND DARE
-- (void)fundDare:(UIButton *)sender{
-    if (!sender.selected && (int)[[PFUser currentUser] objectForKey:@"funds"] >= 1) {
-        PFObject *object = [[sender layer] valueForKey:@"dareObject"];
-        NSMutableArray *funders = [object objectForKey:@"funders"];
-        [funders addObject:[PFUser currentUser].objectId];
-        [object saveInBackground];
-        int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
-        [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
-        [[PFUser currentUser] saveEventually];
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    }
-}
-
 - (void)uploadSubmission:(UIButton *)sender {
     if (!sender.selected){
         UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
@@ -230,6 +215,13 @@
             self.indexPathRow = [NSNumber numberWithInt:(int)sender.tag];
         }];
     }
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
+    [addFundsViewController addFunds:true forDare:[self.objects objectAtIndex:indexPath.row]];
+    self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController pushViewController:addFundsViewController animated:YES];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {

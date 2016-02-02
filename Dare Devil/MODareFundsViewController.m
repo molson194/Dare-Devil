@@ -12,6 +12,11 @@
 @interface MODareFundsViewController ()
 @property(nonatomic) STPPaymentCardTextField *paymentTextField;
 @property(nonatomic) BOOL canSave;
+@property(nonatomic) BOOL doAdd;
+@property(nonatomic) BOOL keepPrevious;
+@property (nonatomic, strong) UIButton *amount;
+@property (nonatomic,strong) NSString* fundingAmount;
+@property (nonatomic,strong) PFObject* currDare;
 @end
 
 @implementation MODareFundsViewController
@@ -44,10 +49,68 @@
         imageHolder.image = image;
         [changeCard addSubview:imageHolder];
         [self.view addSubview:changeCard];
+        self.keepPrevious= true;
     } else {
         [self.view addSubview:self.paymentTextField];
         [self.view bringSubviewToFront:self.paymentTextField];
+        self.keepPrevious = false;
     }
+
+    if (self.doAdd) {
+        self.amount=[UIButton buttonWithType:UIButtonTypeCustom];
+        self.amount.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+        self.amount.frame=CGRectMake(0,150,[[UIScreen mainScreen] bounds].size.width,30);
+        self.amount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+        [self.amount setTitle: @"Add Funds: $0" forState: UIControlStateNormal];
+        [self.amount addTarget:self action:@selector(amountPressed) forControlEvents:UIControlEventTouchUpInside];
+        UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
+        UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
+        imageHolder.image = image;
+        [self.amount addSubview:imageHolder];
+        [self.view addSubview:self.amount];
+    
+        self.fundingAmount = @"";
+    }
+    
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc]
+                                   initWithTarget:self
+                                   action:@selector(dismissKeyboard)];
+    
+    [self.view addGestureRecognizer:tap];
+}
+
+- (void)insertText:(NSString *)theText {
+    self.fundingAmount = [NSString stringWithFormat:@"%@%@",self.fundingAmount,theText];
+    [self.amount setTitle: [NSString stringWithFormat:@"Add Fund: $%@",self.fundingAmount] forState: UIControlStateNormal];
+}
+
+- (void)deleteBackward {
+    self.fundingAmount = [self.fundingAmount substringToIndex:[self.fundingAmount length] - 1];
+    [self.amount setTitle: [NSString stringWithFormat:@"Add Funds: $%@",self.fundingAmount] forState: UIControlStateNormal];
+}
+
+-(void)dismissKeyboard {
+    [self resignFirstResponder];
+}
+
+- (void)amountPressed {
+    self.fundingAmount = @"";
+    [self becomeFirstResponder];
+}
+
+- (UIKeyboardType) keyboardType {
+    return UIKeyboardTypeNumberPad;
+}
+
+- (BOOL)canBecomeFirstResponder { return true; }
+
+- (BOOL)hasText {
+    return YES;
+}
+
+- (void)addFunds:(BOOL)addFunds forDare:(PFObject *)dare {
+    self.doAdd = addFunds;
+    self.currDare = dare;
 }
 
 // USER PRESSED CANCEL BUTTON
@@ -63,10 +126,36 @@
 
 - (void)paymentCardTextFieldDidChange:(STPPaymentCardTextField *)textField {
     self.canSave = textField.isValid;
+    self.keepPrevious = false;
 }
 
 -(void) donePressed {
-    if (self.canSave) {
+    if (self.keepPrevious && self.doAdd) {
+        [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"], @"amount":[NSNumber numberWithInt:self.fundingAmount.intValue*100], } block:^(id object, NSError *error) {
+            if (error) {
+                
+            } else {
+                NSMutableDictionary* funders =  [self.currDare objectForKey:@"funders"];
+                NSNumber *totalFunding = [self.currDare objectForKey:@"totalFunding"];
+                
+                totalFunding = [NSNumber numberWithInt:(self.fundingAmount.intValue + totalFunding.intValue)];
+                [self.currDare setObject:totalFunding forKey:@"totalFunding"];
+                
+                if ([funders objectForKey:[PFUser currentUser].objectId]) {
+                    NSNumber* myFunds = [funders objectForKey:[PFUser currentUser].objectId];
+                    [funders setObject:[NSNumber numberWithInt:(self.fundingAmount.intValue + myFunds.intValue)] forKey:[PFUser currentUser].objectId];
+                } else {
+                    [funders setObject:[NSNumber numberWithInt:self.fundingAmount.intValue] forKey:[PFUser currentUser].objectId];
+                }
+                [self.currDare setObject:funders forKey:@"funders"];
+                [self.currDare saveInBackground];
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            }
+        }];
+    } else if (self.keepPrevious) {
+        [self.navigationController popViewControllerAnimated:YES];
+    } else if (self.canSave) {
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
                 
@@ -87,6 +176,30 @@
                             [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
                             [[PFUser currentUser] saveInBackground];
                             [self.navigationController popViewControllerAnimated:YES];
+                            
+                            if (self.doAdd) {
+                                [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":customer, @"amount":[NSNumber numberWithInt:self.fundingAmount.intValue*100], } block:^(id object, NSError *error) {
+                                    if (error) {
+                                        
+                                    } else {
+                                        NSMutableDictionary* funders =  [self.currDare objectForKey:@"funders"];
+                                        NSNumber *totalFunding = [self.currDare objectForKey:@"totalFunding"];
+                                        
+                                        totalFunding = [NSNumber numberWithInt:(self.fundingAmount.intValue + totalFunding.intValue)];
+                                        [self.currDare setObject:totalFunding forKey:@"totalFunding"];
+                                        
+                                        if ([funders objectForKey:[PFUser currentUser].objectId]) {
+                                            NSNumber* myFunds = [funders objectForKey:[PFUser currentUser].objectId];
+                                            [funders setObject:[NSNumber numberWithInt:(self.fundingAmount.intValue + myFunds.intValue)] forKey:[PFUser currentUser].objectId];
+                                        } else {
+                                            [funders setObject:[NSNumber numberWithInt:self.fundingAmount.intValue] forKey:[PFUser currentUser].objectId];
+                                        }
+                                        [self.currDare setObject:funders forKey:@"funders"];
+                                        [self.currDare saveInBackground];
+                                        
+                                    }
+                                }];
+                            }
                         }
                     }];
                     
