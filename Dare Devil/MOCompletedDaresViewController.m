@@ -95,7 +95,8 @@
         [moneyRaised setTextAlignment:NSTextAlignmentRight];
         [moneyRaised setFont:[UIFont systemFontOfSize:15]];
         [cell.contentView addSubview:moneyRaised];
-        moneyRaised.text = [NSString stringWithFormat:@"$ %lu", (unsigned long) [[object objectForKey:@"funders"] count]];
+        NSNumber *funding = [object objectForKey:@"totalFunding"];
+        moneyRaised.text = [NSString stringWithFormat:@"$ %d", funding.intValue ];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
 
@@ -153,8 +154,15 @@
 
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName]; // TODO handle private dares
+    PFQuery *queryWorld = [PFQuery queryWithClassName:self.parseClassName];
+    PFQuery *queryFacebook = [PFQuery queryWithClassName:self.parseClassName];
+    [queryWorld whereKey:@"toWorld" equalTo:[NSNumber numberWithBool:YES]];
+    [queryFacebook whereKey:@"facebookIds" containsString:[[PFUser currentUser] objectForKey:@"fbId"]];
+    
+    query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:queryFacebook, queryWorld, nil]];
     [query orderByDescending:@"createdAt"];
     [query whereKey:@"isWinner" equalTo:[NSNumber numberWithBool:YES]];
+    
     return query;
 }
 

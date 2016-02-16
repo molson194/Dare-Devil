@@ -59,9 +59,10 @@
 }
 
 - (void) returnFundsPressed {
-    NSArray *funders = [self.obj objectForKey:@"funders"];
+    //todo
+    NSDictionary *funders = [self.obj objectForKey:@"funders"];
     PFQuery * query = [PFUser query];
-    [query whereKey:@"objectId" containedIn:funders];
+    [query whereKey:@"objectId" containedIn:[funders allKeys]];
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             [PFCloud callFunctionInBackground:@"refund" withParameters:@{@"idArray": funders} block:^(id  _Nullable object, NSError * _Nullable error) {
                 if (!error) {
@@ -91,25 +92,18 @@
 }
 
 - (void) winnerPressed {
-    int max = -1;
-    PFUser *winner;
-    for (PFObject *current in self.objects){
-        int count = (int)[[current objectForKey:@"votingFavorites"] count];
-        if (count > max) {
-            max = count;
-            winner = [current objectForKey:@"user"];
-        }
-    }
+    PFUser *winner = [self.obj objectForKey:@"user"];
     [winner fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
         int funds = [[object objectForKey:@"funds"] intValue];
-        int winnings = (int)[[self.obj objectForKey:@"funders" ] count];
+        int winnings = [[self.obj objectForKey:@"totalFunding" ] intValue];
         [PFCloud callFunctionInBackground:@"winner" withParameters:@{@"id":winner.objectId, @"newFunds":[NSNumber numberWithInt:(funds+winnings)]} block:^(id  _Nullable object, NSError * _Nullable error) {
             if (!error) {
                 [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
                 [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded){
                         // Create our push query
-                        NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
+                        NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
+                        NSArray *fundersPush = [allFunders allKeys];
                         PFQuery *pushQuery = [PFInstallation query];
                         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
                         PFQuery *pushQueryWinner = [PFInstallation query];

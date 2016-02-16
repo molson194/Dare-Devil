@@ -18,7 +18,6 @@
 
 @interface MOMainViewController ()
 @property (nonatomic, strong) PFObject *uploadObject;
-@property (nonatomic, strong) NSNumber *indexPathRow;
 @property (nonatomic) CGFloat previousScrollViewYOffset;
 @property (nonatomic) int queryHotRecent;
 @property (nonatomic) int queryLocalFriends;
@@ -204,24 +203,25 @@
     [self loadObjects];
 }
 
-- (void)uploadSubmission:(UIButton *)sender {
-    if (!sender.selected){
-        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePicker.delegate = self;
-        imagePicker.mediaTypes = [[NSMutableArray alloc] initWithObjects:(NSString *)kUTTypeMovie, kUTTypeImage, nil];
-        [self presentViewController:imagePicker animated:YES completion:^{
-            self.uploadObject = [[sender layer] valueForKey:@"dareObject"];
-            self.indexPathRow = [NSNumber numberWithInt:(int)sender.tag];
-        }];
-    }
+- (void)uploadSubmission:(PFObject *)obj {
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker.delegate = self;
+    imagePicker.mediaTypes = [[NSMutableArray alloc] initWithObjects:(NSString *)kUTTypeMovie, kUTTypeImage, nil];
+    [self presentViewController:imagePicker animated:YES completion:^{
+            self.uploadObject = obj;
+    }];
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
-    [addFundsViewController addFunds:true forDare:[self.objects objectAtIndex:indexPath.row]];
-    self.navigationController.navigationBar.hidden = NO;
-    [self.navigationController pushViewController:addFundsViewController animated:YES];
+    if ([[[self.objects objectAtIndex:indexPath.row] objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+        [self uploadSubmission:[self.objects objectAtIndex:indexPath.row]];
+    } else {
+        MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
+        [addFundsViewController addFunds:true forDare:[self.objects objectAtIndex:indexPath.row]];
+        self.navigationController.navigationBar.hidden = NO;
+        [self.navigationController pushViewController:addFundsViewController animated:YES];
+    }
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
@@ -251,14 +251,15 @@
             PFFile *imageFile = [PFFile fileWithName:@"image.png" data:UIImagePNGRepresentation(image)];
             submission[@"image"] = imageFile;
         }
-    
+        
+        submission[@"toWorld"] = [self.uploadObject objectForKey:@"toWorld"];
+        submission[@"facebookIds"] = [self.uploadObject objectForKey:@"facebookIds"];
         submission[@"dare"] = self.uploadObject;
         submission[@"user"] = [PFUser currentUser];
         submission[@"isWinner"] = [NSNumber numberWithBool:NO];
         [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if(succeeded) {
                 [hud hide:YES];
-                [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:[self.indexPathRow integerValue] inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
             } else {
                 [hud hide:YES];
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error Uploading Submission" message:error.description preferredStyle:UIAlertControllerStyleAlert];
@@ -268,7 +269,8 @@
             }
         }];
         // Create our push query
-        NSMutableArray *fundersPush = [self.uploadObject objectForKey:@"funders"];
+        NSMutableDictionary *funders = [self.uploadObject objectForKey:@"funders"];
+        NSArray *fundersPush = [funders allKeys];
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
         // Send push notification to query
