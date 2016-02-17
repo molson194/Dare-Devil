@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */; };
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01585861C46EF2B001ED67F /* MODareFundsViewController.m */; };
 		F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */; };
@@ -81,6 +82,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F00DD6E61C741E07009FB577 /* MOSingleSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSingleSubmissionViewController.h; sourceTree = "<group>"; };
+		F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSingleSubmissionViewController.m; sourceTree = "<group>"; };
 		F01470221BDEAFE000F4074D /* MOCompletedDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCompletedDaresViewController.h; sourceTree = "<group>"; };
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
 		F01585851C46EF2B001ED67F /* MODareFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareFundsViewController.h; sourceTree = "<group>"; };
@@ -267,6 +270,8 @@
 				F0674A6B1C46AA470016CC3F /* MODareTargetViewController.m */,
 				F01585851C46EF2B001ED67F /* MODareFundsViewController.h */,
 				F01585861C46EF2B001ED67F /* MODareFundsViewController.m */,
+				F00DD6E61C741E07009FB577 /* MOSingleSubmissionViewController.h */,
+				F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */,
 			);
 			name = Other;
 			sourceTree = "<group>";
@@ -518,6 +523,7 @@
 			files = (
 				F0F3E4C31C2F9DE3003369CD /* MOAdminDareViewController.m in Sources */,
 				F0BBFBF71C05056400F7686D /* SideViewController.m in Sources */,
+				F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */,
 				F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */,
 				F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */,
 				F0F3E4C61C2FA263003369CD /* MOAdminSubmissionViewController.m in Sources */,

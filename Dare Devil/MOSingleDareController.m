@@ -137,10 +137,10 @@
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
         // Send push notification to query
-        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.obj objectForKey:@"text"]]];
+        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
         
         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-        notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission to the follwoing dare: %@", [[PFUser currentUser] objectForKey:@"name"], [self.obj objectForKey:@"text"]];
+        notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]];
         notification[@"dare"] = self.obj;
         notification[@"type"] = @"New Submission";
         notification[@"followers"] = fundersPush;

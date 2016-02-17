@@ -11,6 +11,7 @@
 #import "MOPostViewController.h"
 #import <Parse/Parse.h>
 #import "MOSingleDareController.h"
+#import "MOSingleSubmissionViewController.h"
 
 @interface MOActivityViewController ()
 @property (nonatomic) CGFloat previousScrollViewYOffset;
@@ -96,32 +97,22 @@
     }
     
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
-    //if created at > 2 days or if new dare and > 1 day
-    NSDate *createdAt = obj.createdAt;
-    NSDate *now = [NSDate date];
+    PFObject *dareObj = obj[@"dare"];
     
-    if (([now laterDate:[createdAt dateByAddingTimeInterval:2*24*60*60]] == now) && [obj[@"type"] isEqualToString:@"New Submission"]) {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Voting Over" message:@"48 Hours after dare posted" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-    } else if (([now laterDate:[createdAt dateByAddingTimeInterval:24*60*60]] == now) && [obj[@"type"] isEqualToString:@"New Dare"]){
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Fudning/Submissions Over" message:@"24 Hours after dare posted" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
-    } else {
-    
-        if ([obj[@"type"] isEqualToString:@"New Submission"]) {
-
-        } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
-            PFObject *dareObj = obj[@"dare"];
-            [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-                MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
-                [singleView setObject:object];
-                [self.navigationController pushViewController:singleView animated:YES];
-            }];
-        }
+    if ([obj[@"type"] isEqualToString:@"New Submission"]) {
+        PFQuery *query  = [PFQuery queryWithClassName:@"Submissions"];
+        [query whereKey:@"dare" equalTo:dareObj];
+        [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
+            MOSingleSubmissionViewController *view = [[MOSingleSubmissionViewController alloc] initWithStyle:UITableViewStylePlain];
+            [view setObject:objects[1]];
+            [self.navigationController pushViewController:view animated:YES];
+        }];
+    } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
+        [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+            MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
+            [singleView setObject:object];
+            [self.navigationController pushViewController:singleView animated:YES];
+        }];
     }
 }
 

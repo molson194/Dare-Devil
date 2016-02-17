@@ -153,7 +153,7 @@
 }
 
 - (PFQuery *)queryForTable {
-    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName]; // TODO handle private dares
+    PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     PFQuery *queryWorld = [PFQuery queryWithClassName:self.parseClassName];
     PFQuery *queryFacebook = [PFQuery queryWithClassName:self.parseClassName];
     [queryWorld whereKey:@"toWorld" equalTo:[NSNumber numberWithBool:YES]];

@@ -74,10 +74,10 @@
                             PFQuery *pushQuery = [PFInstallation query];
                             [pushQuery whereKey:@"userObject" containedIn:fundersPush];
                             // Send push notification to query
-                            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"The following dare was refunded: %@", [self.obj objectForKey:@"text"]]];
+                            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"A dare was refunded"]];
                             
                             PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                            notification[@"text"] = [NSString stringWithFormat:@"The following dare was refunded: %@", [self.obj objectForKey:@"text"]];
+                            notification[@"text"] = [NSString stringWithFormat:@"A dare was refunded"];
                             notification[@"dare"] = self.obj;
                             notification[@"type"] = @"Refund";
                             notification[@"followers"] = fundersPush;
@@ -108,10 +108,10 @@
                         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
                         PFQuery *pushQueryWinner = [PFInstallation query];
                         [pushQueryWinner whereKey:@"userObject" containedIn:@[winner.objectId]];
-                        [PFPush sendPushMessageToQueryInBackground:[PFQuery orQueryWithSubqueries:@[pushQuery, pushQueryWinner]] withMessage:[NSString stringWithFormat:@"%@ won the following dare: %@", [winner objectForKey:@"name"], [self.obj objectForKey:@"text"]]];
+                        [PFPush sendPushMessageToQueryInBackground:[PFQuery orQueryWithSubqueries:@[pushQuery, pushQueryWinner]] withMessage:[NSString stringWithFormat:@"%@ won a tagged dare.", [winner objectForKey:@"name"]]];
                         
                         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                        notification[@"text"] = [NSString stringWithFormat:@"%@ won the following dare: %@", [winner objectForKey:@"name"], [self.obj objectForKey:@"text"]];
+                        notification[@"text"] = [NSString stringWithFormat:@"%@ won a tagged dare", [winner objectForKey:@"name"]];
                         notification[@"dare"] = self.obj;
                         notification[@"type"] = @"Winner";
                         notification[@"followers"] = fundersPush;

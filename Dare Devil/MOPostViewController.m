@@ -299,15 +299,17 @@
                 [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                     if (succeeded) {
                         PFQuery *pushQuery = [PFInstallation query];
-                        [pushQuery whereKey:@"facebook" containedIn:self.facebookIds];
+                        NSMutableArray *arr = [NSMutableArray arrayWithArray:self.facebookIds];
+                        [arr addObject:self.targetPerson[1]];
+                        [pushQuery whereKey:@"facebook" containedIn:arr];
                         // Send push notification to query
                         [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
                         
                         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                        notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a dare", [[PFUser currentUser] objectForKey:@"name"]];
+                        notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]];
                         notification[@"dare"] = dare;
                         notification[@"type"] = @"New Dare";
-                        notification[@"facebook"] = self.facebookIds;
+                        notification[@"facebook"] = arr;
                         [notification saveInBackground];
                         [self.navigationController popToRootViewControllerAnimated:YES];
                     }
