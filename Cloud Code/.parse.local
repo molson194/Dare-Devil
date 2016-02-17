@@ -1,0 +1,10 @@
+{
+  "applications": {
+    "Dare Devil": {
+      "applicationId": "a6E3JVOxkXWJLnzg8f9sP2qBvVb0c1GuC2SkqfS2"
+    },
+    "_default": {
+      "link": "Dare Devil"
+    }
+  }
+}

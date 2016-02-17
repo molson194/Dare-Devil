@@ -59,7 +59,6 @@
 }
 
 - (void) returnFundsPressed {
-    //todo
     NSDictionary *funders = [self.obj objectForKey:@"funders"];
     PFQuery * query = [PFUser query];
     [query whereKey:@"objectId" containedIn:[funders allKeys]];
@@ -70,7 +69,8 @@
                     [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
                         if (succeeded){
                             // Create our push query
-                            NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
+                            NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
+                            NSArray *fundersPush = [allFunders allKeys];
                             PFQuery *pushQuery = [PFInstallation query];
                             [pushQuery whereKey:@"userObject" containedIn:fundersPush];
                             // Send push notification to query
