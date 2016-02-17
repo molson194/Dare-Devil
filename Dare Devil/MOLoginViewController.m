@@ -53,6 +53,11 @@
                 [[PFUser currentUser] setObject:result[@"name"] forKey:@"name"];
                 [[PFUser currentUser] setObject:[NSNumber numberWithBool:NO] forKey:@"isAdmin"];
                 [[PFUser currentUser] saveInBackground];
+                PFInstallation *currentInstallation = [PFInstallation currentInstallation];
+                [currentInstallation addUniqueObject:[PFUser currentUser].objectId forKey:@"userObject"];
+                [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"fbId"] forKey:@"facebook"];
+                [currentInstallation saveInBackground];
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBar];
             }];
 
         }

@@ -17,6 +17,10 @@
 
 -(void)viewDidLoad {
     self.tableView.delegate = self;
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Submission";
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)setObject:(PFObject *)object {

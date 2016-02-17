@@ -39,7 +39,7 @@
     
     if ([[PFUser currentUser] objectForKey:@"CustomerId"]) {
         UIButton* changeCard=[UIButton buttonWithType:UIButtonTypeCustom];
-        changeCard.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+        changeCard.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
         changeCard.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [changeCard setTitle:@"Change card?" forState: UIControlStateNormal];
@@ -58,7 +58,7 @@
 
     if (self.doAdd) {
         self.amount=[UIButton buttonWithType:UIButtonTypeCustom];
-        self.amount.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+        self.amount.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
         self.amount.frame=CGRectMake(0,150,[[UIScreen mainScreen] bounds].size.width,30);
         self.amount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [self.amount setTitle: @"Add Funds: $0" forState: UIControlStateNormal];

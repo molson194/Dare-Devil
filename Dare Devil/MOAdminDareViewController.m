@@ -33,7 +33,7 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
-    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
     SWRevealViewController *revealController = [self revealViewController];
     UIImage* menuImage = [UIImage imageNamed:@"menuicon.png"];

@@ -29,8 +29,11 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     // NAVIGATION BAR SETUP
-    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Transfer Funds";
     SWRevealViewController *revealController = [self revealViewController];
     UIImage* menuImage = [UIImage imageNamed:@"menuicon.png"];
     UIButton *menuButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
@@ -41,6 +44,7 @@
     self.navigationItem.leftBarButtonItem = revealButtonItem;
     
     UITapGestureRecognizer *tap = [revealController tapGestureRecognizer];
+    [tap addTarget:self action:@selector(dismissKeyboard)];
     tap.delegate = self;
     [self.view addGestureRecognizer:tap];
     
@@ -67,7 +71,7 @@
     
     if ([[PFUser currentUser] objectForKey:@"recipient"]){
         UIButton* changeCard=[UIButton buttonWithType:UIButtonTypeCustom];
-        changeCard.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+        changeCard.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
         changeCard.frame=CGRectMake(0,100,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
         [changeCard setTitle:@"Change card?" forState: UIControlStateNormal];
@@ -84,6 +88,11 @@
         self.changingCard = true;
     }
     
+   
+}
+
+-(void)dismissKeyboard {
+    [self.paymentTextField resignFirstResponder];
 }
 
 - (void)changeCard:(UIButton *)sender{

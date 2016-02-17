@@ -49,7 +49,7 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
-    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addDare)];
     self.navigationItem.rightBarButtonItem = addButton;
@@ -75,14 +75,14 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 75)];
     NSArray *popularitySort = [NSArray arrayWithObjects: @"Recent", @"Hot", nil];
     UISegmentedControl *popularityControl = [[UISegmentedControl alloc] initWithItems:popularitySort];
-    popularityControl.tintColor = [UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    popularityControl.tintColor = [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     popularityControl.frame = CGRectMake(5, 5, self.view.bounds.size.width-10, 30);
     [popularityControl addTarget:self action:@selector(popularityControlAction:) forControlEvents:UIControlEventValueChanged];
     popularityControl.selectedSegmentIndex = 0;
     [headerView addSubview:popularityControl];
     NSArray *peopleSort = [NSArray arrayWithObjects: @"World", @"Friends", @"Local", nil];
     UISegmentedControl *peopleControl = [[UISegmentedControl alloc] initWithItems:peopleSort];
-    peopleControl.tintColor = [UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    peopleControl.tintColor = [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     peopleControl.frame = CGRectMake(5, 40, self.view.bounds.size.width-10, 30);
     [peopleControl addTarget:self action:@selector(peopleControlAction:) forControlEvents:UIControlEventValueChanged];
     peopleControl.selectedSegmentIndex = 0;
@@ -122,6 +122,7 @@
     [dareLabel setFont:[UIFont systemFontOfSize:15]];
     dareLabel.scrollEnabled = false;
     dareLabel.editable = false;
+    [dareLabel setUserInteractionEnabled:NO];
     dareLabel.text = [object objectForKey:@"text"];
     [cell.contentView addSubview:dareLabel];
     

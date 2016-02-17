@@ -27,9 +27,14 @@
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 250)];
     PFImageView *imageView = [[PFImageView alloc] initWithFrame:CGRectMake(20, 10, 200, 200)];
     imageView.file = [[PFUser currentUser] objectForKey:@"profilePic"];
-    [imageView setContentMode:UIViewContentModeScaleAspectFit];
+    [imageView setClipsToBounds:YES];
+    [imageView setContentMode:UIViewContentModeScaleAspectFill];
     [imageView loadInBackground];
     [headerView addSubview:imageView];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 200, 200)];
+    UIImage *image = [UIImage imageNamed:@"ProfileBackground.png"];
+    imageHolder.image = image;
+    [headerView addSubview:imageHolder];
     UILabel *personSubmitted = [[UILabel alloc] initWithFrame:CGRectMake(20, 220, 200, 30)];
     personSubmitted.textColor = [UIColor blackColor];
     [personSubmitted setFont:[UIFont systemFontOfSize:15]];

@@ -44,7 +44,7 @@
     [self.view setBackgroundColor:[UIColor whiteColor]];
     
     // NAVIGATION BAR SETUP
-    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     
     // CANCEL BUTTON IN NAV BAR
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPost)];
@@ -58,7 +58,7 @@
     self.navigationItem.title = @"Add a Dare";
     
     self.target=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.target.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.target.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     self.target.frame=CGRectMake(0,93,[[UIScreen mainScreen] bounds].size.width,25);
     self.target.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.target setTitle: @"Target:" forState: UIControlStateNormal];
@@ -70,7 +70,7 @@
     [self.view addSubview:self.target];
     
     self.daysOpen=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.daysOpen.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.daysOpen.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     self.daysOpen.frame=CGRectMake(0,120,[[UIScreen mainScreen] bounds].size.width,25);
     self.daysOpen.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.daysOpen setTitle: @"Open: 0 days" forState: UIControlStateNormal];
@@ -81,7 +81,7 @@
     [self.view addSubview:self.daysOpen];
     
     self.funds=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.funds.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.funds.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     self.funds.frame=CGRectMake(0,147,[[UIScreen mainScreen] bounds].size.width,25);
     self.funds.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     if ([[PFUser currentUser] objectForKey:@"Last4"]) {
@@ -112,7 +112,7 @@
     
     // TO BUTTON
     self.toButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.toButton.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.toButton.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     self.toButton.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,25);
     self.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.toButton setTitle: @"Tag:" forState: UIControlStateNormal];
@@ -123,7 +123,7 @@
     [self.view addSubview:self.toButton];
     
     self.amount=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.amount.backgroundColor=[UIColor colorWithRed:0.9 green:0.50 blue:0.50 alpha:1.0];
+    self.amount.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
     self.amount.frame=CGRectMake(0,174,[[UIScreen mainScreen] bounds].size.width,25);
     self.amount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.amount setTitle: @"Add: $0" forState: UIControlStateNormal];

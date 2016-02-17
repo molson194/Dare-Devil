@@ -10,6 +10,7 @@
 		F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */; };
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01585861C46EF2B001ED67F /* MODareFundsViewController.m */; };
+		F02B3FB91C75134800E647D8 /* ProfileBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = F02B3FB81C75134800E647D8 /* ProfileBackground.png */; };
 		F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */; };
 		F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F052AE8B1C24C07800CF7061 /* MODareRecipientViewController.m */; };
 		F05AAD1B1C2D1201009C5D28 /* Stripe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F05AAD1A1C2D1201009C5D28 /* Stripe.framework */; };
@@ -88,6 +89,7 @@
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
 		F01585851C46EF2B001ED67F /* MODareFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareFundsViewController.h; sourceTree = "<group>"; };
 		F01585861C46EF2B001ED67F /* MODareFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareFundsViewController.m; sourceTree = "<group>"; };
+		F02B3FB81C75134800E647D8 /* ProfileBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileBackground.png; sourceTree = "<group>"; };
 		F04C5CAC1C2F1702007AE863 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		F052AE8A1C24C07800CF7061 /* MODareRecipientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareRecipientViewController.h; sourceTree = "<group>"; };
@@ -308,6 +310,7 @@
 		F0BAACE41BAD0B96000F4F5A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F02B3FB81C75134800E647D8 /* ProfileBackground.png */,
 				F0CA08A61C30DC9E0090F66E /* menuicon.png */,
 				F0CA08A81C30E4350090F66E /* rightArrow.png */,
 				F0C129441C2F5BFA00955E9D /* placeholder.jpg */,
@@ -491,6 +494,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F02B3FB91C75134800E647D8 /* ProfileBackground.png in Resources */,
 				F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */,
 				F0CA08A91C30E4350090F66E /* rightArrow.png in Resources */,
 				F0C129451C2F5BFA00955E9D /* placeholder.jpg in Resources */,

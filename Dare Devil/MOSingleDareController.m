@@ -10,11 +10,16 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "MBProgressHUD.h"
+#import "MODareFundsViewController.h"
 
 @implementation MOSingleDareController
 
 -(void)viewDidLoad {
     self.tableView.delegate = self;
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Dare";
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 }
 
 - (void)setObject:(PFObject *)object {
@@ -45,6 +50,7 @@
     [dareLabel setFont:[UIFont systemFontOfSize:15]];
     dareLabel.scrollEnabled = false;
     dareLabel.editable = false;
+    [dareLabel setUserInteractionEnabled:NO];
     dareLabel.text = [self.obj objectForKey:@"text"];
     [cell.contentView addSubview:dareLabel];
     
@@ -86,13 +92,22 @@
     }
 }
 
-- (void)uploadSubmission:(UIButton *)sender {
-    if (!sender.selected){
-        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
-        imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-        imagePicker.delegate = self;
-        imagePicker.mediaTypes = [[NSMutableArray alloc] initWithObjects:(NSString *)kUTTypeMovie, kUTTypeImage, nil];
-        [self presentViewController:imagePicker animated:YES completion:nil];
+- (void)uploadSubmission{
+    UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+    imagePicker.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    imagePicker.delegate = self;
+    imagePicker.mediaTypes = [[NSMutableArray alloc] initWithObjects:(NSString *)kUTTypeMovie, kUTTypeImage, nil];
+    [self presentViewController:imagePicker animated:YES completion:nil];
+}
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    if ([[self.obj objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+        [self uploadSubmission];
+    } else {
+        MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
+        [addFundsViewController addFunds:true forDare:self.obj];
+        self.navigationController.navigationBar.hidden = NO;
+        [self.navigationController pushViewController:addFundsViewController animated:YES];
     }
 }
 

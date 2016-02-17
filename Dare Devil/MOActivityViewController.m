@@ -35,8 +35,11 @@
     [super viewDidLoad];
     
     // NAVIGATION BAR SETUP
-    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:0.88 green:0.40 blue:0.40 alpha:1.0];
+    self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Activity";
     UIBarButtonItem *addButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addDare)];
     self.navigationItem.rightBarButtonItem = addButton;
     [addButton setTintColor:[UIColor whiteColor]];
@@ -104,10 +107,10 @@
         [query whereKey:@"dare" equalTo:dareObj];
         [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
             MOSingleSubmissionViewController *view = [[MOSingleSubmissionViewController alloc] initWithStyle:UITableViewStylePlain];
-            [view setObject:objects[1]];
+            [view setObject:objects[0]];
             [self.navigationController pushViewController:view animated:YES];
         }];
-    } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
+    } else if ([obj[@"type"] isEqualToString:@"New Dare"] || [obj[@"type"] isEqualToString:@"Refund"] || [obj[@"type"] isEqualToString:@"Winner"]) {
         [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
             MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
             [singleView setObject:object];
