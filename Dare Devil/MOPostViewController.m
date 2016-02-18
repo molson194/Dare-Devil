@@ -38,6 +38,15 @@
 
 @implementation MOPostViewController
 
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    if ([[PFUser currentUser] objectForKey:@"Last4"]) {
+        [self.funds setTitle: [NSString stringWithFormat:@"Card ending in %@", [[PFUser currentUser] objectForKey:@"Last4"]]forState: UIControlStateNormal];
+    } else {
+        [self.funds setTitle: @"Add Card" forState: UIControlStateNormal];
+    }
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     

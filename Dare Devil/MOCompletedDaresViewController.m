@@ -78,10 +78,7 @@
     static NSString *CellIdentifier = nil;
     CellIdentifier = [NSString stringWithFormat: @"Cell%li", (long)indexPath.row];
     PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
+    cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     PFObject *dareObject = [object objectForKey:@"dare"];
@@ -118,11 +115,17 @@
         PFFile *video = [object objectForKey:@"video"];
         AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
         AVPlayerLayer *videoView = nil;
+        UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(0,110,self.view.bounds.size.width,self.view.bounds.size.width)];
+        UIImage *image = [UIImage imageNamed:@"PlayButton.png"];
+        imageHolder.image = image;
+        imageHolder.tag = 123;
+        [cell.contentView addSubview:imageHolder];
         videoView = [AVPlayerLayer playerLayerWithPlayer:player];
         videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
         videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:videoView];
+        [cell.contentView addSubview:imageHolder];
         [self.players setObject:player forKey:[NSNumber numberWithLong:indexPath.row]];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     } else if (object[@"image"]) {
@@ -160,7 +163,7 @@
     PFQuery *queryWorld = [PFQuery queryWithClassName:self.parseClassName];
     PFQuery *queryFacebook = [PFQuery queryWithClassName:self.parseClassName];
     [queryWorld whereKey:@"toWorld" equalTo:[NSNumber numberWithBool:YES]];
-    [queryFacebook whereKey:@"facebookIds" containsString:[[PFUser currentUser] objectForKey:@"fbId"]];
+    [queryFacebook whereKey:@"facebookIds" containsAllObjectsInArray:@[[[PFUser currentUser] objectForKey:@"fbId"]]];
     
     query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:queryFacebook, queryWorld, nil]];
     [query orderByDescending:@"createdAt"];
@@ -175,6 +178,8 @@
     if ((indexPath.row + 1) > [self.objects count]) {
         [self loadNextPage];
     } else if (player!=nil) {
+        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+        [[cell.contentView viewWithTag:123] removeFromSuperview];
         [player seekToTime:kCMTimeZero];
         [player play];
     }

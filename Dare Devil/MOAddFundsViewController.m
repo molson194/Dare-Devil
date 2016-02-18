@@ -59,10 +59,15 @@
     
     // CASH OUT BUTTON
     self.cashOut=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.cashOut.backgroundColor=[UIColor blueColor];
+    if ([[[PFUser currentUser] objectForKey:@"funds"] intValue] > 0){
+        self.cashOut.backgroundColor=[UIColor blueColor];
+        [self.cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
+    } else {
+        self.cashOut.backgroundColor=[UIColor lightGrayColor];
+    }
     self.cashOut.frame=CGRectMake([[UIScreen mainScreen] bounds].size.width/2-60,145,120,40);
     [self.cashOut setTitle: @"Cash Out" forState: UIControlStateNormal];
-    [self.cashOut addTarget:self action:@selector(cashOutPressed) forControlEvents:UIControlEventTouchUpInside];
+    
     [self.view addSubview:self.cashOut];
     
     
@@ -74,7 +79,7 @@
         changeCard.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
         changeCard.frame=CGRectMake(0,100,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [changeCard setTitle:@"Change card?" forState: UIControlStateNormal];
+        [changeCard setTitle:[NSString stringWithFormat:@"Change card ending in %@?", [[PFUser currentUser] objectForKey:@"Last4"]] forState: UIControlStateNormal];
         [changeCard addTarget:self action:@selector(changeCard:) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
         UIImage *image = [UIImage imageNamed:@"rightArrow.png"];

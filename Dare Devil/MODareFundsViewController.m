@@ -42,7 +42,7 @@
         changeCard.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
         changeCard.frame=CGRectMake(0,66,[[UIScreen mainScreen] bounds].size.width,30);
         changeCard.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [changeCard setTitle:@"Change card?" forState: UIControlStateNormal];
+        [changeCard setTitle:[NSString stringWithFormat:@"Change card ending in %@?", [[PFUser currentUser] objectForKey:@"Last4"]] forState: UIControlStateNormal];
         [changeCard addTarget:self action:@selector(changeCard:) forControlEvents:UIControlEventTouchUpInside];
         UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 3, 30, 24)];
         UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
@@ -81,7 +81,7 @@
 
 - (void)insertText:(NSString *)theText {
     self.fundingAmount = [NSString stringWithFormat:@"%@%@",self.fundingAmount,theText];
-    [self.amount setTitle: [NSString stringWithFormat:@"Add Fund: $%@",self.fundingAmount] forState: UIControlStateNormal];
+    [self.amount setTitle: [NSString stringWithFormat:@"Add Funds: $%@",self.fundingAmount] forState: UIControlStateNormal];
 }
 
 - (void)deleteBackward {
@@ -155,7 +155,7 @@
         }];
     } else if (self.keepPrevious) {
         [self.navigationController popViewControllerAnimated:YES];
-    } else if (self.canSave) {
+    } else if (self.canSave && self.doAdd) {
         [self createToken:^(STPToken *token, NSError *error) {
             if (error) {
                 
@@ -175,31 +175,30 @@
                             NSString* customer = (NSString *)object;
                             [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
                             [[PFUser currentUser] saveInBackground];
-                            [self.navigationController popViewControllerAnimated:YES];
                             
-                            if (self.doAdd) {
-                                [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":customer, @"amount":[NSNumber numberWithInt:self.fundingAmount.intValue*100], } block:^(id object, NSError *error) {
-                                    if (error) {
+                            [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":customer, @"amount":[NSNumber numberWithInt:self.fundingAmount.intValue*100], } block:^(id object, NSError *error) {
+                                if (error) {
                                         
+                                } else {
+                                    NSMutableDictionary* funders =  [self.currDare objectForKey:@"funders"];
+                                    NSNumber *totalFunding = [self.currDare objectForKey:@"totalFunding"];
+                                    
+                                    totalFunding = [NSNumber numberWithInt:(self.fundingAmount.intValue + totalFunding.intValue)];
+                                    [self.currDare setObject:totalFunding forKey:@"totalFunding"];
+                                        
+                                    if ([funders objectForKey:[PFUser currentUser].objectId]) {
+                                        NSNumber* myFunds = [funders objectForKey:[PFUser currentUser].objectId];
+                                        [funders setObject:[NSNumber numberWithInt:(self.fundingAmount.intValue + myFunds.intValue)] forKey:[PFUser currentUser].objectId];
                                     } else {
-                                        NSMutableDictionary* funders =  [self.currDare objectForKey:@"funders"];
-                                        NSNumber *totalFunding = [self.currDare objectForKey:@"totalFunding"];
-                                        
-                                        totalFunding = [NSNumber numberWithInt:(self.fundingAmount.intValue + totalFunding.intValue)];
-                                        [self.currDare setObject:totalFunding forKey:@"totalFunding"];
-                                        
-                                        if ([funders objectForKey:[PFUser currentUser].objectId]) {
-                                            NSNumber* myFunds = [funders objectForKey:[PFUser currentUser].objectId];
-                                            [funders setObject:[NSNumber numberWithInt:(self.fundingAmount.intValue + myFunds.intValue)] forKey:[PFUser currentUser].objectId];
-                                        } else {
-                                            [funders setObject:[NSNumber numberWithInt:self.fundingAmount.intValue] forKey:[PFUser currentUser].objectId];
-                                        }
-                                        [self.currDare setObject:funders forKey:@"funders"];
-                                        [self.currDare saveInBackground];
-                                        
+                                        [funders setObject:[NSNumber numberWithInt:self.fundingAmount.intValue] forKey:[PFUser currentUser].objectId];
                                     }
-                                }];
-                            }
+                                    [self.currDare setObject:funders forKey:@"funders"];
+                                    [self.currDare saveInBackground];
+                                    [self.navigationController popViewControllerAnimated:YES];
+                                        
+                                }
+                            }];
+                            
                         }
                     }];
                     
@@ -212,6 +211,46 @@
                         id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
                         NSLog(@"%@",[json objectForKey:@"id"]);
 
+                        [[PFUser currentUser] setObject:[json objectForKey:@"id"] forKey:@"recipient"];
+                        [[PFUser currentUser] setObject:[json objectForKey:@"default_card"] forKey:@"card"];
+                        [[PFUser currentUser] saveInBackground];
+                    }];
+                }
+            }
+        }];
+    } else if(self.canSave) {
+        [self createToken:^(STPToken *token, NSError *error) {
+            if (error) {
+                
+            } else {
+                if (token.card.funding != STPCardFundingTypeDebit) {
+                    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Card Error" message:@"Need to use debit card" preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+                    [alertController addAction:ok];
+                    [self presentViewController:alertController animated:YES completion:nil];
+                } else {
+                    [[PFUser currentUser] setObject:token.card.last4 forKey:@"Last4"];
+                    [[PFUser currentUser] saveInBackground];
+                    [PFCloud callFunctionInBackground:@"createCustomer" withParameters:@{@"tokenId":token.tokenId,} block:^(id object, NSError *error) {
+                        if (error) {
+                            
+                        } else {
+                            NSString* customer = (NSString *)object;
+                            [[PFUser currentUser] setObject:customer forKey:@"CustomerId"];
+                            [[PFUser currentUser] saveInBackground];
+                            [self.navigationController popViewControllerAnimated:YES];
+                        }
+                    }];
+                    
+                    NSString *firstName = [[[PFUser currentUser] objectForKey:@"name"]componentsSeparatedByString:@" "][0];
+                    NSString *lastName = [[[PFUser currentUser] objectForKey:@"name"]componentsSeparatedByString:@" "][1];
+                    NSDictionary *info = @{ @"cardToken": token.tokenId, @"firstName":firstName, @"lastName":lastName};
+                    [PFCloud callFunctionInBackground:@"recipient" withParameters:info block:^(id object, NSError *error) {
+                        NSString *stringData = (NSString*) object;
+                        NSData *data = [stringData dataUsingEncoding:NSUTF8StringEncoding];
+                        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:nil];
+                        NSLog(@"%@",[json objectForKey:@"id"]);
+                        
                         [[PFUser currentUser] setObject:[json objectForKey:@"id"] forKey:@"recipient"];
                         [[PFUser currentUser] setObject:[json objectForKey:@"default_card"] forKey:@"card"];
                         [[PFUser currentUser] saveInBackground];

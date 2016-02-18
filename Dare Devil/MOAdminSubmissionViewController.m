@@ -40,7 +40,7 @@
     UIButton *returnFunds=[UIButton buttonWithType:UIButtonTypeCustom];
     returnFunds.backgroundColor=[UIColor blueColor];
     returnFunds.frame=CGRectMake(20,5,self.view.bounds.size.width/2-21,30);
-    [returnFunds setTitle: @"Return $1" forState: UIControlStateNormal];
+    [returnFunds setTitle: @"Return Money" forState: UIControlStateNormal];
     [returnFunds addTarget:self action:@selector(returnFundsPressed) forControlEvents:UIControlEventTouchUpInside];
     [headerView addSubview:returnFunds];
     

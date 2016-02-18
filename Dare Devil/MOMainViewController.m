@@ -108,12 +108,10 @@
 
 // SETUP CELL WITH PARSE DATA
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier;
+    CellIdentifier = [NSString stringWithFormat:@"Cell %ld",(long)indexPath.row];
     PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
+    cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // DARE TEXT
@@ -127,9 +125,10 @@
     [cell.contentView addSubview:dareLabel];
     
     // FUNDS BUTTON
-    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8, 40, self.view.bounds.size.width/8, 12)];
+    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8-10, 40, self.view.bounds.size.width/8, 12)];
+    fundsLabel.textAlignment = NSTextAlignmentRight;
     fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = [[object objectForKey:@"totalFunding"] stringValue];
+    fundsLabel.text = [NSString stringWithFormat:@"$%@",[[object objectForKey:@"totalFunding"] stringValue]];
     [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
@@ -137,9 +136,11 @@
     timeLeft.textColor = [UIColor lightGrayColor];
     [timeLeft setTextAlignment:NSTextAlignmentCenter];
     timeLeft.font = [UIFont systemFontOfSize:13];
-    NSDate *endDate = [[object createdAt] dateByAddingTimeInterval:60*60*24*1];
+    NSDate *endDate = [object objectForKey:@"closeDate"];
     NSInteger diff = [endDate timeIntervalSinceDate:[NSDate date]]/60;
-    if (diff>60) {
+    if (diff>1440){
+        timeLeft.text = [NSMutableString stringWithFormat:@"%ldd", (long) diff/1440];
+    } else if (diff>60) {
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldh", (long) diff/60];
     } else {
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
