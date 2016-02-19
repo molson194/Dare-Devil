@@ -63,66 +63,68 @@
     PFQuery * query = [PFUser query];
     [query whereKey:@"objectId" containedIn:[funders allKeys]];
     [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
-            [PFCloud callFunctionInBackground:@"refund" withParameters:@{@"idArray": funders} block:^(id  _Nullable object, NSError * _Nullable error) {
-                if (!error) {
-                    [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
-                    [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                        if (succeeded){
-                            // Create our push query
-                            NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
-                            NSArray *fundersPush = [allFunders allKeys];
-                            PFQuery *pushQuery = [PFInstallation query];
-                            [pushQuery whereKey:@"userObject" containedIn:fundersPush];
-                            // Send push notification to query
-                            [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"A dare was refunded"]];
-                            
-                            PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                            notification[@"text"] = [NSString stringWithFormat:@"A dare was refunded"];
-                            notification[@"dare"] = self.obj;
-                            notification[@"type"] = @"Refund";
-                            notification[@"followers"] = fundersPush;
-                            [notification saveInBackground];
-                            [self.navigationController popToRootViewControllerAnimated:YES];
-                        }
-                    }];
-                }
-                
-            }];
+        [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+        [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                // Create our push query
+                NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Return Money" message:[NSString stringWithFormat:@"%@",allFunders] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                }];
+                [alertController addAction:ok];
+                [self presentViewController:alertController animated:YES completion:nil];
+                NSArray *fundersPush = [allFunders allKeys];
+                PFQuery *pushQuery = [PFInstallation query];
+                [pushQuery whereKey:@"userObject" containedIn:fundersPush];
+                // Send push notification to query
+                [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"A dare was refunded"]];
+                    
+                PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                notification[@"text"] = [NSString stringWithFormat:@"A dare was refunded"];
+                notification[@"dare"] = self.obj;
+                notification[@"type"] = @"Refund";
+                notification[@"followers"] = fundersPush;
+                [notification saveInBackground];
+            }
+        }];
+        
     }];
 }
 
 - (void) winnerPressed {
     PFUser *winner = [self.obj objectForKey:@"user"];
-    [winner fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        int funds = [[object objectForKey:@"funds"] intValue];
-        int winnings = [[self.obj objectForKey:@"totalFunding" ] intValue];
-        [PFCloud callFunctionInBackground:@"winner" withParameters:@{@"id":winner.objectId, @"newFunds":[NSNumber numberWithInt:(funds+winnings)]} block:^(id  _Nullable object, NSError * _Nullable error) {
-            if (!error) {
-                [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
-                [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                    if (succeeded){
-                        // Create our push query
-                        NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
-                        NSArray *fundersPush = [allFunders allKeys];
-                        PFQuery *pushQuery = [PFInstallation query];
-                        [pushQuery whereKey:@"userObject" containedIn:fundersPush];
-                        PFQuery *pushQueryWinner = [PFInstallation query];
-                        [pushQueryWinner whereKey:@"userObject" containedIn:@[winner.objectId]];
-                        [PFPush sendPushMessageToQueryInBackground:[PFQuery orQueryWithSubqueries:@[pushQuery, pushQueryWinner]] withMessage:[NSString stringWithFormat:@"%@ won a tagged dare.", [winner objectForKey:@"name"]]];
-                        
-                        PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                        notification[@"text"] = [NSString stringWithFormat:@"%@ won a tagged dare", [winner objectForKey:@"name"]];
-                        notification[@"dare"] = self.obj;
-                        notification[@"type"] = @"Winner";
-                        notification[@"followers"] = fundersPush;
-                        [notification saveInBackground];
-                        [self.navigationController popToRootViewControllerAnimated:YES];
-                    }
+    //[winner fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
+        int winnings = [[self.obj objectForKey:@"totalFunding"] intValue];
+        [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+        [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded){
+                UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Winner Money" message:[NSString stringWithFormat:@"Add $%d to %@",winnings, winner.objectId] preferredStyle:UIAlertControllerStyleAlert];
+                UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+                    [self.navigationController popToRootViewControllerAnimated:YES];
                 }];
+                [alertController addAction:ok];
+                [self presentViewController:alertController animated:YES completion:nil];
+                
+            // Create our push query
+                NSMutableDictionary* allFunders = [self.obj objectForKey:@"funders"];
+                NSArray *fundersPush = [allFunders allKeys];
+                PFQuery *pushQuery = [PFInstallation query];
+                [pushQuery whereKey:@"userObject" containedIn:fundersPush];
+                PFQuery *pushQueryWinner = [PFInstallation query];
+                [pushQueryWinner whereKey:@"userObject" containedIn:@[winner.objectId]];
+                [PFPush sendPushMessageToQueryInBackground:[PFQuery orQueryWithSubqueries:@[pushQuery, pushQueryWinner]] withMessage:[NSString stringWithFormat:@"%@ won a tagged dare.", [winner objectForKey:@"name"]]];
+                        
+                PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                notification[@"text"] = [NSString stringWithFormat:@"%@ won a tagged dare", [winner objectForKey:@"name"]];
+                notification[@"dare"] = self.obj;
+                notification[@"type"] = @"Winner";
+                notification[@"followers"] = fundersPush;
+                [notification saveInBackground];
             }
         }];
-
-    }];
+    
+    //}];
 }
 
 // SETUP CELL WITH PARSE DATA

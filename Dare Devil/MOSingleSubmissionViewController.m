@@ -43,23 +43,20 @@
 
 // SETUP CELL WITH PARSE DATA
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    static NSString *CellIdentifier = nil;
-    CellIdentifier = [NSString stringWithFormat: @"Cell%li", (long)indexPath.row];
+    static NSString *CellIdentifier = @"Cell";
     PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    if (cell == nil) {
-        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-    }
+    cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     PFObject *dareObject = [self.obj objectForKey:@"dare"];
     [dareObject fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(3, 30, self.view.bounds.size.width-6, 50)];
+        UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(3, 5, self.view.bounds.size.width-6, 50)];
         dareLabel.textColor = [UIColor blackColor];
         [dareLabel setFont:[UIFont systemFontOfSize:12]];
         dareLabel.scrollEnabled = false;
         dareLabel.editable = false;
         dareLabel.text = [object objectForKey:@"text"];
+        [dareLabel setUserInteractionEnabled:NO];
         [cell.contentView addSubview:dareLabel];
         UILabel *moneyRaised = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 15, 50, 15)];
         moneyRaised.textColor = [UIColor blackColor];
@@ -71,17 +68,6 @@
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
     
-    
-    PFUser *userSubmitted = (PFUser *)[self.obj objectForKey:@"user"];
-    [userSubmitted fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
-        UILabel *personSubmitted = [[UILabel alloc] initWithFrame:CGRectMake(10, 15, self.view.bounds.size.width-80, 15)];
-        personSubmitted.textColor = [UIColor blackColor];
-        [personSubmitted setFont:[UIFont systemFontOfSize:15]];
-        [cell.contentView addSubview:personSubmitted];
-        personSubmitted.text = [object objectForKey:@"name"];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    }];
-    
     if (self.obj[@"video"]) {
         PFFile *video = [self.obj objectForKey:@"video"];
         self.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
@@ -90,7 +76,7 @@
         videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
         videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:videoView];
+        [self.view.layer addSublayer:videoView];
         [self.player play];
     } else if (self.obj[@"image"]) {
         PFImageView *imageView = nil;
@@ -113,12 +99,15 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     NSArray *array = self.view.layer.sublayers;
+    AVPlayerLayer *myLayer = nil;
     for (CALayer *layer in array) {
         if ([layer class] == [AVPlayerLayer class]){
-            [layer removeFromSuperlayer];
+            myLayer = (AVPlayerLayer*)layer;
         }
     }
-    PFTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (myLayer != nil) {
+        [myLayer removeFromSuperlayer];
+    }
     if (self.obj[@"video"]) {
         PFFile *video = [self.obj objectForKey:@"video"];
         AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
@@ -127,7 +116,7 @@
         videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
         videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:videoView];
+        [self.view.layer addSublayer:videoView];
         [player play];
     }
     //TODO remove all other videos from layer

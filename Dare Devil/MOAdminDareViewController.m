@@ -87,7 +87,7 @@
 - (PFQuery *)queryForTable {
     PFQuery *query = [PFQuery queryWithClassName:self.parseClassName];
     [query whereKey:@"isFinished" equalTo:[NSNumber numberWithBool:NO]];
-    [query whereKey:@"createdAt" lessThan:[[NSDate date] dateByAddingTimeInterval:-2*24*60*60]];
+    [query whereKey:@"closeDate" lessThan:[NSDate date]];
     return query;
 }
 
