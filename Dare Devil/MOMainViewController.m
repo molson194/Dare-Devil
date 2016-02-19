@@ -240,12 +240,6 @@
             submission[@"isVertical"] = [NSNumber numberWithBool:YES];
             PFFile *videoFile = [PFFile fileWithName:@"video.mp4" contentsAtPath:[videoUrl path]];
             submission[@"video"] = videoFile;
-            AVURLAsset *movieAsset = [[AVURLAsset alloc] initWithURL:(NSURL*)[info objectForKey:UIImagePickerControllerMediaURL] options:nil];
-            AVAssetImageGenerator *assetImageGemerator = [[AVAssetImageGenerator alloc] initWithAsset:movieAsset];
-            assetImageGemerator.appliesPreferredTrackTransform = YES;
-            CGImageRef frameRef = [assetImageGemerator copyCGImageAtTime:CMTimeMake(0, 2) actualTime:nil error:nil];
-            PFFile *imageFile = [PFFile fileWithName:@"image.png" data:UIImagePNGRepresentation([[UIImage alloc] initWithCGImage:frameRef])];
-            submission[@"image"] = imageFile;
         } else if (CFStringCompare ((__bridge CFStringRef) mediaType, kUTTypeImage, 0) == kCFCompareEqualTo) {
             UIImage *image = [info objectForKey:@"UIImagePickerControllerOriginalImage"];
             if (image.size.height > image.size.width) {

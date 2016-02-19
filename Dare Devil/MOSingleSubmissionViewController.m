@@ -91,7 +91,7 @@
         videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
         videoView.needsDisplayOnBoundsChange = YES;
         [cell.layer addSublayer:videoView];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        [self.player play];
     } else if (self.obj[@"image"]) {
         PFImageView *imageView = nil;
         if (self.obj[@"isVertical"] == [NSNumber numberWithBool:YES]) {
@@ -112,10 +112,25 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if(self.player != nil) {
-        [self.player seekToTime:kCMTimeZero];
-        [self.player play];
+    NSArray *array = self.view.layer.sublayers;
+    for (CALayer *layer in array) {
+        if ([layer class] == [AVPlayerLayer class]){
+            [layer removeFromSuperlayer];
+        }
     }
+    PFTableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    if (self.obj[@"video"]) {
+        PFFile *video = [self.obj objectForKey:@"video"];
+        AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
+        AVPlayerLayer *videoView = nil;
+        videoView = [AVPlayerLayer playerLayerWithPlayer:player];
+        videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
+        videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        videoView.needsDisplayOnBoundsChange = YES;
+        [cell.layer addSublayer:videoView];
+        [player play];
+    }
+    //TODO remove all other videos from layer
 }
 
 
