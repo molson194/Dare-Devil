@@ -55,9 +55,10 @@
     [cell.contentView addSubview:dareLabel];
     
     // FUNDS BUTTON
-    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8, 40, self.view.bounds.size.width/8, 12)];
+    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8-10, 40, self.view.bounds.size.width/8, 12)];
+    fundsLabel.textAlignment = NSTextAlignmentRight;
     fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = [[self.obj objectForKey:@"totalFunding"] stringValue];
+    fundsLabel.text = [NSString stringWithFormat:@"$%@",[[self.obj objectForKey:@"totalFunding"] stringValue]];
     [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
@@ -67,7 +68,9 @@
     timeLeft.font = [UIFont systemFontOfSize:13];
     NSDate *endDate = [[self.obj createdAt] dateByAddingTimeInterval:60*60*24*1];
     NSInteger diff = [endDate timeIntervalSinceDate:[NSDate date]]/60;
-    if (diff>60) {
+    if (diff>1440){
+        timeLeft.text = [NSMutableString stringWithFormat:@"%ldd", (long) diff/1440];
+    } else if (diff>60) {
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldh", (long) diff/60];
     } else {
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
@@ -148,7 +151,8 @@
             }
         }];
         // Create our push query
-        NSMutableArray *fundersPush = [self.obj objectForKey:@"funders"];
+        NSMutableDictionary *funders = [self.obj objectForKey:@"funders"];
+        NSArray *fundersPush = [funders allKeys];
         PFQuery *pushQuery = [PFInstallation query];
         [pushQuery whereKey:@"userObject" containedIn:fundersPush];
         // Send push notification to query

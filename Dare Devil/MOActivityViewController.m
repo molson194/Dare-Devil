@@ -102,7 +102,7 @@
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
     PFObject *dareObj = obj[@"dare"];
     
-    if ([obj[@"type"] isEqualToString:@"New Submission"]) {
+    if ([obj[@"type"] isEqualToString:@"New Submission"] || [obj[@"type"] isEqualToString:@"Winner"]) {
         PFQuery *query  = [PFQuery queryWithClassName:@"Submissions"];
         [query whereKey:@"dare" equalTo:dareObj];
         [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
@@ -110,7 +110,7 @@
             [view setObject:objects[0]];
             [self.navigationController pushViewController:view animated:YES];
         }];
-    } else if ([obj[@"type"] isEqualToString:@"New Dare"] || [obj[@"type"] isEqualToString:@"Refund"] || [obj[@"type"] isEqualToString:@"Winner"]) {
+    } else if ([obj[@"type"] isEqualToString:@"New Dare"] || [obj[@"type"] isEqualToString:@"Refund"]) {
         [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
             MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
             [singleView setObject:object];

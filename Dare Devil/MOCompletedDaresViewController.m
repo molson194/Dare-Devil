@@ -111,39 +111,21 @@
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
     
-    if (object[@"video"]) {
-        PFFile *video = [object objectForKey:@"video"];
-        AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
-        AVPlayerLayer *videoView = nil;
-        UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(0,110,self.view.bounds.size.width,self.view.bounds.size.width)];
-        UIImage *image = [UIImage imageNamed:@"PlayButton.png"];
-        imageHolder.image = image;
-        imageHolder.tag = 123;
-        [cell.contentView addSubview:imageHolder];
-        videoView = [AVPlayerLayer playerLayerWithPlayer:player];
-        videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
-        videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        videoView.needsDisplayOnBoundsChange = YES;
-        [cell.layer addSublayer:videoView];
-        [cell.contentView addSubview:imageHolder];
-        [self.players setObject:player forKey:[NSNumber numberWithLong:indexPath.row]];
-        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-    } else if (object[@"image"]) {
-        PFImageView *imageView = nil;
-        if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
-            imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60)];
-        } else {
-            imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
-        }
-        imageView.image = [UIImage imageNamed:@"placeholder.png"];
-        imageView.file = [object objectForKey:@"image"];
-        [imageView setContentMode:UIViewContentModeScaleAspectFill];
-        [imageView setClipsToBounds:YES];
-        [imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        }];
-        [cell.contentView addSubview:imageView];
+
+    PFImageView *imageView = nil;
+    if (object[@"isVertical"] == [NSNumber numberWithBool:YES]) {
+        imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60)];
+    } else {
+        imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
     }
+    imageView.image = [UIImage imageNamed:@"placeholder.png"];
+    imageView.file = [object objectForKey:@"image"];
+    [imageView setContentMode:UIViewContentModeScaleAspectFill];
+    [imageView setClipsToBounds:YES];
+    [imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
+        [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+    }];
+    [cell.contentView addSubview:imageView];
     return cell;
 }
 
@@ -173,15 +155,29 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [super tableView:tableView didSelectRowAtIndexPath:indexPath];
-    AVPlayer *player = [self.players objectForKey:[NSNumber numberWithLong:indexPath.row]];
+    
     if ((indexPath.row + 1) > [self.objects count]) {
         [self loadNextPage];
-    } else if (player!=nil) {
-        UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-        [[cell.contentView viewWithTag:123] removeFromSuperview];
-        [player seekToTime:kCMTimeZero];
-        [player play];
+    } else {
+        NSArray *array = self.view.layer.sublayers;
+        for (CALayer *layer in array) {
+            if ([layer class] == [AVPlayerLayer class]){
+                [layer removeFromSuperlayer];
+            }
+        }
+        PFObject *object = [self.objects objectAtIndex:indexPath.row];
+        if (object[@"video"]) {
+            PFFile *video = [object objectForKey:@"video"];
+            AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
+            AVPlayerLayer *videoView = nil;
+            videoView = [AVPlayerLayer playerLayerWithPlayer:player];
+            videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
+            videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            videoView.needsDisplayOnBoundsChange = YES;
+            [self.view.layer addSublayer:videoView];
+            [player play];
+        }
+        //TODO remove all other videos from layer
     }
 }
 
