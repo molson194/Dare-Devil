@@ -191,7 +191,7 @@
 - (void)insertText:(NSString *)theText {
     if (self.chargeAmountText) {
         self.chargeAmount = [NSString stringWithFormat:@"%@%@",self.chargeAmount,theText];
-        [self.amount setTitle: [NSString stringWithFormat:@"Add $%@",self.chargeAmount] forState: UIControlStateNormal];
+        [self.amount setTitle: [NSString stringWithFormat:@"Add: $%@",self.chargeAmount] forState: UIControlStateNormal];
     } else {
         self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
         [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
@@ -285,7 +285,46 @@
 
 // USER ABLE TO POST, POST TO CLOUD
 - (void)postToCloud {
-    if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
+    if (self.daysOpenAmount == nil || self.daysOpenAmount.intValue == 0 || [self.textView.text isEqualToString:@"I dare the target to..."] || [self.textView.text isEqualToString:@""] ||(self.world == NO && [self.facebookIds count] == 0) || self.targetPerson == nil){
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Fill in all input fields" message:@"Make sure days open inputted, dare text filled in, tags included, and target added." preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:ok];
+        [self presentViewController:alertController animated:YES completion:nil];
+    } else if (self.chargeAmount == nil || self.chargeAmount.intValue == 0){
+        PFObject *dare = [PFObject objectWithClassName:@"Dare"];
+        dare[@"text"] = [NSString stringWithFormat:@"I dare %@ to %@", self.targetPerson[0],self.textView.text];
+        dare[@"user"] = [PFUser currentUser];
+        if (self.geoPoint) {
+            dare[@"location"] = self.geoPoint;
+        } else {
+            dare[@"location"] = [PFGeoPoint geoPointWithLatitude:0 longitude:0];
+        }
+        dare[@"funders"] = [NSMutableDictionary dictionaryWithDictionary:@{[PFUser currentUser].objectId : [NSNumber numberWithInt:self.chargeAmount.intValue]}];
+        dare[@"totalFunding"] = [NSNumber numberWithInt:self.chargeAmount.intValue];
+        dare[@"closeDate"] = [[NSDate date] dateByAddingTimeInterval:60*60*24*self.daysOpenAmount.intValue];
+        dare[@"facebookIds"] = self.facebookIds;
+        dare[@"target"] = self.targetPerson[1];
+        dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
+        dare[@"isFinished"] = [NSNumber numberWithBool:NO];
+        [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+            if (succeeded) {
+                PFQuery *pushQuery = [PFInstallation query];
+                NSMutableArray *arr = [NSMutableArray arrayWithArray:self.facebookIds];
+                [arr addObject:self.targetPerson[1]];
+                [pushQuery whereKey:@"facebook" containedIn:arr];
+                // Send push notification to query
+                [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
+                
+                PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
+                notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]];
+                notification[@"dare"] = dare;
+                notification[@"type"] = @"New Dare";
+                notification[@"facebook"] = arr;
+                [notification saveInBackground];
+                [self.navigationController popToRootViewControllerAnimated:YES];
+            }
+        }];
+    } else if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
         [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"], @"amount":[NSNumber numberWithInt:self.chargeAmount.intValue*100], } block:^(id object, NSError *error) {
             if (error) {
                 
@@ -326,6 +365,11 @@
 
             }
         }];
+    } else {
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Add Card" message:@"Add card if you want to fund the dare. Otherwise, reduce funding to $0" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
+        [alertController addAction:ok];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
 }
 

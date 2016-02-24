@@ -10,6 +10,8 @@
 		F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */; };
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
 		F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01585861C46EF2B001ED67F /* MODareFundsViewController.m */; };
+		F015CA9D1C7C9814006D4B96 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = F015CA9C1C7C9814006D4B96 /* facebook.png */; };
+		F015CA9F1C7C9C6D006D4B96 /* LoginBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F015CA9E1C7C9C6D006D4B96 /* LoginBackground.jpg */; };
 		F02B3FB91C75134800E647D8 /* ProfileBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = F02B3FB81C75134800E647D8 /* ProfileBackground.png */; };
 		F02B3FBB1C75351A00E647D8 /* PlayButton.png in Resources */ = {isa = PBXBuildFile; fileRef = F02B3FBA1C75351A00E647D8 /* PlayButton.png */; };
 		F04C5CAE1C2F1702007AE863 /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = F04C5CAD1C2F1702007AE863 /* MBProgressHUD.m */; };
@@ -28,7 +30,6 @@
 		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
 		F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F07600411BAE6CEC0052BFBB /* MOPostViewController.m */; };
 		F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F084712D1C239A350068EEC5 /* MOActivityViewController.m */; };
-		F097A3D71C2E5D9500BA167C /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = F097A3D61C2E5D9500BA167C /* facebook.png */; };
 		F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACAD1BAD06F9000F4F5A /* main.m */; };
 		F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */; };
 		F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */; };
@@ -90,6 +91,8 @@
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
 		F01585851C46EF2B001ED67F /* MODareFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareFundsViewController.h; sourceTree = "<group>"; };
 		F01585861C46EF2B001ED67F /* MODareFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareFundsViewController.m; sourceTree = "<group>"; };
+		F015CA9C1C7C9814006D4B96 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
+		F015CA9E1C7C9C6D006D4B96 /* LoginBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = LoginBackground.jpg; sourceTree = "<group>"; };
 		F02B3FB81C75134800E647D8 /* ProfileBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileBackground.png; sourceTree = "<group>"; };
 		F02B3FBA1C75351A00E647D8 /* PlayButton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = PlayButton.png; sourceTree = "<group>"; };
 		F04C5CAC1C2F1702007AE863 /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
@@ -116,7 +119,6 @@
 		F07600411BAE6CEC0052BFBB /* MOPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPostViewController.m; sourceTree = "<group>"; };
 		F084712C1C239A350068EEC5 /* MOActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOActivityViewController.h; sourceTree = "<group>"; };
 		F084712D1C239A350068EEC5 /* MOActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOActivityViewController.m; sourceTree = "<group>"; };
-		F097A3D61C2E5D9500BA167C /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		F0BAACAD1BAD06F9000F4F5A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F0BAACAF1BAD06F9000F4F5A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -317,7 +319,8 @@
 				F0CA08A81C30E4350090F66E /* rightArrow.png */,
 				F02B3FBA1C75351A00E647D8 /* PlayButton.png */,
 				F0C129441C2F5BFA00955E9D /* placeholder.jpg */,
-				F097A3D61C2E5D9500BA167C /* facebook.png */,
+				F015CA9C1C7C9814006D4B96 /* facebook.png */,
+				F015CA9E1C7C9C6D006D4B96 /* LoginBackground.jpg */,
 				F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */,
 				F0C11A061C042F5600EEF2AC /* Default-568h@2x.png */,
 			);
@@ -498,13 +501,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				F02B3FB91C75134800E647D8 /* ProfileBackground.png in Resources */,
+				F015CA9D1C7C9814006D4B96 /* facebook.png in Resources */,
 				F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */,
 				F0CA08A91C30E4350090F66E /* rightArrow.png in Resources */,
 				F02B3FBB1C75351A00E647D8 /* PlayButton.png in Resources */,
 				F0C129451C2F5BFA00955E9D /* placeholder.jpg in Resources */,
-				F097A3D71C2E5D9500BA167C /* facebook.png in Resources */,
 				F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */,
 				F0CA08A71C30DC9E0090F66E /* menuicon.png in Resources */,
+				F015CA9F1C7C9C6D006D4B96 /* LoginBackground.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

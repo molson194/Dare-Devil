@@ -94,7 +94,6 @@
 
 - (void) winnerPressed {
     PFUser *winner = [self.obj objectForKey:@"user"];
-    //[winner fetchInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
         int winnings = [[self.obj objectForKey:@"totalFunding"] intValue];
         [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
         [self.obj saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
@@ -123,8 +122,6 @@
                 [notification saveInBackground];
             }
         }];
-    
-    //}];
 }
 
 // SETUP CELL WITH PARSE DATA

@@ -8,9 +8,11 @@
 
 #import "MOSingleSubmissionViewController.h"
 #import <AVFoundation/AVFoundation.h>
+#import "MBProgressHUD.h"
 
 @interface MOSingleSubmissionViewController ()
 @property (nonatomic,strong) AVPlayer *player;
+@property (nonatomic, strong) MBProgressHUD *hud;
 @end
 
 @implementation MOSingleSubmissionViewController
@@ -70,14 +72,21 @@
     
     if (self.obj[@"video"]) {
         PFFile *video = [self.obj objectForKey:@"video"];
-        self.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
-        AVPlayerLayer *videoView = nil;
-        videoView = [AVPlayerLayer playerLayerWithPlayer:self.player];
-        videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
-        videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        videoView.needsDisplayOnBoundsChange = YES;
-        [self.view.layer addSublayer:videoView];
-        [self.player play];
+        [video getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
+            [self.hud removeFromSuperview];
+            self.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
+            AVPlayerLayer *videoView = nil;
+            videoView = [AVPlayerLayer playerLayerWithPlayer:self.player];
+            videoView.frame = CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width+60);
+            videoView.videoGravity = AVLayerVideoGravityResizeAspectFill;
+            videoView.needsDisplayOnBoundsChange = YES;
+            [self.view.layer addSublayer:videoView];
+            [self.player play];
+        } progressBlock:^(int percentDone) {
+            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+            self.hud.mode = MBProgressHUDModeIndeterminate;
+            self.hud.labelText = @"Loading";
+        }];
     } else if (self.obj[@"image"]) {
         PFImageView *imageView = nil;
         if (self.obj[@"isVertical"] == [NSNumber numberWithBool:YES]) {
@@ -109,6 +118,17 @@
         [myLayer removeFromSuperlayer];
     }
     if (self.obj[@"video"]) {
+        NSArray *array = self.view.layer.sublayers;
+        CALayer *removeLayer = nil;
+        for (CALayer *layer in array) {
+            if ([layer class] == [AVPlayerLayer class]){
+                removeLayer = layer;
+            }
+        }
+        if (removeLayer!= nil){
+            [removeLayer removeFromSuperlayer];
+        }
+        
         PFFile *video = [self.obj objectForKey:@"video"];
         AVPlayer *player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
         AVPlayerLayer *videoView = nil;
@@ -119,7 +139,7 @@
         [self.view.layer addSublayer:videoView];
         [player play];
     }
-    //TODO remove all other videos from layer
+    //TODO check functionality
 }
 
 

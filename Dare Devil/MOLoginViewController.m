@@ -26,10 +26,16 @@
     // FACEBOOK BUTTON SETUP
     UIImage *btnImage = [UIImage imageNamed:@"facebook.png"];
     UIButton *myLoginButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    myLoginButton.frame=CGRectMake(self.view.frame.size.width/2 - 100, self.view.frame.size.height/3, 200, 40);
+    myLoginButton.frame=CGRectMake(10, self.view.frame.size.height/4, self.view.frame.size.width-20, 140);
     [myLoginButton setImage:btnImage forState:UIControlStateNormal];
     [myLoginButton addTarget:self action:@selector(loginButtonClicked) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:myLoginButton];
+    
+    UIGraphicsBeginImageContext(self.view.frame.size);
+    [[UIImage imageNamed:@"LoginBackground.jpg"] drawInRect:self.view.bounds];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    self.view.backgroundColor=[UIColor colorWithPatternImage:image];
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
