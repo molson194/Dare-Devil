@@ -18,7 +18,7 @@
 #import "MOActivityViewController.h"
 #import <Stripe/Stripe.h>
 
-NSString * const StripePublishableKey = @"pk_test_woGWGmzxdnhovpC5UqrXjOvk";
+NSString * const StripePublishableKey = @"pk_live_uFUSZnJoXvh3sfhUC7W28Ikl";
 
 
 @interface AppDelegate () <SWRevealViewControllerDelegate>
