@@ -7,11 +7,9 @@
 //
 
 #import "MOPostViewController.h"
-#import "MOAddFundsViewController.h"
 #import <Parse/Parse.h>
 #import "MODareRecipientViewController.h"
 #import "MODareTargetViewController.h"
-#import "MODareFundsViewController.h"
 
 @interface MOPostViewController ()
 @property (nonatomic, strong) UITextView *textView;
@@ -29,10 +27,7 @@
 @property (nonatomic, strong) UIButton *daysOpen;
 @property (nonatomic, strong) UILabel *numDays;
 @property (nonatomic) BOOL displayText;
-@property (nonatomic, strong) UIButton *funds;
 @property (nonatomic, strong) UIButton *amount;
-@property (nonatomic) BOOL chargeAmountText;
-@property (nonatomic,strong) NSString* chargeAmount;
 @property (nonatomic,strong) NSString* daysOpenAmount;
 @end
 
@@ -40,11 +35,6 @@
 
 -(void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([[PFUser currentUser] objectForKey:@"Last4"]) {
-        [self.funds setTitle: [NSString stringWithFormat:@"Card ending in %@", [[PFUser currentUser] objectForKey:@"Last4"]]forState: UIControlStateNormal];
-    } else {
-        [self.funds setTitle: @"Add Card" forState: UIControlStateNormal];
-    }
 }
 
 - (void)viewDidLoad {
@@ -72,7 +62,7 @@
     self.target.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.target setTitle: @"Target:" forState: UIControlStateNormal];
     [self.target addTarget:self action:@selector(recipientPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
+    UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 20)];
     UIImage *image = [UIImage imageNamed:@"rightArrow.png"];
     imageHolder.image = image;
     [self.target addSubview:imageHolder];
@@ -84,28 +74,13 @@
     self.daysOpen.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.daysOpen setTitle: @"Open: 0 days" forState: UIControlStateNormal];
     [self.daysOpen addTarget:self action:@selector(daysPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
+    UIImageView *imageHolder3 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 20)];
     imageHolder3.image = image;
     [self.daysOpen addSubview:imageHolder3];
     [self.view addSubview:self.daysOpen];
     
-    self.funds=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.funds.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
-    self.funds.frame=CGRectMake(0,147,[[UIScreen mainScreen] bounds].size.width,25);
-    self.funds.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    if ([[PFUser currentUser] objectForKey:@"Last4"]) {
-        [self.funds setTitle: [NSString stringWithFormat:@"Card ending in %@", [[PFUser currentUser] objectForKey:@"Last4"]]forState: UIControlStateNormal];
-    } else {
-        [self.funds setTitle: @"Add Card" forState: UIControlStateNormal];
-    }
-    [self.funds addTarget:self action:@selector(addFunds) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder4 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
-    imageHolder4.image = image;
-    [self.funds addSubview:imageHolder4];
-    [self.view addSubview:self.funds];
-    
     // DARE TEXT VIEW
-    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 197, [[UIScreen mainScreen] bounds].size.width-6, 60)];
+    self.textView = [[UITextView alloc] initWithFrame:CGRectMake(3, 146, [[UIScreen mainScreen] bounds].size.width-6, 60)];
     [self.textView setFont:[UIFont systemFontOfSize:16]];
     [self.textView setReturnKeyType:UIReturnKeySend];
     self.automaticallyAdjustsScrollViewInsets = NO;
@@ -126,21 +101,10 @@
     self.toButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.toButton setTitle: @"Tag:" forState: UIControlStateNormal];
     [self.toButton addTarget:self action:@selector(toButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
+    UIImageView *imageHolder2 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 20)];
     imageHolder2.image = image;
     [self.toButton addSubview:imageHolder2];
     [self.view addSubview:self.toButton];
-    
-    self.amount=[UIButton buttonWithType:UIButtonTypeCustom];
-    self.amount.backgroundColor=[UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
-    self.amount.frame=CGRectMake(0,174,[[UIScreen mainScreen] bounds].size.width,25);
-    self.amount.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-    [self.amount setTitle: @"Add: $0" forState: UIControlStateNormal];
-    [self.amount addTarget:self action:@selector(changeAmount) forControlEvents:UIControlEventTouchUpInside];
-    UIImageView *imageHolder5 = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-25, 3, 30, 24)];
-    imageHolder5.image = image;
-    [self.amount addSubview:imageHolder5];
-    [self.view addSubview:self.amount];
     
     // LOCATION SERVICES
     [PFGeoPoint geoPointForCurrentLocationInBackground:^(PFGeoPoint *geoPoint, NSError *error) {
@@ -164,16 +128,8 @@
     [self resignFirstResponder];
 }
 
-- (void) changeAmount {
-    self.displayText = YES;
-    self.chargeAmountText = YES;
-    self.chargeAmount = @"";
-    [self becomeFirstResponder];
-}
-
 - (void)daysPressed {
     self.displayText = YES;
-    self.chargeAmountText = NO;
     self.daysOpenAmount = @"";
     [self becomeFirstResponder];
 }
@@ -189,23 +145,14 @@
 }
 
 - (void)insertText:(NSString *)theText {
-    if (self.chargeAmountText) {
-        self.chargeAmount = [NSString stringWithFormat:@"%@%@",self.chargeAmount,theText];
-        [self.amount setTitle: [NSString stringWithFormat:@"Add: $%@",self.chargeAmount] forState: UIControlStateNormal];
-    } else {
-        self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
-        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
-    }
+
+    self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
+    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
 }
 
 - (void)deleteBackward {
-    if (self.chargeAmountText && [self.chargeAmount length]>0) {
-        self.chargeAmount = [self.chargeAmount substringToIndex:[self.chargeAmount length] - 1];
-        [self.amount setTitle: [NSString stringWithFormat:@"Add $%@",self.chargeAmount] forState: UIControlStateNormal];
-    } else if (!self.chargeAmountText && [self.daysOpenAmount length]>0){
-        self.daysOpenAmount = [self.daysOpenAmount substringToIndex:[self.daysOpenAmount length] - 1];
-        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
-    }
+    self.daysOpenAmount = [self.daysOpenAmount substringToIndex:[self.daysOpenAmount length] - 1];
+    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
 }
 
 - (void) recipientPressed {
@@ -290,7 +237,7 @@
         UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
         [alertController addAction:ok];
         [self presentViewController:alertController animated:YES completion:nil];
-    } else if (self.chargeAmount == nil || self.chargeAmount.intValue == 0){
+    } else {
         PFObject *dare = [PFObject objectWithClassName:@"Dare"];
         dare[@"text"] = [NSString stringWithFormat:@"I dare %@ to %@", self.targetPerson[0],self.textView.text];
         dare[@"user"] = [PFUser currentUser];
@@ -299,8 +246,6 @@
         } else {
             dare[@"location"] = [PFGeoPoint geoPointWithLatitude:0 longitude:0];
         }
-        dare[@"funders"] = [NSMutableDictionary dictionaryWithDictionary:@{[PFUser currentUser].objectId : [NSNumber numberWithInt:self.chargeAmount.intValue]}];
-        dare[@"totalFunding"] = [NSNumber numberWithInt:self.chargeAmount.intValue];
         dare[@"closeDate"] = [[NSDate date] dateByAddingTimeInterval:60*60*24*self.daysOpenAmount.intValue];
         dare[@"facebookIds"] = self.facebookIds;
         dare[@"target"] = self.targetPerson[1];
@@ -320,63 +265,12 @@
                 notification[@"dare"] = dare;
                 notification[@"type"] = @"New Dare";
                 notification[@"facebook"] = arr;
+                notification[@"maker"] = [PFUser currentUser];
                 [notification saveInBackground];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }
         }];
-    } else if ([[PFUser currentUser] objectForKey:@"CustomerId"]) { //user alread is a customer
-        [PFCloud callFunctionInBackground:@"chargeCustomer" withParameters:@{@"customerId":[[PFUser currentUser] objectForKey:@"CustomerId"], @"amount":[NSNumber numberWithInt:self.chargeAmount.intValue*100], } block:^(id object, NSError *error) {
-            if (error) {
-                
-            } else {
-                PFObject *dare = [PFObject objectWithClassName:@"Dare"];
-                dare[@"text"] = [NSString stringWithFormat:@"I dare %@ to %@", self.targetPerson[0],self.textView.text];
-                dare[@"user"] = [PFUser currentUser];
-                if (self.geoPoint) {
-                    dare[@"location"] = self.geoPoint;
-                } else {
-                    dare[@"location"] = [PFGeoPoint geoPointWithLatitude:0 longitude:0];
-                }
-                dare[@"funders"] = [NSMutableDictionary dictionaryWithDictionary:@{[PFUser currentUser].objectId : [NSNumber numberWithInt:self.chargeAmount.intValue]}];
-                dare[@"totalFunding"] = [NSNumber numberWithInt:self.chargeAmount.intValue];
-                dare[@"closeDate"] = [[NSDate date] dateByAddingTimeInterval:60*60*24*self.daysOpenAmount.intValue];
-                dare[@"facebookIds"] = self.facebookIds;
-                dare[@"target"] = self.targetPerson[1];
-                dare[@"toWorld"] = [NSNumber numberWithBool:self.world];
-                dare[@"isFinished"] = [NSNumber numberWithBool:NO];
-                [dare saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
-                    if (succeeded) {
-                        PFQuery *pushQuery = [PFInstallation query];
-                        NSMutableArray *arr = [NSMutableArray arrayWithArray:self.facebookIds];
-                        [arr addObject:self.targetPerson[1]];
-                        [pushQuery whereKey:@"facebook" containedIn:arr];
-                        // Send push notification to query
-                        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]]];
-                        
-                        PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
-                        notification[@"text"] = [NSString stringWithFormat:@"%@ tagged you in a new dare", [[PFUser currentUser] objectForKey:@"name"]];
-                        notification[@"dare"] = dare;
-                        notification[@"type"] = @"New Dare";
-                        notification[@"facebook"] = arr;
-                        [notification saveInBackground];
-                        [self.navigationController popToRootViewControllerAnimated:YES];
-                    }
-                }];
-
-            }
-        }];
-    } else {
-        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Add Card" message:@"Add card if you want to fund the dare. Otherwise, reduce funding to $0" preferredStyle:UIAlertControllerStyleAlert];
-        UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];
-        [alertController addAction:ok];
-        [self presentViewController:alertController animated:YES completion:nil];
     }
-}
-
-- (void) addFunds {
-    MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
-    self.navigationController.navigationBar.hidden = NO;
-    [self.navigationController pushViewController:addFundsViewController animated:YES];
 }
 
 @end

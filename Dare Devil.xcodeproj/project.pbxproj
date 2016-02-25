@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */; };
 		F01470241BDEAFE000F4074D /* MOCompletedDaresViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */; };
-		F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F01585861C46EF2B001ED67F /* MODareFundsViewController.m */; };
 		F015CA9D1C7C9814006D4B96 /* facebook.png in Resources */ = {isa = PBXBuildFile; fileRef = F015CA9C1C7C9814006D4B96 /* facebook.png */; };
 		F015CA9F1C7C9C6D006D4B96 /* LoginBackground.jpg in Resources */ = {isa = PBXBuildFile; fileRef = F015CA9E1C7C9C6D006D4B96 /* LoginBackground.jpg */; };
 		F02B3FB91C75134800E647D8 /* ProfileBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = F02B3FB81C75134800E647D8 /* ProfileBackground.png */; };
@@ -30,6 +29,7 @@
 		F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F076003E1BAE640A0052BFBB /* MOMainViewController.m */; };
 		F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F07600411BAE6CEC0052BFBB /* MOPostViewController.m */; };
 		F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F084712D1C239A350068EEC5 /* MOActivityViewController.m */; };
+		F0A19B671C7F715A00B9608B /* RedRight.png in Resources */ = {isa = PBXBuildFile; fileRef = F0A19B661C7F715A00B9608B /* RedRight.png */; };
 		F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACAD1BAD06F9000F4F5A /* main.m */; };
 		F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */; };
 		F0BAACB91BAD06F9000F4F5A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F0BAACB81BAD06F9000F4F5A /* Assets.xcassets */; };
@@ -61,10 +61,7 @@
 		F0CA08A71C30DC9E0090F66E /* menuicon.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CA08A61C30DC9E0090F66E /* menuicon.png */; };
 		F0CA08A91C30E4350090F66E /* rightArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = F0CA08A81C30E4350090F66E /* rightArrow.png */; };
 		F0ECDB851BD3530B005297B0 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */; };
-		F0F3E4C31C2F9DE3003369CD /* MOAdminDareViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F3E4C21C2F9DE3003369CD /* MOAdminDareViewController.m */; };
-		F0F3E4C61C2FA263003369CD /* MOAdminSubmissionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0F3E4C51C2FA263003369CD /* MOAdminSubmissionViewController.m */; };
 		F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */; };
-		F0FD84E71BB1EFB500A43F83 /* MOAddFundsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -89,8 +86,6 @@
 		F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSingleSubmissionViewController.m; sourceTree = "<group>"; };
 		F01470221BDEAFE000F4074D /* MOCompletedDaresViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCompletedDaresViewController.h; sourceTree = "<group>"; };
 		F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCompletedDaresViewController.m; sourceTree = "<group>"; };
-		F01585851C46EF2B001ED67F /* MODareFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MODareFundsViewController.h; sourceTree = "<group>"; };
-		F01585861C46EF2B001ED67F /* MODareFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MODareFundsViewController.m; sourceTree = "<group>"; };
 		F015CA9C1C7C9814006D4B96 /* facebook.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = facebook.png; sourceTree = "<group>"; };
 		F015CA9E1C7C9C6D006D4B96 /* LoginBackground.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = LoginBackground.jpg; sourceTree = "<group>"; };
 		F02B3FB81C75134800E647D8 /* ProfileBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ProfileBackground.png; sourceTree = "<group>"; };
@@ -119,6 +114,7 @@
 		F07600411BAE6CEC0052BFBB /* MOPostViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPostViewController.m; sourceTree = "<group>"; };
 		F084712C1C239A350068EEC5 /* MOActivityViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOActivityViewController.h; sourceTree = "<group>"; };
 		F084712D1C239A350068EEC5 /* MOActivityViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOActivityViewController.m; sourceTree = "<group>"; };
+		F0A19B661C7F715A00B9608B /* RedRight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RedRight.png; sourceTree = "<group>"; };
 		F0BAACAD1BAD06F9000F4F5A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F0BAACAF1BAD06F9000F4F5A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F0BAACB01BAD06F9000F4F5A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -156,14 +152,8 @@
 		F0CA08A61C30DC9E0090F66E /* menuicon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menuicon.png; path = "Dare Devil/menuicon.png"; sourceTree = "<group>"; };
 		F0CA08A81C30E4350090F66E /* rightArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rightArrow.png; sourceTree = "<group>"; };
 		F0ECDB841BD3530B005297B0 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
-		F0F3E4C11C2F9DE3003369CD /* MOAdminDareViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAdminDareViewController.h; sourceTree = "<group>"; };
-		F0F3E4C21C2F9DE3003369CD /* MOAdminDareViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAdminDareViewController.m; sourceTree = "<group>"; };
-		F0F3E4C41C2FA263003369CD /* MOAdminSubmissionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAdminSubmissionViewController.h; sourceTree = "<group>"; };
-		F0F3E4C51C2FA263003369CD /* MOAdminSubmissionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAdminSubmissionViewController.m; sourceTree = "<group>"; };
 		F0FA415C1C2A005700AA0FCD /* MOSingleDareController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOSingleDareController.h; sourceTree = "<group>"; };
 		F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOSingleDareController.m; sourceTree = "<group>"; };
-		F0FD84E51BB1EFB500A43F83 /* MOAddFundsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAddFundsViewController.h; sourceTree = "<group>"; };
-		F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAddFundsViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -238,8 +228,6 @@
 				F01470231BDEAFE000F4074D /* MOCompletedDaresViewController.m */,
 				F076003D1BAE640A0052BFBB /* MOMainViewController.h */,
 				F076003E1BAE640A0052BFBB /* MOMainViewController.m */,
-				F0FD84E51BB1EFB500A43F83 /* MOAddFundsViewController.h */,
-				F0FD84E61BB1EFB500A43F83 /* MOAddFundsViewController.m */,
 				F084712C1C239A350068EEC5 /* MOActivityViewController.h */,
 				F084712D1C239A350068EEC5 /* MOActivityViewController.m */,
 			);
@@ -274,8 +262,6 @@
 				F0FA415D1C2A005700AA0FCD /* MOSingleDareController.m */,
 				F0674A6A1C46AA470016CC3F /* MODareTargetViewController.h */,
 				F0674A6B1C46AA470016CC3F /* MODareTargetViewController.m */,
-				F01585851C46EF2B001ED67F /* MODareFundsViewController.h */,
-				F01585861C46EF2B001ED67F /* MODareFundsViewController.m */,
 				F00DD6E61C741E07009FB577 /* MOSingleSubmissionViewController.h */,
 				F00DD6E71C741E07009FB577 /* MOSingleSubmissionViewController.m */,
 			);
@@ -297,7 +283,6 @@
 		F0BAACAB1BAD06F9000F4F5A /* Dare Devil */ = {
 			isa = PBXGroup;
 			children = (
-				F0F3E4C01C2F9D56003369CD /* Admin */,
 				F06556271C211ED7000DDB42 /* Other */,
 				F0BBFBED1C04E97300F7686D /* Side View */,
 				F014702B1BDEC11D00F4074D /* Post */,
@@ -314,6 +299,7 @@
 		F0BAACE41BAD0B96000F4F5A /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				F0A19B661C7F715A00B9608B /* RedRight.png */,
 				F02B3FB81C75134800E647D8 /* ProfileBackground.png */,
 				F0CA08A61C30DC9E0090F66E /* menuicon.png */,
 				F0CA08A81C30E4350090F66E /* rightArrow.png */,
@@ -372,17 +358,6 @@
 				F0BBFBEF1C04E9B600F7686D /* SWRevealViewController.m */,
 			);
 			name = SWRevealViewController;
-			sourceTree = "<group>";
-		};
-		F0F3E4C01C2F9D56003369CD /* Admin */ = {
-			isa = PBXGroup;
-			children = (
-				F0F3E4C11C2F9DE3003369CD /* MOAdminDareViewController.h */,
-				F0F3E4C21C2F9DE3003369CD /* MOAdminDareViewController.m */,
-				F0F3E4C41C2FA263003369CD /* MOAdminSubmissionViewController.h */,
-				F0F3E4C51C2FA263003369CD /* MOAdminSubmissionViewController.m */,
-			);
-			name = Admin;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -508,6 +483,7 @@
 				F0C129451C2F5BFA00955E9D /* placeholder.jpg in Resources */,
 				F0C11A071C042F5600EEF2AC /* Default-568h@2x.png in Resources */,
 				F0CA08A71C30DC9E0090F66E /* menuicon.png in Resources */,
+				F0A19B671C7F715A00B9608B /* RedRight.png in Resources */,
 				F015CA9F1C7C9C6D006D4B96 /* LoginBackground.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -533,13 +509,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F0F3E4C31C2F9DE3003369CD /* MOAdminDareViewController.m in Sources */,
 				F0BBFBF71C05056400F7686D /* SideViewController.m in Sources */,
 				F00DD6E81C741E07009FB577 /* MOSingleSubmissionViewController.m in Sources */,
 				F0FA415E1C2A005700AA0FCD /* MOSingleDareController.m in Sources */,
 				F0BAACB11BAD06F9000F4F5A /* AppDelegate.m in Sources */,
-				F0F3E4C61C2FA263003369CD /* MOAdminSubmissionViewController.m in Sources */,
-				F01585871C46EF2B001ED67F /* MODareFundsViewController.m in Sources */,
 				F076003F1BAE640A0052BFBB /* MOMainViewController.m in Sources */,
 				F052AE8C1C24C07800CF7061 /* MODareRecipientViewController.m in Sources */,
 				F0BAACAE1BAD06F9000F4F5A /* main.m in Sources */,
@@ -550,7 +523,6 @@
 				F07600421BAE6CEC0052BFBB /* MOPostViewController.m in Sources */,
 				F084712E1C239A350068EEC5 /* MOActivityViewController.m in Sources */,
 				F0BAAD0F1BAD16B6000F4F5A /* MOLoginViewController.m in Sources */,
-				F0FD84E71BB1EFB500A43F83 /* MOAddFundsViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -54,7 +54,6 @@
                 UIImage *image = [UIImage imageWithData:data];
                 PFFile *profilePic = [PFFile fileWithName:@"profilePic.png" data:UIImagePNGRepresentation(image)];
                 [[PFUser currentUser] setObject:profilePic forKey:@"profilePic"];
-                [[PFUser currentUser] setObject:@0 forKey:@"funds"];
                 [[PFUser currentUser] setObject:result[@"id"] forKey:@"fbId"];
                 [[PFUser currentUser] setObject:result[@"name"] forKey:@"name"];
                 [[PFUser currentUser] setObject:[NSNumber numberWithBool:NO] forKey:@"isAdmin"];

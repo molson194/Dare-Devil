@@ -60,18 +60,12 @@
         dareLabel.text = [object objectForKey:@"text"];
         [dareLabel setUserInteractionEnabled:NO];
         [cell.contentView addSubview:dareLabel];
-        UILabel *moneyRaised = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-60, 15, 50, 15)];
-        moneyRaised.textColor = [UIColor blackColor];
-        [moneyRaised setTextAlignment:NSTextAlignmentRight];
-        [moneyRaised setFont:[UIFont systemFontOfSize:15]];
-        [cell.contentView addSubview:moneyRaised];
-        NSNumber *funding = [object objectForKey:@"totalFunding"];
-        moneyRaised.text = [NSString stringWithFormat:@"$ %d", funding.intValue ];
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
     }];
     
     if (self.obj[@"video"]) {
         PFFile *video = [self.obj objectForKey:@"video"];
+        //TODO player and hud
         [video getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
             [self.hud removeFromSuperview];
             self.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
@@ -84,8 +78,9 @@
             [self.player play];
         } progressBlock:^(int percentDone) {
             self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
-            self.hud.mode = MBProgressHUDModeIndeterminate;
+            self.hud.mode = MBProgressHUDModeAnnularDeterminate;
             self.hud.labelText = @"Loading";
+            self.hud.progress = (float)percentDone/100;
         }];
     } else if (self.obj[@"image"]) {
         PFImageView *imageView = nil;
@@ -94,12 +89,16 @@
         } else {
             imageView = [[PFImageView alloc] initWithFrame:CGRectMake(0, 80, self.view.bounds.size.width, self.view.bounds.size.width-100)];
         }
-        imageView.image = [UIImage imageNamed:@"placeholder.png"];
         imageView.file = [self.obj objectForKey:@"image"];
         [imageView setContentMode:UIViewContentModeScaleAspectFill];
         [imageView setClipsToBounds:YES];
         [imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
-            [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+        } progressBlock:^(int percentDone) {
+            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+            self.hud.mode = MBProgressHUDModeAnnularDeterminate;
+            self.hud.labelText = @"Loading";
+            self.hud.progress = (float)percentDone/100;
+            //TODO hide hud
         }];
         [cell.contentView addSubview:imageView];
     }
@@ -139,7 +138,6 @@
         [self.view.layer addSublayer:videoView];
         [player play];
     }
-    //TODO check functionality
 }
 
 
