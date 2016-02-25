@@ -15,13 +15,11 @@
 -(void)sendIndividuals:(NSMutableArray *)individuals;
 @end
 
-@interface MODareRecipientViewController : UIViewController <UISearchResultsUpdating, UISearchBarDelegate,UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
+@interface MODareRecipientViewController : UIViewController <UINavigationControllerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
 @property(nonatomic,assign)id delegate;
 @property(nonatomic,strong) UITableView *tableView;
 @property (nonatomic, strong) __block NSMutableArray *allFacebook;
-@property (nonatomic, strong) NSMutableArray *searchResults;
-@property (nonatomic, strong) UISearchController *searchController;
 @property (nonatomic, strong) NSMutableArray *taggedFacebook;
 @property (nonatomic, strong) UIButton *worldButton;
 @property (nonatomic, strong) UIButton *friendsButton;

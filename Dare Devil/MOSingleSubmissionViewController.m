@@ -65,9 +65,8 @@
     
     if (self.obj[@"video"]) {
         PFFile *video = [self.obj objectForKey:@"video"];
-        //TODO player and hud
         [video getDataInBackgroundWithBlock:^(NSData * _Nullable data, NSError * _Nullable error) {
-            [self.hud removeFromSuperview];
+            [self.hud hide:YES];
             self.player = [[AVPlayer alloc] initWithURL:[NSURL URLWithString:video.url]];
             AVPlayerLayer *videoView = nil;
             videoView = [AVPlayerLayer playerLayerWithPlayer:self.player];
@@ -77,7 +76,7 @@
             [self.view.layer addSublayer:videoView];
             [self.player play];
         } progressBlock:^(int percentDone) {
-            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+            self.hud = [MBProgressHUD showHUDAddedTo:cell.contentView animated:NO];
             self.hud.mode = MBProgressHUDModeAnnularDeterminate;
             self.hud.labelText = @"Loading";
             self.hud.progress = (float)percentDone/100;
@@ -93,14 +92,14 @@
         [imageView setContentMode:UIViewContentModeScaleAspectFill];
         [imageView setClipsToBounds:YES];
         [imageView loadInBackground:^(UIImage * _Nullable image, NSError * _Nullable error) {
+            [self.hud hide:YES];
+            [cell.contentView addSubview:imageView];
         } progressBlock:^(int percentDone) {
-            self.hud = [MBProgressHUD showHUDAddedTo:self.view animated:NO];
+            self.hud = [MBProgressHUD showHUDAddedTo:cell.contentView animated:NO];
             self.hud.mode = MBProgressHUDModeAnnularDeterminate;
             self.hud.labelText = @"Loading";
             self.hud.progress = (float)percentDone/100;
-            //TODO hide hud
         }];
-        [cell.contentView addSubview:imageView];
     }
     return cell;
 }

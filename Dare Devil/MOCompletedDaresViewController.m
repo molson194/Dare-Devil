@@ -35,6 +35,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.tableView.rowHeight = 100;
+    self.tableView.estimatedRowHeight = 100;
+    
     // NAVIGATION BAR SETUP
     self.navigationController.navigationBar.barTintColor =  [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
     self.navigationItem.hidesBackButton = YES;
@@ -77,7 +80,9 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath object:(PFObject *)object {
     static NSString *CellIdentifier = @"Cell";
     PFTableViewCell *cell = (PFTableViewCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    if (cell == nil) {
+        cell = [[PFTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     PFObject *dareObject = [object objectForKey:@"dare"];
@@ -97,6 +102,10 @@
     UIImage *image = [UIImage imageNamed:@"RedRight.png"];
     imageHolder.image = image;
     [cell.contentView addSubview:imageHolder];
+    
+    [cell.contentView setNeedsLayout];
+    [cell.contentView layoutIfNeeded];// TODO Cell jumping
+    
     return cell;
 }
 

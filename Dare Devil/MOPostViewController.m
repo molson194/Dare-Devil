@@ -145,14 +145,17 @@
 }
 
 - (void)insertText:(NSString *)theText {
-
-    self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
-    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    if([self.daysOpenAmount length] < 2) {
+        self.daysOpenAmount = [NSString stringWithFormat:@"%@%@",self.daysOpenAmount,theText];
+        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    }
 }
 
 - (void)deleteBackward {
-    self.daysOpenAmount = [self.daysOpenAmount substringToIndex:[self.daysOpenAmount length] - 1];
-    [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    if ([self.daysOpenAmount length] != 0) {
+        self.daysOpenAmount = [self.daysOpenAmount substringToIndex:[self.daysOpenAmount length] - 1];
+        [self.daysOpen setTitle: [NSString stringWithFormat:@"Open: %@ days",self.daysOpenAmount] forState: UIControlStateNormal];
+    }
 }
 
 - (void) recipientPressed {

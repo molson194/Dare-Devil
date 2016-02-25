@@ -19,6 +19,14 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    self.navigationItem.title = @"Tag Friends";
+    
+    UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelPost)];
+    [cancelButton setTintColor:[UIColor whiteColor]];
+    self.navigationItem.leftBarButtonItem = cancelButton;
+    
     UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 100)];
     self.worldButton=[UIButton buttonWithType:UIButtonTypeCustom];
     if (self.toWorld) {
@@ -65,22 +73,11 @@
             NSArray *friendInfo = [NSArray arrayWithObjects:[friend objectForKey:@"name"], [friend objectForKey:@"id"], nil];
             [self.allFacebook addObject:friendInfo];
         }
-        self.searchResults = [self.allFacebook mutableCopy];
         [self.tableView reloadData];
     }];
-
-    self.searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    self.searchController.searchResultsUpdater = self;
-    self.searchController.obscuresBackgroundDuringPresentation = NO;
-    self.searchController.hidesNavigationBarDuringPresentation = NO;
-    self.searchController.searchBar.placeholder = @"Search Facebook/Contacts";
-    self.searchController.searchBar.delegate = self;
-    self.searchController.searchBar.frame = CGRectMake(0, 0, self.view.bounds.size.width-80, 40);
-    self.searchController.searchBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    UIBarButtonItem *searchBarItem = [[UIBarButtonItem alloc] initWithCustomView:self.searchController.searchBar];
-    self.navigationItem.leftBarButtonItem = searchBarItem;
     
     UIBarButtonItem *tagButton = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(tagPeople)];
+    [tagButton setTintColor:[UIColor whiteColor]];
     self.navigationItem.rightBarButtonItem = tagButton;
     
     if (self.taggedFacebook == nil) {
@@ -90,11 +87,9 @@
 }
 
 @synthesize delegate;
--(void)viewWillDisappear:(BOOL)animated
-{
-    
-    //[delegate sendDataToPostViewfacebook:self.taggedFacebook world:[self.worldButton.backgroundColor isEqual:[UIColor lightGrayColor]]];
-    
+
+- (void)cancelPost {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void) reopenWithFacebook:(NSMutableArray*)facebookTags {
@@ -124,10 +119,6 @@
     searchBar.frame = CGRectMake(0, 0, self.view.bounds.size.width-100, 40);
 }
 
--(void) dealloc {
-    [self.searchController.view removeFromSuperview];
-}
-
 -(void) tagPeople {
     [delegate sendIndividuals:self.taggedFacebook];
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
@@ -137,10 +128,10 @@
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
     if (cell.contentView.backgroundColor != [UIColor lightGrayColor]){
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
-        [self.taggedFacebook addObject:[NSArray arrayWithObjects:self.searchResults[indexPath.row][0], self.searchResults[indexPath.row][1], nil]];
+        [self.taggedFacebook addObject:[NSArray arrayWithObjects:self.allFacebook[indexPath.row][0], self.allFacebook[indexPath.row][1], nil]];
     } else {
         [cell.contentView setBackgroundColor:[UIColor whiteColor]];
-        [self.taggedFacebook removeObject:[NSArray arrayWithObjects:self.searchResults[indexPath.row][0], self.searchResults[indexPath.row][1], nil]];
+        [self.taggedFacebook removeObject:[NSArray arrayWithObjects:self.allFacebook[indexPath.row][0], self.allFacebook[indexPath.row][1], nil]];
     }
 }
 
@@ -154,9 +145,9 @@
     }
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    cell.textLabel.text = self.searchResults[indexPath.row][0];
+    cell.textLabel.text = self.allFacebook[indexPath.row][0];
     
-    if ([self.taggedFacebook containsObject:self.searchResults[indexPath.row]]) {
+    if ([self.taggedFacebook containsObject:self.allFacebook[indexPath.row]]) {
         [cell.contentView setBackgroundColor:[UIColor lightGrayColor]];
     }
 
@@ -164,23 +155,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.searchResults count];
-}
-
-- (void)updateSearchResultsForSearchController:(UISearchController *)searchController
-{
-    NSString *searchString = self.searchController.searchBar.text;
-    if ([searchString isEqualToString:@""]){
-        self.searchResults = [self.allFacebook mutableCopy];
-    } else {
-        self.searchResults = [[NSMutableArray alloc] init];
-        for (NSArray *contact in self.allFacebook) {
-            if ([contact[0] rangeOfString:searchString options:NSCaseInsensitiveSearch].location != NSNotFound){
-                [self.searchResults addObject:contact];
-            }
-        }
-    }
-    [self.tableView reloadData];
+    return [self.allFacebook count];
 }
 
 
