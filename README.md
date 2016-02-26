@@ -6,17 +6,17 @@ Social media platform for dares. Dare friends, complete dares, and view submissi
 
 ## Screenshots
 
-Completed Dares Feed
+### Completed Dares Feed
 ![UI V2](https://github.com/molson194/Dare-Devil/blob/master/Completed.png)
 
-Open Dares Feed
+### Open Dares Feed
 ![UI V2](https://github.com/molson194/Dare-Devil/blob/master/OpenDares.png)
 
-Post New Dare
+### Post New Dare
 ![UI V2](https://github.com/molson194/Dare-Devil/blob/master/Post.png)
 
-View Submission
+### View Submission
 ![UI V2](https://github.com/molson194/Dare-Devil/blob/master/Submission.png)
 
-Menu Options
+### Menu Options
 ![UI V2](https://github.com/molson194/Dare-Devil/blob/master/Menu.png)
