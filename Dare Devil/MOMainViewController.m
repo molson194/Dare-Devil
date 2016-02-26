@@ -8,18 +8,15 @@
 
 #import "MOMainViewController.h"
 #import "MOPostViewController.h"
-#import "MOAddFundsViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SWRevealViewController.h"
 #import <Parse/Parse.h>
 #import <AVFoundation/AVFoundation.h>
 #import "MBProgressHUD.h"
-#import "MODareFundsViewController.h"
 
 @interface MOMainViewController ()
 @property (nonatomic, strong) PFObject *uploadObject;
 @property (nonatomic) CGFloat previousScrollViewYOffset;
-@property (nonatomic) int queryHotRecent;
 @property (nonatomic) int queryLocalFriends;
 @property (nonatomic, strong) CLLocationManager *locationManager;
 @property (nonatomic, strong) CLLocation *location;
@@ -72,18 +69,11 @@
     [self.view addGestureRecognizer:tap];
     
     // SORTING OPTIONS
-    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 75)];
-    NSArray *popularitySort = [NSArray arrayWithObjects: @"Recent", @"Hot", nil];
-    UISegmentedControl *popularityControl = [[UISegmentedControl alloc] initWithItems:popularitySort];
-    popularityControl.tintColor = [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1];
-    popularityControl.frame = CGRectMake(5, 5, self.view.bounds.size.width-10, 30);
-    [popularityControl addTarget:self action:@selector(popularityControlAction:) forControlEvents:UIControlEventValueChanged];
-    popularityControl.selectedSegmentIndex = 0;
-    [headerView addSubview:popularityControl];
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 35)];
     NSArray *peopleSort = [NSArray arrayWithObjects: @"World", @"Friends", @"Local", nil];
     UISegmentedControl *peopleControl = [[UISegmentedControl alloc] initWithItems:peopleSort];
     peopleControl.tintColor = [UIColor colorWithRed:1 green:.2 blue:0.35 alpha:1.0];
-    peopleControl.frame = CGRectMake(5, 40, self.view.bounds.size.width-10, 30);
+    peopleControl.frame = CGRectMake(5, 5, self.view.bounds.size.width-10, 25);
     [peopleControl addTarget:self action:@selector(peopleControlAction:) forControlEvents:UIControlEventValueChanged];
     peopleControl.selectedSegmentIndex = 0;
     [headerView addSubview:peopleControl];
@@ -115,7 +105,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // DARE TEXT
-    UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(5, 0, 7*self.view.bounds.size.width/8, 70)];
+    UITextView *dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(2, 0, 7*self.view.bounds.size.width/8, 70)];
     dareLabel.textColor = [UIColor blackColor];
     [dareLabel setFont:[UIFont systemFontOfSize:15]];
     dareLabel.scrollEnabled = false;
@@ -123,13 +113,6 @@
     [dareLabel setUserInteractionEnabled:NO];
     dareLabel.text = [object objectForKey:@"text"];
     [cell.contentView addSubview:dareLabel];
-    
-    // FUNDS BUTTON
-    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8-10, 40, self.view.bounds.size.width/8, 12)];
-    fundsLabel.textAlignment = NSTextAlignmentRight;
-    fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = [NSString stringWithFormat:@"$%@",[[object objectForKey:@"totalFunding"] stringValue]];
-    [cell.contentView addSubview:fundsLabel];
     
     // TIME LEFT LABEL
     UILabel* timeLeft = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-35, 5, 30, 12)];
@@ -147,11 +130,22 @@
     }
     [cell.contentView addSubview:timeLeft];
     
+    if ([[object objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+        UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 40, 30, 30)];
+        UIImage *image = [UIImage imageNamed:@"RedRight.png"];
+        imageHolder.image = image;
+        [cell.contentView addSubview:imageHolder];
+    }
+    
     return cell;
 }
 
 // HEIGHT OF CELL
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 100;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 100;
 }
 
@@ -169,29 +163,17 @@
     
     PFQuery *query;
     if (self.queryLocalFriends == 1 || self.queryLocalFriends ==0){
-        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, nil]];
+        query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery, userQuery, nil]];
     } else if (self.queryLocalFriends == 2) {
         query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects: facebookQuery, userQuery, nil]];
     } else if (self.queryLocalFriends == 3) {
         query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:worldQuery, facebookQuery,userQuery, nil]];
         [query whereKey:@"location" nearGeoPoint:self.geoPoint withinMiles:10.0];
     }
-    if (self.queryHotRecent==1 || self.queryHotRecent == 0) {
-        [query orderByDescending:@"createdAt"];
-    } else if (self.queryHotRecent == 2) {
-        [query orderByDescending:@"totalFunding"];
-    }
+    [query orderByDescending:@"createdAt"];
     [query whereKey:@"closeDate" greaterThan:[NSDate date]];
+    [query whereKey:@"isFinished" equalTo:[NSNumber numberWithBool:NO]];
     return query;
-}
-
-- (void)popularityControlAction:(UISegmentedControl *)segment {
-    if(segment.selectedSegmentIndex==0) {
-        self.queryHotRecent = 1;
-    } else if (segment.selectedSegmentIndex==1) {
-        self.queryHotRecent = 2;
-    }
-    [self loadObjects];
 }
 
 - (void)peopleControlAction:(UISegmentedControl *)segment {
@@ -216,13 +198,10 @@
 }
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    if ([[[self.objects objectAtIndex:indexPath.row] objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+    if ((indexPath.row + 1) > [self.objects count]) {
+        [self loadNextPage];
+    }else if ([[[self.objects objectAtIndex:indexPath.row] objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
         [self uploadSubmission:[self.objects objectAtIndex:indexPath.row]];
-    } else {
-        MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
-        [addFundsViewController addFunds:true forDare:[self.objects objectAtIndex:indexPath.row]];
-        self.navigationController.navigationBar.hidden = NO;
-        [self.navigationController pushViewController:addFundsViewController animated:YES];
     }
 }
 
@@ -256,12 +235,15 @@
         [self.uploadObject fetchInBackground];
         submission[@"toWorld"] = [self.uploadObject objectForKey:@"toWorld"];
         submission[@"facebookIds"] = [self.uploadObject objectForKey:@"facebookIds"];
+        submission[@"dareMaker"] = [self.uploadObject objectForKey:@"user"];
         submission[@"dare"] = self.uploadObject;
         submission[@"user"] = [PFUser currentUser];
-        submission[@"isWinner"] = [NSNumber numberWithBool:NO];
         [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if(succeeded) {
                 [hud hide:YES];
+                [self.uploadObject setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+                [self.uploadObject saveInBackground];
+                [self.tableView reloadData];
             } else {
                 [hud hide:YES];
                 UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Error Uploading Submission" message:error.description preferredStyle:UIAlertControllerStyleAlert];
@@ -270,19 +252,25 @@
                 [self presentViewController:alertController animated:YES completion:nil];
             }
         }];
+        
         // Create our push query
-        NSMutableDictionary *funders = [self.uploadObject objectForKey:@"funders"];
-        NSArray *fundersPush = [funders allKeys];
-        PFQuery *pushQuery = [PFInstallation query];
-        [pushQuery whereKey:@"userObject" containedIn:fundersPush];
-        // Send push notification to query
-        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
+
+        NSArray *facebookPush = [self.uploadObject objectForKey:@"facebookIds"];
+        PFQuery *facebook = [PFInstallation query];
+        [facebook whereKey:@"facebook" containedIn:facebookPush];
+        [PFPush sendPushMessageToQueryInBackground:facebook withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
+        
+        PFUser *makerPush = [self.uploadObject objectForKey:@"user"];
+        PFQuery *maker = [PFInstallation query];
+        [maker whereKey:@"userObject" equalTo:makerPush.objectId];
+        [PFPush sendPushMessageToQueryInBackground:maker withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
         
         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
         notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]];
         notification[@"dare"] = self.uploadObject;
         notification[@"type"] = @"New Submission";
-        notification[@"followers"] = fundersPush;
+        notification[@"followers"] = facebookPush;
+        notification[@"maker"] = makerPush;
         [notification saveInBackground];
     }];
 }

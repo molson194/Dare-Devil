@@ -18,9 +18,6 @@
 #import "MOActivityViewController.h"
 #import <Stripe/Stripe.h>
 
-NSString * const StripePublishableKey = @"pk_live_uFUSZnJoXvh3sfhUC7W28Ikl";
-
-
 @interface AppDelegate () <SWRevealViewControllerDelegate>
 @property (nonatomic) BOOL notificationRecieved;
 @end
@@ -37,7 +34,6 @@ NSString * const StripePublishableKey = @"pk_live_uFUSZnJoXvh3sfhUC7W28Ikl";
     [PFFacebookUtils initializeFacebookWithApplicationLaunchOptions:launchOptions];
     
     // STRIPE SETUP
-    [Stripe setDefaultPublishableKey:StripePublishableKey];
     
     UIUserNotificationType userNotificationTypes = (UIUserNotificationTypeAlert |
                                                     UIUserNotificationTypeBadge |

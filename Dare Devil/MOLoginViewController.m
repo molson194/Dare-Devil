@@ -11,6 +11,7 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <ParseFacebookUtilsV4/PFFacebookUtils.h>
 #import <Parse/Parse.h>
+#import "MOContractViewController.h"
 
 @interface MOLoginViewController ()
 
@@ -54,7 +55,6 @@
                 UIImage *image = [UIImage imageWithData:data];
                 PFFile *profilePic = [PFFile fileWithName:@"profilePic.png" data:UIImagePNGRepresentation(image)];
                 [[PFUser currentUser] setObject:profilePic forKey:@"profilePic"];
-                [[PFUser currentUser] setObject:@0 forKey:@"funds"];
                 [[PFUser currentUser] setObject:result[@"id"] forKey:@"fbId"];
                 [[PFUser currentUser] setObject:result[@"name"] forKey:@"name"];
                 [[PFUser currentUser] setObject:[NSNumber numberWithBool:NO] forKey:@"isAdmin"];
@@ -62,17 +62,20 @@
                 PFInstallation *currentInstallation = [PFInstallation currentInstallation];
                 [currentInstallation addUniqueObject:[PFUser currentUser].objectId forKey:@"userObject"];
                 [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"fbId"] forKey:@"facebook"];
-                [currentInstallation saveInBackground];
-                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBar];
+                [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                    MOContractViewController *view = [[MOContractViewController alloc] init];
+                    UIViewController *contractView =  [[UINavigationController alloc] initWithRootViewController:view];
+                    [self presentViewController:contractView animated:YES completion:nil];
+                }];
             }];
 
-        }
-        if (user) {
+        } else if (user) {
             PFInstallation *currentInstallation = [PFInstallation currentInstallation];
             [currentInstallation addUniqueObject:[PFUser currentUser].objectId forKey:@"userObject"];
             [currentInstallation addUniqueObject:[[PFUser currentUser] objectForKey:@"fbId"] forKey:@"facebook"];
-            [currentInstallation saveInBackground];
-            [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBar];
+            [currentInstallation saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
+                [(AppDelegate*)[[UIApplication sharedApplication] delegate] presentTabBar];
+            }];
         } else if (error) {
             UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Facebook Login Error" message:@"Try again" preferredStyle:UIAlertControllerStyleAlert];
             UIAlertAction *ok = [UIAlertAction actionWithTitle:@"Okay" style:UIAlertActionStyleDefault handler:nil];

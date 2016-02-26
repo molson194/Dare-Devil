@@ -8,11 +8,9 @@
 
 #import "SideViewController.h"
 #import "SWRevealViewController.h"
-#import "MOAddFundsViewController.h"
 #import "MOCompletedDaresViewController.h"
 #import "MOMainViewController.h"
 #import "MOActivityViewController.h"
-#import "MOAdminDareViewController.h"
 #import <Parse/Parse.h>
 #import <QuartzCore/QuartzCore.h>
 
@@ -70,11 +68,7 @@
 #pragma marl - UITableView Data Source
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if ([PFUser currentUser][@"isAdmin"] == [NSNumber numberWithBool:YES]) {
-        return 5;
-    } else {
-        return 4;
-    }
+        return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -89,15 +83,11 @@
     
     NSString *text = nil;
     if (row == 0) {
-        text = @"Transfer Funds";
-    } else if (row == 1) {
         text = @"Dares Feed";
-    } else if (row == 2) {
+    } else if (row == 1) {
         text = @"Completed Dares";
-    } else if (row ==3) {
+    } else if (row ==2) {
         text = @"Activity";
-    } else if (row == 4) {
-        text = @"Admin Activities";
     }
     cell.textLabel.text = NSLocalizedString( text, nil );
     
@@ -111,20 +101,14 @@
     
     UIViewController *newFrontController = nil;
     if (row == 0) {
-        MOAddFundsViewController *addFundsViewController = [[MOAddFundsViewController alloc] init];
-        newFrontController = [[UINavigationController alloc] initWithRootViewController:addFundsViewController];
-    } else if (row==1) {
         MOMainViewController *postedDaresViewController = [[MOMainViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:postedDaresViewController];
-    } else if (row==2) {
+    } else if (row==1) {
         MOCompletedDaresViewController *completedDaresViewController = [[MOCompletedDaresViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:completedDaresViewController];
-    } else if (row==3) {
+    } else if (row==2) {
         MOActivityViewController *activityViewController = [[MOActivityViewController alloc] initWithStyle:UITableViewStylePlain];
         newFrontController = [[UINavigationController alloc] initWithRootViewController:activityViewController];
-    } else if (row==4) {
-        MOAdminDareViewController *adminViewController = [[MOAdminDareViewController alloc] initWithStyle:UITableViewStylePlain];
-        newFrontController = [[UINavigationController alloc] initWithRootViewController:adminViewController];
     }
     [revealController pushFrontViewController:newFrontController animated:YES];
 }

@@ -10,7 +10,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "MBProgressHUD.h"
-#import "MODareFundsViewController.h"
 
 @implementation MOSingleDareController
 
@@ -24,6 +23,7 @@
 
 - (void)setObject:(PFObject *)object {
     self.obj = object;
+    [self.obj fetchInBackground];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -45,7 +45,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     // DARE TEXT
-    UITextView* dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(5, 0, 7*self.view.bounds.size.width/8, 70)];
+    UITextView* dareLabel = [[UITextView alloc] initWithFrame:CGRectMake(2, 0, 7*self.view.bounds.size.width/8, 70)];
     dareLabel.textColor = [UIColor blackColor];
     [dareLabel setFont:[UIFont systemFontOfSize:15]];
     dareLabel.scrollEnabled = false;
@@ -54,19 +54,12 @@
     dareLabel.text = [self.obj objectForKey:@"text"];
     [cell.contentView addSubview:dareLabel];
     
-    // FUNDS BUTTON
-    UILabel *fundsLabel = [[UILabel alloc] initWithFrame:CGRectMake(7*self.view.bounds.size.width/8-10, 40, self.view.bounds.size.width/8, 12)];
-    fundsLabel.textAlignment = NSTextAlignmentRight;
-    fundsLabel.textColor = [UIColor blackColor];
-    fundsLabel.text = [NSString stringWithFormat:@"$%@",[[self.obj objectForKey:@"totalFunding"] stringValue]];
-    [cell.contentView addSubview:fundsLabel];
-    
     // TIME LEFT LABEL
     UILabel* timeLeft = [[UILabel alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-35, 5, 30, 12)];
     timeLeft.textColor = [UIColor lightGrayColor];
     [timeLeft setTextAlignment:NSTextAlignmentCenter];
     timeLeft.font = [UIFont systemFontOfSize:13];
-    NSDate *endDate = [[self.obj createdAt] dateByAddingTimeInterval:60*60*24*1];
+    NSDate *endDate = [self.obj objectForKey:@"closeDate"];
     NSInteger diff = [endDate timeIntervalSinceDate:[NSDate date]]/60;
     if (diff>1440){
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldd", (long) diff/1440];
@@ -76,23 +69,14 @@
         timeLeft.text = [NSMutableString stringWithFormat:@"%ldm", (long) diff];
     }
     [cell.contentView addSubview:timeLeft];
+    if ([[self.obj objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
+        UIImageView *imageHolder = [[UIImageView alloc] initWithFrame:CGRectMake(self.view.bounds.size.width-30, 40, 30, 30)];
+        UIImage *image = [UIImage imageNamed:@"RedRight.png"];
+        imageHolder.image = image;
+        [cell.contentView addSubview:imageHolder];
+    }
     
     return cell;
-}
-
-// FUND DARE
-- (void)fundDare:(UIButton *)sender{
-    if (!sender.selected && (int)[[PFUser currentUser] objectForKey:@"funds"] >= 1) {
-        NSMutableArray *funders = [self.obj objectForKey:@"funders"];
-        [funders addObject:[PFUser currentUser].objectId];
-        [self.obj saveInBackground];
-        int fundsRemaining = (int) [[[PFUser currentUser] objectForKey:@"funds"] integerValue] - 1;
-        [[PFUser currentUser] setObject:@(fundsRemaining) forKey:@"funds"];
-        [[PFUser currentUser] saveEventually];
-        [self.tableView beginUpdates];
-        [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:sender.tag inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-        [self.tableView endUpdates];
-    }
 }
 
 - (void)uploadSubmission{
@@ -106,11 +90,6 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     if ([[self.obj objectForKey:@"target"] isEqualToString:[[PFUser currentUser] objectForKey:@"fbId"]]) {
         [self uploadSubmission];
-    } else {
-        MODareFundsViewController *addFundsViewController = [[MODareFundsViewController alloc] init];
-        [addFundsViewController addFunds:true forDare:self.obj];
-        self.navigationController.navigationBar.hidden = NO;
-        [self.navigationController pushViewController:addFundsViewController animated:YES];
     }
 }
 
@@ -137,10 +116,11 @@
         
         submission[@"dare"] = self.obj;
         submission[@"user"] = [PFUser currentUser];
-        submission[@"isWinner"] = [NSNumber numberWithBool:NO];
         [submission saveInBackgroundWithBlock:^(BOOL succeeded, NSError * _Nullable error) {
             if(succeeded) {
                 [hud hide:YES];
+                [self.obj setObject:[NSNumber numberWithBool:YES] forKey:@"isFinished"];
+                [self.obj saveInBackground];
                 [self.tableView reloadData];
             } else {
                 [hud hide:YES];
@@ -150,19 +130,24 @@
                 [self presentViewController:alertController animated:YES completion:nil];
             }
         }];
+        
         // Create our push query
-        NSMutableDictionary *funders = [self.obj objectForKey:@"funders"];
-        NSArray *fundersPush = [funders allKeys];
-        PFQuery *pushQuery = [PFInstallation query];
-        [pushQuery whereKey:@"userObject" containedIn:fundersPush];
-        // Send push notification to query
-        [PFPush sendPushMessageToQueryInBackground:pushQuery withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
+        NSArray *facebookPush = [self.obj objectForKey:@"facebookIds"];
+        PFQuery *facebook = [PFInstallation query];
+        [facebook whereKey:@"facebook" containedIn:facebookPush];
+        [PFPush sendPushMessageToQueryInBackground:facebook withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
+        
+        PFUser *makerPush = [self.obj objectForKey:@"user"];
+        PFQuery *maker = [PFInstallation query];
+        [maker whereKey:@"userObject" equalTo:makerPush.objectId];
+        [PFPush sendPushMessageToQueryInBackground:maker withMessage:[NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]]];
         
         PFObject *notification = [PFObject objectWithClassName:@"Notifications"];
         notification[@"text"] = [NSString stringWithFormat:@"%@ posted a new submission", [[PFUser currentUser] objectForKey:@"name"]];
         notification[@"dare"] = self.obj;
         notification[@"type"] = @"New Submission";
-        notification[@"followers"] = fundersPush;
+        notification[@"followers"] = facebookPush;
+        notification[@"maker"] = makerPush;
         [notification saveInBackground];
     }];
 }

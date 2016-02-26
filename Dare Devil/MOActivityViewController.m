@@ -87,7 +87,10 @@
     PFQuery *queryFacebook = [PFQuery queryWithClassName:self.parseClassName];
     [queryFacebook whereKey:@"facebook" equalTo:[[PFUser currentUser] objectForKey:@"fbId"]];
     
-    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:queryUsers, queryFacebook, nil]];
+    PFQuery *queryMaker = [PFQuery queryWithClassName:self.parseClassName];
+    [queryMaker whereKey:@"maker" equalTo:[PFUser currentUser]];
+    
+    PFQuery *query = [PFQuery orQueryWithSubqueries:[NSArray arrayWithObjects:queryUsers, queryFacebook, queryMaker, nil]];
     [query orderByDescending:@"createdAt"];
     return query;
 }
@@ -102,7 +105,7 @@
     PFObject *obj = [self.objects objectAtIndex:indexPath.row];
     PFObject *dareObj = obj[@"dare"];
     
-    if ([obj[@"type"] isEqualToString:@"New Submission"] || [obj[@"type"] isEqualToString:@"Winner"]) {
+    if ([obj[@"type"] isEqualToString:@"New Submission"]) {
         PFQuery *query  = [PFQuery queryWithClassName:@"Submissions"];
         [query whereKey:@"dare" equalTo:dareObj];
         [query findObjectsInBackgroundWithBlock:^(NSArray * _Nullable objects, NSError * _Nullable error) {
@@ -110,7 +113,7 @@
             [view setObject:objects[0]];
             [self.navigationController pushViewController:view animated:YES];
         }];
-    } else if ([obj[@"type"] isEqualToString:@"New Dare"] || [obj[@"type"] isEqualToString:@"Refund"]) {
+    } else if ([obj[@"type"] isEqualToString:@"New Dare"]) {
         [dareObj fetchIfNeededInBackgroundWithBlock:^(PFObject * _Nullable object, NSError * _Nullable error) {
             MOSingleDareController *singleView = [[MOSingleDareController alloc] initWithStyle:UITableViewStylePlain];
             [singleView setObject:object];
