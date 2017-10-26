@@ -27,7 +27,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // PARSE SET UP
     [Parse enableLocalDatastore];
-    [Parse setApplicationId:@"a6E3JVOxkXWJLnzg8f9sP2qBvVb0c1GuC2SkqfS2" clientKey:@"yoBwVLe5jZQJbavZHVu0MAycNVslRWNwOjTJ4yM0"];
+    [Parse setApplicationId:@"APP_ID" clientKey:@"CLIENT_KEY"];
     
     // FACEBOOK SETUP
     [FBSDKAppEvents activateApp];
